@@ -1,1 +1,263 @@
-<p>flight-form works!</p>
+<div class="page">
+  <div class="card" role="main" aria-label="Flight details form">
+    <div class="accentBar" aria-hidden="true"></div>
+
+    <header class="header">
+      <div class="brandMark" aria-hidden="true">🧳</div>
+      <div>
+        <h1>Arrival Details</h1>
+        <p class="subtitle">Enter flight information so we can prepare for your arrival.</p>
+        <p class="requiredNote">Fields marked with <span class="requiredMark" aria-hidden="true">*</span> are required.</p>
+      </div>
+
+      <div class="headerActions">
+        <a class="monsterLink" href="https://monsterrg.com/" target="_blank" rel="noreferrer">
+          Monster RG
+        </a>
+        <button class="ghostButton" type="button" (click)="onSignOutClick()">Sign out</button>
+      </div>
+    </header>
+
+    <div *ngIf="submissionReceipt" class="receipt" role="status" aria-live="polite">
+      <div class="receiptHeader">
+        <div class="receiptIcon" aria-hidden="true">✅</div>
+        <div>
+          <div class="receiptTitle">Submitted successfully</div>
+          <div class="receiptSubtitle">You’re all set. Here’s what we received.</div>
+        </div>
+      </div>
+
+      <div class="receiptGrid">
+        <div class="receiptItem">
+          <div class="receiptLabel">Airline</div>
+          <div class="receiptValue">{{ submissionReceipt.airline }}</div>
+        </div>
+
+        <div class="receiptItem">
+          <div class="receiptLabel">Flight number</div>
+          <div class="receiptValue">{{ submissionReceipt.flightNumber }}</div>
+        </div>
+
+        <div class="receiptItem">
+          <div class="receiptLabel">Local Arrival date</div>
+          <div class="receiptValue">{{ formatReceiptDate(submissionReceipt.arrivalDate) }}</div>
+        </div>
+
+        <div class="receiptItem">
+          <div class="receiptLabel">Local Arrival time</div>
+          <div class="receiptValue">{{ formatReceiptTime(submissionReceipt.arrivalTime) }}</div>
+        </div>
+
+        <div class="receiptItem">
+          <div class="receiptLabel">Guests</div>
+          <div class="receiptValue">{{ submissionReceipt.numOfGuests }}</div>
+        </div>
+
+        <div class="receiptItem" *ngIf="submissionReceipt.comments">
+          <div class="receiptLabel">Comments</div>
+          <div class="receiptValue">{{ submissionReceipt.comments }}</div>
+        </div>
+      </div>
+
+      <div class="receiptActions">
+        <button class="primaryButton" type="button" (click)="onSubmitAnotherClick()">Submit another</button>
+        <button class="secondaryButton" type="button" (click)="onEditSubmissionClick()">Edit</button>
+      </div>
+    </div>
+
+    <form
+      *ngIf="!submissionReceipt"
+      class="form"
+      [formGroup]="flightForm"
+      (ngSubmit)="onSubmit()"
+      novalidate
+    >
+      <div *ngIf="submitErrorMessage" class="alert error" role="alert" aria-live="polite">
+        <div class="alertIcon" aria-hidden="true">!</div>
+        <div class="alertText">
+          <div class="alertTitle">Submission failed</div>
+          <div class="alertMessage">{{ submitErrorMessage }}</div>
+        </div>
+      </div>
+
+      <div *ngIf="submitSuccessMessage" class="alert success" role="status" aria-live="polite">
+        <div class="alertIcon" aria-hidden="true">✓</div>
+        <div class="alertText">
+          <div class="alertTitle">Submitted</div>
+          <div class="alertMessage">{{ submitSuccessMessage }}</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sectionTitle">
+            <span class="sectionIcon" aria-hidden="true">✈️</span>
+            Flight
+        </div>
+
+        <div class="gridTwo">
+          <label class="field">
+            <span class="label">
+                Airline
+                <span class="requiredMark" aria-hidden="true">*</span>
+                <span class="srOnly">Required</span>
+            </span>
+            <input
+              type="text"
+              placeholder="Delta"
+              formControlName="airline"
+              (input)="clearSubmissionMessages()"
+              aria-describedby="airlineError"
+            />
+            <span id="airlineError" class="error" *ngIf="shouldShowError('airline')">
+              Airline is required.
+            </span>
+          </label>
+
+          <label class="field">
+            <span class="label">
+                Flight number
+                <span class="requiredMark" aria-hidden="true">*</span>
+                <span class="srOnly">Required</span>
+            </span>
+            <input
+              type="text"
+              placeholder="DL 123"
+              formControlName="flightNumber"
+              (input)="clearSubmissionMessages()"
+              aria-describedby="flightError"
+            />
+            <span id="flightError" class="error" *ngIf="shouldShowError('flightNumber')">
+              Flight number is required.
+            </span>
+          </label>
+        </div>
+      </div>
+
+        <div class="section">
+        <div class="sectionTitle">
+            <span class="sectionIcon" aria-hidden="true">🕒</span>
+            Arrival
+        </div>
+
+        <div class="gridTwo">
+            <label class="field">
+            <span class="label">
+                Arrival date
+                <span class="requiredMark" aria-hidden="true">*</span>
+                <span class="srOnly">Required</span>
+            </span>
+            <input
+                type="date"
+                formControlName="arrivalDate"
+                (input)="clearSubmissionMessages()"
+                aria-describedby="dateError"
+            />
+            <span id="dateError" class="error" *ngIf="shouldShowError('arrivalDate')">
+                Arrival date is required.
+            </span>
+            </label>
+
+            <label class="field">
+            <span class="label">
+                Arrival time
+                <span class="requiredMark" aria-hidden="true">*</span>
+                <span class="srOnly">Required</span>
+            </span>
+            <input
+                type="time"
+                formControlName="arrivalTime"
+                (input)="clearSubmissionMessages()"
+                aria-describedby="timeError"
+            />
+            <span id="timeError" class="error" *ngIf="shouldShowError('arrivalTime')">
+                Arrival time is required.
+            </span>
+            </label>
+        </div>
+
+        <div class="callout arrivalCallout" aria-label="Tip">
+            <div class="calloutTitle">
+                Tip
+            </div>
+            <div class="calloutText">
+             Please provide both the arrival date and time in the local time zone of your destination city. This is essential for the team to coordinate your arrival accurately.
+            </div>
+        </div>
+        </div>
+
+
+      <div class="section">
+        <div class="sectionTitle">
+            <span class="sectionIcon" aria-hidden="true">👥</span>
+            Group
+        </div>
+
+        <div class="gridTwo">
+          <label class="field">
+            <span class="label">
+                Number of guests
+                <span class="requiredMark" aria-hidden="true">*</span>
+                <span class="srOnly">Required</span>
+            </span>
+            <input
+              type="number"
+              inputmode="numeric"
+              min="1"
+              max="20"
+              placeholder="2"
+              formControlName="numOfGuests"
+              (input)="clearSubmissionMessages()"
+              aria-describedby="guestError"
+            />
+            <span class="hint">1–20 guests</span>
+            <span id="guestError" class="error" *ngIf="shouldShowError('numOfGuests')">
+              Enter a number between 1 and 20.
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sectionTitle">
+            <span class="sectionIcon" aria-hidden="true">💬</span>
+            Optional
+        </div>
+
+        <label class="field">
+          <span class="label">Comments - include special notes if needed.</span>
+          <textarea
+            rows="3"
+            placeholder="Anything we should know?"
+            formControlName="comments"
+            (input)="clearSubmissionMessages()"
+          ></textarea>
+        </label>
+      </div>
+
+    <div class="actionsRow">
+    <div class="actionsLeft">
+        <button
+        class="primaryButton"
+        type="submit"
+        [disabled]="flightForm.invalid || isSubmitting"
+        [attr.aria-busy]="isSubmitting ? 'true' : null"
+        >
+        <span *ngIf="!isSubmitting">Submit flight details</span>
+        <span *ngIf="isSubmitting">Submitting…</span>
+        </button>
+    </div>
+
+    <div class="actionsRight">
+        <button class="secondaryButton dangerLite" type="button" (click)="onResetClick()" [disabled]="isSubmitting">
+        Reset
+        </button>
+    </div>
+    </div>
+
+
+      <p class="tinyNote">
+        By submitting, you confirm these details are accurate.
+      </p>
+    </form>
+  </div>
+</div>
