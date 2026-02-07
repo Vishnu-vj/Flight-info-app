@@ -71,6 +71,31 @@
         <span *ngIf="isSubmitting">Logging in…</span>
       </button>
 
+      <div class="dividerRow" aria-hidden="true">
+        <div class="dividerLine"></div>
+        <div class="dividerText">or</div>
+        <div class="dividerLine"></div>
+      </div>
+
+      <button
+        type="button"
+        class="googleButton"
+        (click)="onGoogleSignIn()"
+        [disabled]="isGoogleSigningIn || isSubmitting"
+        [attr.aria-busy]="isGoogleSigningIn ? 'true' : null"
+      >
+        <span *ngIf="!isGoogleSigningIn">Continue with Google</span>
+        <span *ngIf="isGoogleSigningIn">Signing in…</span>
+      </button>
+
+      <div *ngIf="googleAuthErrorMessage" class="authAlert" role="alert" aria-live="polite">
+        <div class="authAlertIcon" aria-hidden="true">!</div>
+        <div class="authAlertText">
+          <div class="authAlertTitle">Google sign-in</div>
+          <div class="authAlertMessage">{{ googleAuthErrorMessage }}</div>
+        </div>
+      </div>
+
       <div class="footerRow">
         <button
           class="linkButton"

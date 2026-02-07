@@ -2,6 +2,13 @@ import { CommonModule } from '@angular/common'
 import { Component, ChangeDetectorRef, Injector, runInInjectionContext } from '@angular/core'
 import type { AbstractControl, ValidationErrors } from '@angular/forms'
 import { FormBuilder, ReactiveFormsModule, Validators, type FormGroup } from '@angular/forms'
+import {
+  Auth,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from '@angular/fire/auth'
 import { Router } from '@angular/router'
 
 function consumerEmailValidator(control: AbstractControl): ValidationErrors | null {
@@ -29,6 +36,9 @@ export class Login {
   resetEmailSent = false
   resetErrorMessage = ''
 
+  isGoogleSigningIn = false
+  googleAuthErrorMessage = ''
+
   loginForm: FormGroup
 
   constructor(
@@ -52,6 +62,11 @@ export class Login {
       if (this.resetEmailSent || this.resetErrorMessage) {
         this.resetEmailSent = false
         this.resetErrorMessage = ''
+        this.changeDetectorRef.detectChanges()
+      }
+
+      if (this.googleAuthErrorMessage) {
+        this.googleAuthErrorMessage = ''
         this.changeDetectorRef.detectChanges()
       }
     })
@@ -93,11 +108,11 @@ export class Login {
 
     try {
       await runInInjectionContext(this.injector, () =>
-      sendPasswordResetEmail(this.auth, email, {
-        url: `${window.location.origin}/login`,
-        handleCodeInApp: false,
-      })
-    )
+        sendPasswordResetEmail(this.auth, email, {
+          url: `${window.location.origin}/login`,
+          handleCodeInApp: false,
+        })
+      )
       this.resetEmailSent = true
     } catch (error: any) {
       const errorCode = String(error?.code ?? '')
@@ -118,6 +133,54 @@ export class Login {
       this.changeDetectorRef.detectChanges()
     }
   }
+
+  async onGoogleSignIn(): Promise<void> {
+  this.googleAuthErrorMessage = ''
+  this.isGoogleSigningIn = true
+  this.changeDetectorRef.detectChanges()
+
+  let focusFallbackTimer: any = null
+
+ const onWindowFocus = () => {
+    focusFallbackTimer = setTimeout(() => {
+      if (this.isGoogleSigningIn) {
+        this.isGoogleSigningIn = false
+        this.changeDetectorRef.detectChanges()
+      }
+    }, 250)
+  }
+
+  window.addEventListener('focus', onWindowFocus, { once: true })
+
+  try {
+    const provider = new GoogleAuthProvider()
+    provider.setCustomParameters({ prompt: 'select_account' })
+
+    await runInInjectionContext(this.injector, () =>
+      signInWithPopup(this.auth, provider)
+    )
+
+    await this.router.navigateByUrl('/flight-form')
+  } catch (error: any) {
+    const errorCode = String(error?.code ?? '')
+
+    if (errorCode === 'auth/popup-closed-by-user') {
+      this.googleAuthErrorMessage = ''
+    } else if (errorCode === 'auth/popup-blocked') {
+      this.googleAuthErrorMessage = 'Popup blocked by your browser. Please allow popups and try again.'
+    } else if (errorCode === 'auth/cancelled-popup-request') {
+      this.googleAuthErrorMessage = ''
+    } else if (errorCode === 'auth/network-request-failed') {
+      this.googleAuthErrorMessage = 'Network error. Please try again.'
+    } else {
+      this.googleAuthErrorMessage = 'Google sign-in failed. Please try again.'
+    }
+  } finally {
+    if (focusFallbackTimer) clearTimeout(focusFallbackTimer)
+    this.isGoogleSigningIn = false
+    this.changeDetectorRef.detectChanges()
+  }
+}
 
   async onSubmit(): Promise<void> {
     this.hasSubmitted = true

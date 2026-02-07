@@ -291,3 +291,44 @@ input[type='text'] {
   font-size: 13px;
   color: rgba(6, 95, 70, 0.95);
 }
+
+.googleButton {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.googleButton:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.googleButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dividerRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0 14px;
+  opacity: 0.8;
+}
+
+.dividerLine {
+  height: 1px;
+  flex: 1;
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.dividerText {
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
