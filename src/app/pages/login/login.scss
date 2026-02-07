@@ -215,7 +215,52 @@ input[type='text'] {
 
 .accentBar {
   width: 100%;
-  //margin-left: 52px;
   margin-top: 2px;
   margin-bottom: 14px;
+}
+
+.authAlert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  background: rgba(220, 38, 38, 0.06);
+  margin: 12px 0 14px;
+}
+
+.authAlertIcon {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  color: rgb(185, 28, 28);
+  background: rgba(220, 38, 38, 0.12);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.authAlertText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.authAlertTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgb(127, 29, 29);
+}
+
+.authAlertMessage {
+  font-size: 13px;
+  color: rgba(127, 29, 29, 0.85);
+  word-break: break-word;
 }

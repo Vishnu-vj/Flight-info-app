@@ -19,39 +19,46 @@
           autocomplete="email"
           placeholder="you@example.com"
           formControlName="email"
+          (input)="authErrorMessage=''"
         />
+
         <span class="error" *ngIf="(emailControl?.touched || hasSubmitted) && emailControl?.invalid">
-            <span *ngIf="emailControl?.errors?.['required']">Email is required.</span>
-            <span *ngIf="emailControl?.errors?.['consumerEmail']">
-                Enter a valid email (example: name@gmail.com).
-            </span>
+          <span *ngIf="emailControl?.errors?.['required']">Email is required.</span>
+          <span *ngIf="emailControl?.errors?.['consumerEmail']">
+            Enter a valid email (example: name@gmail.com).
+          </span>
         </span>
       </label>
 
       <label class="field">
-    <span class="label">Password</span>
+        <span class="label">Password</span>
 
-    <div class="inputWithButton">
-        <input
-        class="input"
-        [type]="showPassword ? 'text' : 'password'"
-        autocomplete="current-password"
-        placeholder="Your password"
-        formControlName="password"
-        />
-        <button class="iconButton" type="button" (click)="togglePasswordVisibility()">
-        {{ showPassword ? 'Hide' : 'Show' }}
-        </button>
-    </div>
+        <div class="inputWithButton">
+          <input
+            class="input"
+            [type]="showPassword ? 'text' : 'password'"
+            autocomplete="current-password"
+            placeholder="Your password"
+            formControlName="password"
+            (input)="authErrorMessage=''"
+          />
+          <button class="iconButton" type="button" (click)="togglePasswordVisibility()">
+            {{ showPassword ? 'Hide' : 'Show' }}
+          </button>
+        </div>
 
-    <span class="error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
-        Password must be at least 6 characters.
-    </span>
-    </label>
+        <span class="error" *ngIf="(passwordControl?.touched || hasSubmitted) && passwordControl?.invalid">
+          <span *ngIf="passwordControl?.errors?.['required']">Password is required.</span>
+          <span *ngIf="passwordControl?.errors?.['minlength']">Password must be at least 6 characters.</span>
+        </span>
+      </label>
 
-
-      <div class="errorBanner" *ngIf="authErrorMessage">
-        {{ authErrorMessage }}
+      <div *ngIf="authErrorMessage" class="authAlert" role="alert" aria-live="polite">
+        <div class="authAlertIcon" aria-hidden="true">!</div>
+        <div class="authAlertText">
+          <div class="authAlertTitle">Login failed</div>
+          <div class="authAlertMessage">{{ authErrorMessage }}</div>
+        </div>
       </div>
 
       <button class="primaryButton" type="submit" [disabled]="loginForm.invalid || isSubmitting">
