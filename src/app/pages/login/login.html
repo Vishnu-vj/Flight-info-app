@@ -61,13 +61,38 @@
         </div>
       </div>
 
-      <button class="primaryButton" type="submit" [disabled]="loginForm.invalid || isSubmitting">
+      <button
+        class="primaryButton"
+        type="submit"
+        [disabled]="loginForm.invalid || isSubmitting"
+        [attr.aria-busy]="isSubmitting ? 'true' : null"
+      >
         <span *ngIf="!isSubmitting">Log in</span>
         <span *ngIf="isSubmitting">Logging in…</span>
       </button>
 
       <div class="footerRow">
-        <a class="link" href="#" (click)="$event.preventDefault()">Forgot password?</a>
+        <button
+          class="linkButton"
+          type="button"
+          (click)="onForgotPasswordClick()"
+          [disabled]="isResettingPassword || isSubmitting"
+        >
+          <span *ngIf="!isResettingPassword">Forgot password?</span>
+          <span *ngIf="isResettingPassword">Sending reset link…</span>
+        </button>
+      </div>
+
+      <div *ngIf="resetEmailSent" class="infoBanner" role="status" aria-live="polite">
+        If an account exists for <strong>{{ emailControl?.value }}</strong>, a password reset link has been sent.
+      </div>
+
+      <div *ngIf="resetErrorMessage" class="authAlert" role="alert" aria-live="polite">
+        <div class="authAlertIcon" aria-hidden="true">!</div>
+        <div class="authAlertText">
+          <div class="authAlertTitle">Password reset</div>
+          <div class="authAlertMessage">{{ resetErrorMessage }}</div>
+        </div>
       </div>
     </form>
   </div>

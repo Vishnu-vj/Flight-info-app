@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common'
 import { Component, ChangeDetectorRef, Injector, runInInjectionContext } from '@angular/core'
 import type { AbstractControl, ValidationErrors } from '@angular/forms'
 import { FormBuilder, ReactiveFormsModule, Validators, type FormGroup } from '@angular/forms'
-import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth'
 import { Router } from '@angular/router'
 
 function consumerEmailValidator(control: AbstractControl): ValidationErrors | null {
@@ -26,27 +25,37 @@ export class Login {
   authErrorMessage = ''
   hasSubmitted = false
 
+  isResettingPassword = false
+  resetEmailSent = false
+  resetErrorMessage = ''
+
   loginForm: FormGroup
 
   constructor(
-  private formBuilder: FormBuilder,
-  private auth: Auth,
-  private router: Router,
-  private injector: Injector,
-  private changeDetectorRef: ChangeDetectorRef
-) {
-  this.loginForm = this.formBuilder.group({
-    email: ['', [Validators.required, consumerEmailValidator]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-  })
+    private formBuilder: FormBuilder,
+    private auth: Auth,
+    private router: Router,
+    private injector: Injector,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
+    this.loginForm = this.formBuilder.group({
+      email: ['', [Validators.required, consumerEmailValidator]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+    })
 
-  this.loginForm.valueChanges.subscribe(() => {
-    if (this.authErrorMessage) {
-      this.authErrorMessage = ''
-      this.changeDetectorRef.detectChanges()
-    }
-  })
-}
+    this.loginForm.valueChanges.subscribe(() => {
+      if (this.authErrorMessage) {
+        this.authErrorMessage = ''
+        this.changeDetectorRef.detectChanges()
+      }
+
+      if (this.resetEmailSent || this.resetErrorMessage) {
+        this.resetEmailSent = false
+        this.resetErrorMessage = ''
+        this.changeDetectorRef.detectChanges()
+      }
+    })
+  }
 
   get emailControl() {
     return this.loginForm.get('email')
@@ -58,6 +67,56 @@ export class Login {
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword
+  }
+
+  async onForgotPasswordClick(): Promise<void> {
+    this.resetEmailSent = false
+    this.resetErrorMessage = ''
+
+    const email = String(this.emailControl?.value ?? '').trim()
+
+    if (!email) {
+      this.resetErrorMessage = 'Enter your email above, then click “Forgot password?”.'
+      this.changeDetectorRef.detectChanges()
+      return
+    }
+
+    const consumerEmailPattern = /^[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+\.)+[A-Za-z]{2,}$/
+    if (!consumerEmailPattern.test(email)) {
+      this.resetErrorMessage = 'Enter a valid email address first.'
+      this.changeDetectorRef.detectChanges()
+      return
+    }
+
+    this.isResettingPassword = true
+    this.changeDetectorRef.detectChanges()
+
+    try {
+      await runInInjectionContext(this.injector, () =>
+      sendPasswordResetEmail(this.auth, email, {
+        url: `${window.location.origin}/login`,
+        handleCodeInApp: false,
+      })
+    )
+      this.resetEmailSent = true
+    } catch (error: any) {
+      const errorCode = String(error?.code ?? '')
+
+      if (errorCode === 'auth/user-not-found') {
+        this.resetEmailSent = true
+      } else if (errorCode === 'auth/invalid-email') {
+        this.resetErrorMessage = 'That email address looks invalid.'
+      } else if (errorCode === 'auth/too-many-requests') {
+        this.resetErrorMessage = 'Too many attempts. Please try again in a bit.'
+      } else if (errorCode === 'auth/network-request-failed') {
+        this.resetErrorMessage = 'Network error. Please try again.'
+      } else {
+        this.resetErrorMessage = 'Could not send reset email. Please try again.'
+      }
+    } finally {
+      this.isResettingPassword = false
+      this.changeDetectorRef.detectChanges()
+    }
   }
 
   async onSubmit(): Promise<void> {
