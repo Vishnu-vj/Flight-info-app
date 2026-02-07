@@ -1,0 +1,67 @@
+<div class="page">
+  <div class="card" role="main" aria-label="Login">
+    <div class="accentBar" aria-hidden="true"></div>
+    <header class="header">
+      <div class="brandMark" aria-hidden="true">✈️</div>
+      <div>
+        <h1>Flight Details</h1>
+        <p class="subtitle">Sign in to submit arrival details.</p>
+        <p class="helper">Authorized users only · Your submission is logged.</p>
+      </div>
+    </header>
+
+    <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <label class="field">
+        <span class="label">Email</span>
+        <input
+          type="email"
+          inputmode="email"
+          autocomplete="email"
+          placeholder="you@example.com"
+          formControlName="email"
+        />
+        <span class="error" *ngIf="(emailControl?.touched || hasSubmitted) && emailControl?.invalid">
+            <span *ngIf="emailControl?.errors?.['required']">Email is required.</span>
+            <span *ngIf="emailControl?.errors?.['consumerEmail']">
+                Enter a valid email (example: name@gmail.com).
+            </span>
+        </span>
+      </label>
+
+      <label class="field">
+    <span class="label">Password</span>
+
+    <div class="inputWithButton">
+        <input
+        class="input"
+        [type]="showPassword ? 'text' : 'password'"
+        autocomplete="current-password"
+        placeholder="Your password"
+        formControlName="password"
+        />
+        <button class="iconButton" type="button" (click)="togglePasswordVisibility()">
+        {{ showPassword ? 'Hide' : 'Show' }}
+        </button>
+    </div>
+
+    <span class="error" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+        Password must be at least 6 characters.
+    </span>
+    </label>
+
+
+      <div class="errorBanner" *ngIf="authErrorMessage">
+        {{ authErrorMessage }}
+      </div>
+
+      <button class="primaryButton" type="submit" [disabled]="loginForm.invalid || isSubmitting">
+        <span *ngIf="!isSubmitting">Log in</span>
+        <span *ngIf="isSubmitting">Logging in…</span>
+      </button>
+
+      <div class="footerRow">
+        <a class="link" href="#" (click)="$event.preventDefault()">Forgot password?</a>
+      </div>
+    </form>
+  </div>
+</div>
