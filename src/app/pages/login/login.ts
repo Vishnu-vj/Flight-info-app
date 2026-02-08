@@ -42,6 +42,8 @@ export class Login implements OnInit, OnDestroy {
   isGoogleSigningIn = false
   googleAuthErrorMessage = ''
   sessionExpiredMessage = ''
+  emailSuggestion = ''
+  private readonly lastEmailStorageKey = 'flightInfoLastEmail'
 
   loginForm: FormGroup
   private authUnsubscribe: Unsubscribe | null = null
@@ -58,6 +60,8 @@ export class Login implements OnInit, OnDestroy {
       email: ['', [Validators.required, consumerEmailValidator]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     })
+
+    this.loadEmailSuggestion()
 
     this.loginForm.valueChanges.subscribe(() => {
       if (this.authErrorMessage) {
@@ -96,6 +100,15 @@ export class Login implements OnInit, OnDestroy {
     if (this.authUnsubscribe) {
       this.authUnsubscribe()
       this.authUnsubscribe = null
+    }
+  }
+
+  private loadEmailSuggestion(): void {
+    try {
+      const saved = String(localStorage.getItem(this.lastEmailStorageKey) ?? '').trim()
+      this.emailSuggestion = saved
+    } catch {
+      this.emailSuggestion = ''
     }
   }
 
@@ -237,7 +250,7 @@ export class Login implements OnInit, OnDestroy {
           timeoutId = setTimeout(() => reject({ code: 'app/timeout' }), 10000)
         }),
       ])
-
+      try { localStorage.setItem(this.lastEmailStorageKey, email) } catch {}
       await this.router.navigateByUrl('/flight-form')
     } catch (error: any) {
       const errorCode = String(error?.code ?? '')

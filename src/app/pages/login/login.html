@@ -26,7 +26,11 @@
           placeholder="you@example.com"
           formControlName="email"
           (input)="authErrorMessage=''"
+          [attr.list]="emailSuggestion ? 'emailSuggestions' : null"
         />
+        <datalist id="emailSuggestions" *ngIf="emailSuggestion">
+          <option [value]="emailSuggestion"></option>
+        </datalist>
         <span class="error" *ngIf="(emailControl?.touched || hasSubmitted) && emailControl?.invalid">
           <span *ngIf="emailControl?.errors?.['required']">Email is required.</span>
           <span *ngIf="emailControl?.errors?.['consumerEmail']">

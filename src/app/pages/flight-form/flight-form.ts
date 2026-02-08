@@ -535,6 +535,7 @@ formatReceiptDateTime(dateString: string, timeString: string): string {
   }
 
   async onSubmit(): Promise<void> {
+    if (this.isSubmitting) return
     this.hasSubmitted = true
     this.submitErrorMessage = ''
     this.submitSuccessMessage = ''
