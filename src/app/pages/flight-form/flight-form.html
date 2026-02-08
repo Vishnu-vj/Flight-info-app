@@ -139,7 +139,13 @@
               aria-describedby="flightError"
             />
             <span id="flightError" class="error" *ngIf="shouldShowError('flightNumber')">
-              Flight number is required.
+                <span *ngIf="flightForm.get('flightNumber')?.errors?.['trimmedRequired']">Flight number is required.</span>
+                <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberLength'] === 'min'">Use at least 2 characters.</span>
+                <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberLength'] === 'max'">Keep it under 10 characters.</span>
+                <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberCharacters']">Use letters, numbers, spaces or a hyphen only.</span>
+                <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberMustContainLetterDigit']">Include both letters and numbers (Eg:DL123).</span>
+                <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberSeparators']">Avoid leading/trailing or repeated separators.</span>
+                <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberFormat']">Format examples: DL123, DL 123, DL-123.</span>
             </span>
           </label>
         </div>
@@ -161,11 +167,16 @@
             <input
                 type="date"
                 formControlName="arrivalDate"
+                [min]="todayDateString"
                 (input)="clearSubmissionMessages()"
                 aria-describedby="dateError"
             />
             <span id="dateError" class="error" *ngIf="shouldShowError('arrivalDate')">
-                Arrival date is required.
+                <span *ngIf="flightForm.get('arrivalDate')?.errors?.['required']">Arrival date is required.</span>
+                <span *ngIf="flightForm.get('arrivalDate')?.errors?.['arrivalDatePast']">Arrival date cannot be in the past.</span>
+                <span *ngIf="flightForm.get('arrivalDate')?.errors?.['arrivalDateFormat']">Use the date picker to choose a date.</span>
+                <span *ngIf="flightForm.get('arrivalDate')?.errors?.['arrivalDateInvalid']">Enter a valid date.</span>
+                <span *ngIf="flightForm.get('arrivalDate')?.errors?.['arrivalDateTooFar']">Please choose a date within the next 2 years.</span>
             </span>
             </label>
 
@@ -178,6 +189,7 @@
             <input
                 type="time"
                 formControlName="arrivalTime"
+                [min]="minArrivalTimeForSelectedDate"
                 (input)="clearSubmissionMessages()"
                 aria-describedby="timeError"
             />
@@ -189,7 +201,7 @@
 
         <div class="callout arrivalCallout" aria-label="Tip">
             <div class="calloutTitle">
-                Tip
+                Note
             </div>
             <div class="calloutText">
              Please provide both the arrival date and time in the local time zone of your destination city. This is essential for the team to coordinate your arrival accurately.

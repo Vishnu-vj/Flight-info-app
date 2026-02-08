@@ -35,6 +35,61 @@ function airlineValidator(control: AbstractControl): ValidationErrors | null {
   return null
 }
 
+function flightNumberValidator(control: AbstractControl): ValidationErrors | null {
+  const value = String(control.value ?? '').trim()
+  if (!value) return null 
+
+  if (value.length < 2) return { flightNumberLength: 'min' }
+  if (value.length > 10) return { flightNumberLength: 'max' }
+
+  const allowedChars = /^[A-Za-z0-9 -]+$/
+  if (!allowedChars.test(value)) return { flightNumberCharacters: true }
+  if (!/[A-Za-z]/.test(value) || !/\d/.test(value)) return { flightNumberMustContainLetterDigit: true }
+
+  if (/^[ -]/.test(value) || /[ -]$/.test(value) || /[ -]{2,}/.test(value)) {
+    return { flightNumberSeparators: true }
+  }
+
+  const structure = /^[A-Za-z]{1,3}(?:[ -]?\d{1,4}[A-Za-z]?)$/
+  if (!structure.test(value)) return { flightNumberFormat: true }
+  return null
+}
+
+function arrivalDateValidator(control: AbstractControl): ValidationErrors | null {
+  const raw = String(control.value ?? '').trim()
+  if (!raw) return null
+
+  const match = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+  if (!match) return { arrivalDateFormat: true }
+
+  const year = Number(match[1])
+  const month = Number(match[2])
+  const day = Number(match[3])
+
+  if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) {
+    return { arrivalDateInvalid: true }
+  }
+  if (month < 1 || month > 12) return { arrivalDateInvalid: true }
+
+  const selected = new Date(year, month - 1, day, 0, 0, 0, 0)
+  if (
+    Number.isNaN(selected.getTime()) ||
+    selected.getFullYear() !== year ||
+    selected.getMonth() !== month - 1 ||
+    selected.getDate() !== day
+  ) {
+    return { arrivalDateInvalid: true }
+  }
+  const now = new Date()
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0)
+  if (selected < today) return { arrivalDatePast: true }
+
+  //Don't allow future dates after 2 years
+  const maxFuture = new Date(today)
+  maxFuture.setFullYear(maxFuture.getFullYear() + 2)
+  if (selected > maxFuture) return { arrivalDateTooFar: true }
+  return null
+}
 
 function guestsRangeValidator(control: AbstractControl): ValidationErrors | null {
   const rawValue = control.value
@@ -103,8 +158,8 @@ export class FlightForm implements OnInit {
   ) {
     this.flightForm = this.formBuilder.group({
       airline: ['', [trimmedRequired, airlineValidator]],
-      flightNumber: ['', [trimmedRequired]],
-      arrivalDate: ['', [Validators.required]],
+      flightNumber: ['', [trimmedRequired, flightNumberValidator]],
+      arrivalDate: ['', [Validators.required, arrivalDateValidator]],
       arrivalTime: ['', [Validators.required]],
       numOfGuests: ['', [Validators.required, guestsRangeValidator]],
       comments: [''],
@@ -214,6 +269,28 @@ export class FlightForm implements OnInit {
       hour: 'numeric',
       minute: '2-digit',
     }).format(date)
+  }
+
+  get todayDateString(): string {
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = String(now.getMonth() + 1).padStart(2, '0')
+    const day = String(now.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
+  get minArrivalTimeForSelectedDate(): string | null {
+    const rawDate = String(this.flightForm.get('arrivalDate')?.value ?? '').trim()
+    if (!rawDate) return null
+
+    const now = new Date()
+    const today =
+      `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+
+    if (rawDate !== today) return null
+    const hours = String(now.getHours()).padStart(2, '0')
+    const minutes = String(now.getMinutes()).padStart(2, '0')
+    return `${hours}:${minutes}`
   }
 
   private parseLocalDate(dateString: string): Date | null {
