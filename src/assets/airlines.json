@@ -1,0 +1,4972 @@
+[
+  {
+    "name": "12 North",
+    "iata": "12",
+    "icao": "N12"
+  },
+  {
+    "name": "1Time Airline",
+    "iata": "1T",
+    "icao": "RNX"
+  },
+  {
+    "name": "40-Mile Air",
+    "iata": "Q5",
+    "icao": "MLA"
+  },
+  {
+    "name": "88",
+    "iata": "47",
+    "icao": "VVN"
+  },
+  {
+    "name": "Abacus International",
+    "iata": "1B",
+    "icao": ""
+  },
+  {
+    "name": "ABSA - Aerolinhas Brasileiras",
+    "iata": "M3",
+    "icao": "TUS"
+  },
+  {
+    "name": "Abu Dhabi Amiri Flight",
+    "iata": "MO",
+    "icao": "AUH"
+  },
+  {
+    "name": "Access Air",
+    "iata": "ZA",
+    "icao": "CYD"
+  },
+  {
+    "name": "Ada Air",
+    "iata": "ZY",
+    "icao": "ADE"
+  },
+  {
+    "name": "Adam Air",
+    "iata": "KI",
+    "icao": "DHI"
+  },
+  {
+    "name": "Adria Airways",
+    "iata": "JP",
+    "icao": "ADR"
+  },
+  {
+    "name": "Aegean Airlines",
+    "iata": "A3",
+    "icao": "AEE"
+  },
+  {
+    "name": "Aer Arann",
+    "iata": "RE",
+    "icao": "REA"
+  },
+  {
+    "name": "Aer Lingus",
+    "iata": "EI",
+    "icao": "EIN"
+  },
+  {
+    "name": "Aereonautica militare",
+    "iata": "JY",
+    "icao": "AXZ"
+  },
+  {
+    "name": "Aero Benin",
+    "iata": "EM",
+    "icao": "AEB"
+  },
+  {
+    "name": "Aero Condor Peru",
+    "iata": "Q6",
+    "icao": "CDP"
+  },
+  {
+    "name": "Aero Contractors",
+    "iata": "AJ",
+    "icao": "NIG"
+  },
+  {
+    "name": "Aero Flight",
+    "iata": "GV",
+    "icao": "ARF"
+  },
+  {
+    "name": "Aero Lanka",
+    "iata": "QL",
+    "icao": "RLN"
+  },
+  {
+    "name": "Aero VIP (2D)",
+    "iata": "2D",
+    "icao": ""
+  },
+  {
+    "name": "Aero-Service",
+    "iata": "BF",
+    "icao": "RSR"
+  },
+  {
+    "name": "Aerocondor",
+    "iata": "2B",
+    "icao": "ARD"
+  },
+  {
+    "name": "Aeroflot Russian Airlines",
+    "iata": "SU",
+    "icao": "AFL"
+  },
+  {
+    "name": "Aeroflot-Don",
+    "iata": "D9",
+    "icao": "DNV"
+  },
+  {
+    "name": "Aeroflot-Nord",
+    "iata": "5N",
+    "icao": "AUL"
+  },
+  {
+    "name": "Aerolane",
+    "iata": "XL",
+    "icao": "LNE"
+  },
+  {
+    "name": "Aeroline GmbH",
+    "iata": "7E",
+    "icao": "AWU"
+  },
+  {
+    "name": "Aerolineas Argentinas",
+    "iata": "AR",
+    "icao": "ARG"
+  },
+  {
+    "name": "Aerolineas Galapagos (Aerogal)",
+    "iata": "2K",
+    "icao": "GLG"
+  },
+  {
+    "name": "Aerolitoral",
+    "iata": "5D",
+    "icao": "SLI"
+  },
+  {
+    "name": "Aeromar",
+    "iata": "VW",
+    "icao": "TAO"
+  },
+  {
+    "name": "AeroMéxico",
+    "iata": "AM",
+    "icao": "AMX"
+  },
+  {
+    "name": "Aeropelican Air Services",
+    "iata": "OT",
+    "icao": "PEL"
+  },
+  {
+    "name": "Aeroper",
+    "iata": "PL",
+    "icao": "PLI"
+  },
+  {
+    "name": "AeroRep",
+    "iata": "P5",
+    "icao": "RPB"
+  },
+  {
+    "name": "Aerosur",
+    "iata": "5L",
+    "icao": "RSU"
+  },
+  {
+    "name": "Aerosvit Airlines",
+    "iata": "VV",
+    "icao": "AEW"
+  },
+  {
+    "name": "AeroWorld",
+    "iata": "W4",
+    "icao": "WER"
+  },
+  {
+    "name": "Africa West",
+    "iata": "FK",
+    "icao": "WTA"
+  },
+  {
+    "name": "Afriqiyah Airways",
+    "iata": "8U",
+    "icao": "AAW"
+  },
+  {
+    "name": "Aigle Azur",
+    "iata": "ZI",
+    "icao": "AAF"
+  },
+  {
+    "name": "Air Afrique",
+    "iata": "RK",
+    "icao": "RKA"
+  },
+  {
+    "name": "Air Algerie",
+    "iata": "AH",
+    "icao": "DAH"
+  },
+  {
+    "name": "Air Alps Aviation (A6)",
+    "iata": "A6",
+    "icao": ""
+  },
+  {
+    "name": "Air Antilles Express",
+    "iata": "3S",
+    "icao": ""
+  },
+  {
+    "name": "Air Arabia",
+    "iata": "G9",
+    "icao": "ABY"
+  },
+  {
+    "name": "Air Arabia Egypt",
+    "iata": "E5",
+    "icao": "RBG"
+  },
+  {
+    "name": "Air Arabia Maroc",
+    "iata": "3O",
+    "icao": ""
+  },
+  {
+    "name": "Air Astana",
+    "iata": "KC",
+    "icao": "KZR"
+  },
+  {
+    "name": "Air Atlanta Icelandic",
+    "iata": "CC",
+    "icao": "ABD"
+  },
+  {
+    "name": "Air Austral",
+    "iata": "UU",
+    "icao": "REU"
+  },
+  {
+    "name": "Air Bagan",
+    "iata": "W9",
+    "icao": "JAB"
+  },
+  {
+    "name": "Air Baltic",
+    "iata": "BT",
+    "icao": "BTI"
+  },
+  {
+    "name": "Air Bangladesh",
+    "iata": "B9",
+    "icao": "BGD"
+  },
+  {
+    "name": "Air Berlin",
+    "iata": "AB",
+    "icao": "BER"
+  },
+  {
+    "name": "Air Bosna",
+    "iata": "JA",
+    "icao": "BON"
+  },
+  {
+    "name": "Air Botswana",
+    "iata": "BP",
+    "icao": "BOT"
+  },
+  {
+    "name": "Air Bourbon",
+    "iata": "ZB",
+    "icao": "BUB"
+  },
+  {
+    "name": "Air Burkina",
+    "iata": "2J",
+    "icao": "VBW"
+  },
+  {
+    "name": "Air Busan",
+    "iata": "BX",
+    "icao": "ABL"
+  },
+  {
+    "name": "Air Caledonie International",
+    "iata": "SB",
+    "icao": "ACI"
+  },
+  {
+    "name": "Air Canada",
+    "iata": "AC",
+    "icao": "ACA"
+  },
+  {
+    "name": "Air Canada Jazz",
+    "iata": "QK",
+    "icao": "JZA"
+  },
+  {
+    "name": "Air Caraïbes",
+    "iata": "TX",
+    "icao": "FWI"
+  },
+  {
+    "name": "Air Cargo Carriers",
+    "iata": "2Q",
+    "icao": "SNC"
+  },
+  {
+    "name": "Air Cargo Germany",
+    "iata": "6U",
+    "icao": ""
+  },
+  {
+    "name": "Air Carnival",
+    "iata": "2S",
+    "icao": ""
+  },
+  {
+    "name": "Air Chathams",
+    "iata": "CV",
+    "icao": "CVA"
+  },
+  {
+    "name": "Air China",
+    "iata": "CA",
+    "icao": "CCA"
+  },
+  {
+    "name": "Air Choice One",
+    "iata": "3E",
+    "icao": ""
+  },
+  {
+    "name": "Air Comet Chile",
+    "iata": "3I",
+    "icao": ""
+  },
+  {
+    "name": "Air Costa",
+    "iata": "LB",
+    "icao": ""
+  },
+  {
+    "name": "Air Dolomiti",
+    "iata": "EN",
+    "icao": "DLA"
+  },
+  {
+    "name": "Air Europa",
+    "iata": "UX",
+    "icao": "AEA"
+  },
+  {
+    "name": "Air Europe",
+    "iata": "PE",
+    "icao": "AEL"
+  },
+  {
+    "name": "Air Exel",
+    "iata": "XT",
+    "icao": "AXL"
+  },
+  {
+    "name": "Air Finland",
+    "iata": "OF",
+    "icao": "FIF"
+  },
+  {
+    "name": "Air Florida",
+    "iata": "QH",
+    "icao": "FLZ"
+  },
+  {
+    "name": "Air Foyle",
+    "iata": "GS",
+    "icao": "UPA"
+  },
+  {
+    "name": "Air France",
+    "iata": "AF",
+    "icao": "AFR"
+  },
+  {
+    "name": "Air Glaciers",
+    "iata": "7T",
+    "icao": "AGV"
+  },
+  {
+    "name": "Air Greenland",
+    "iata": "GL",
+    "icao": "GRL"
+  },
+  {
+    "name": "Air Guinee Express",
+    "iata": "2U",
+    "icao": "GIP"
+  },
+  {
+    "name": "Air Guyane",
+    "iata": "GG",
+    "icao": "GUY"
+  },
+  {
+    "name": "Air Hamburg (AHO)",
+    "iata": "HH",
+    "icao": "AHO"
+  },
+  {
+    "name": "Air Iceland",
+    "iata": "NY",
+    "icao": "FXI"
+  },
+  {
+    "name": "Air India Express",
+    "iata": "IX",
+    "icao": "AXB"
+  },
+  {
+    "name": "Air India Limited",
+    "iata": "AI",
+    "icao": "AIC"
+  },
+  {
+    "name": "Air India Regional",
+    "iata": "CD",
+    "icao": ""
+  },
+  {
+    "name": "Air Indus",
+    "iata": "PP",
+    "icao": "AI0"
+  },
+  {
+    "name": "Air Italy",
+    "iata": "I9",
+    "icao": "AEY"
+  },
+  {
+    "name": "Air Ivoire",
+    "iata": "VU",
+    "icao": "VUN"
+  },
+  {
+    "name": "Air Jamaica",
+    "iata": "JM",
+    "icao": "AJM"
+  },
+  {
+    "name": "Air Japan",
+    "iata": "NQ",
+    "icao": "AJX"
+  },
+  {
+    "name": "Air Kazakhstan",
+    "iata": "9Y",
+    "icao": "KZK"
+  },
+  {
+    "name": "Air Kenya (Priv)",
+    "iata": "QP",
+    "icao": ""
+  },
+  {
+    "name": "Air Kiribati",
+    "iata": "4A",
+    "icao": "AKL"
+  },
+  {
+    "name": "Air Koryo",
+    "iata": "JS",
+    "icao": "KOR"
+  },
+  {
+    "name": "Air Libert",
+    "iata": "VD",
+    "icao": ""
+  },
+  {
+    "name": "Air Lituanica",
+    "iata": "LT",
+    "icao": "LTU"
+  },
+  {
+    "name": "Air Luxor",
+    "iata": "LK",
+    "icao": "LXR"
+  },
+  {
+    "name": "Air Macau",
+    "iata": "NX",
+    "icao": "AMU"
+  },
+  {
+    "name": "Air Madagascar",
+    "iata": "MD",
+    "icao": "MDG"
+  },
+  {
+    "name": "Air Madrid",
+    "iata": "NM",
+    "icao": "DRD"
+  },
+  {
+    "name": "Air Malawi",
+    "iata": "QM",
+    "icao": "AML"
+  },
+  {
+    "name": "Air Malta",
+    "iata": "KM",
+    "icao": "AMC"
+  },
+  {
+    "name": "Air Mandalay",
+    "iata": "6T",
+    "icao": ""
+  },
+  {
+    "name": "Air Marshall Islands",
+    "iata": "CW",
+    "icao": "CWM"
+  },
+  {
+    "name": "Air Mauritius",
+    "iata": "MK",
+    "icao": "MAU"
+  },
+  {
+    "name": "Air Mediterranee",
+    "iata": "DR",
+    "icao": "BIE"
+  },
+  {
+    "name": "Air Mekong",
+    "iata": "P8",
+    "icao": "MKG"
+  },
+  {
+    "name": "Air Moldova",
+    "iata": "9U",
+    "icao": "MLD"
+  },
+  {
+    "name": "Air Mozambique",
+    "iata": "TM",
+    "icao": ""
+  },
+  {
+    "name": "Air Namibia",
+    "iata": "SW",
+    "icao": "NMB"
+  },
+  {
+    "name": "Air New Zealand",
+    "iata": "NZ",
+    "icao": "ANZ"
+  },
+  {
+    "name": "Air Nippon",
+    "iata": "EL",
+    "icao": "ANK"
+  },
+  {
+    "name": "Air Niugini",
+    "iata": "PX",
+    "icao": "ANG"
+  },
+  {
+    "name": "Air North Charter - Canada",
+    "iata": "4N",
+    "icao": "ANT"
+  },
+  {
+    "name": "Air Nostrum",
+    "iata": "YW",
+    "icao": "ANE"
+  },
+  {
+    "name": "Air One",
+    "iata": "AP",
+    "icao": "ADH"
+  },
+  {
+    "name": "Air Pacific",
+    "iata": "FJ",
+    "icao": "FJI"
+  },
+  {
+    "name": "Air Pegasus",
+    "iata": "OP",
+    "icao": "PPL"
+  },
+  {
+    "name": "Air Philippines",
+    "iata": "2P",
+    "icao": "GAP"
+  },
+  {
+    "name": "Air Plus Comet",
+    "iata": "A7",
+    "icao": "MPD"
+  },
+  {
+    "name": "Air Rarotonga",
+    "iata": "GZ",
+    "icao": "RAR"
+  },
+  {
+    "name": "Air Sahara",
+    "iata": "S2",
+    "icao": "RSH"
+  },
+  {
+    "name": "Air Saint Pierre",
+    "iata": "PJ",
+    "icao": "SPM"
+  },
+  {
+    "name": "Air Salone",
+    "iata": "2O",
+    "icao": ""
+  },
+  {
+    "name": "Air Salone",
+    "iata": "20",
+    "icao": "RNE"
+  },
+  {
+    "name": "Air Serbia",
+    "iata": "JU",
+    "icao": "ASL"
+  },
+  {
+    "name": "Air Seychelles",
+    "iata": "HM",
+    "icao": "SEY"
+  },
+  {
+    "name": "Air Sicilia",
+    "iata": "BM",
+    "icao": ""
+  },
+  {
+    "name": "Air Sinai",
+    "iata": "4D",
+    "icao": "ASD"
+  },
+  {
+    "name": "Air Tahiti",
+    "iata": "VT",
+    "icao": "VTA"
+  },
+  {
+    "name": "Air Tahiti Nui",
+    "iata": "TN",
+    "icao": "THT"
+  },
+  {
+    "name": "Air Tanzania",
+    "iata": "TC",
+    "icao": "ATC"
+  },
+  {
+    "name": "Air Tindi",
+    "iata": "8T",
+    "icao": ""
+  },
+  {
+    "name": "Air Transat",
+    "iata": "TS",
+    "icao": "TSC"
+  },
+  {
+    "name": "Air Vanuatu",
+    "iata": "NF",
+    "icao": "AVN"
+  },
+  {
+    "name": "Air VIA",
+    "iata": "VL",
+    "icao": "VIM"
+  },
+  {
+    "name": "Air Vistara",
+    "iata": "UK",
+    "icao": "VTI"
+  },
+  {
+    "name": "Air Volga",
+    "iata": "G6",
+    "icao": ""
+  },
+  {
+    "name": "Air Wales",
+    "iata": "6G",
+    "icao": "AWW"
+  },
+  {
+    "name": "Air Wisconsin",
+    "iata": "ZW",
+    "icao": "AWI"
+  },
+  {
+    "name": "Air Zimbabwe",
+    "iata": "UM",
+    "icao": "AZW"
+  },
+  {
+    "name": "Air2there",
+    "iata": "F8",
+    "icao": ""
+  },
+  {
+    "name": "AirAsia",
+    "iata": "AK",
+    "icao": "AXM"
+  },
+  {
+    "name": "AirAsia X",
+    "iata": "D7",
+    "icao": "XAX"
+  },
+  {
+    "name": "Airblue",
+    "iata": "ED",
+    "icao": "ABQ"
+  },
+  {
+    "name": "Aircompany Yakutia",
+    "iata": "R3",
+    "icao": "SYL"
+  },
+  {
+    "name": "Aires",
+    "iata": "4C",
+    "icao": "ARE"
+  },
+  {
+    "name": "Airlinair",
+    "iata": "A5",
+    "icao": "RLA"
+  },
+  {
+    "name": "Airlines Of Tasmania",
+    "iata": "FO",
+    "icao": "ATM"
+  },
+  {
+    "name": "Airlines PNG",
+    "iata": "CG",
+    "icao": "TOK"
+  },
+  {
+    "name": "Airlink (SAA)",
+    "iata": "4Z",
+    "icao": ""
+  },
+  {
+    "name": "Airnorth",
+    "iata": "TL",
+    "icao": "ANO"
+  },
+  {
+    "name": "AirOnix",
+    "iata": "OG",
+    "icao": ""
+  },
+  {
+    "name": "AirRussia",
+    "iata": "R8",
+    "icao": "RRJ"
+  },
+  {
+    "name": "AirTran Airways",
+    "iata": "FL",
+    "icao": "TRS"
+  },
+  {
+    "name": "Al-Naser Airlines",
+    "iata": "NA",
+    "icao": ""
+  },
+  {
+    "name": "ALAK",
+    "iata": "J4",
+    "icao": ""
+  },
+  {
+    "name": "Alaska Airlines",
+    "iata": "AS",
+    "icao": "ASA"
+  },
+  {
+    "name": "Alaska Central Express",
+    "iata": "KO",
+    "icao": "AER"
+  },
+  {
+    "name": "Alaska Seaplane Service",
+    "iata": "J5",
+    "icao": ""
+  },
+  {
+    "name": "Albanian Airlines",
+    "iata": "LV",
+    "icao": "LBC"
+  },
+  {
+    "name": "Alitalia",
+    "iata": "AZ",
+    "icao": "AZA"
+  },
+  {
+    "name": "Alitalia Cityliner",
+    "iata": "CT",
+    "icao": ""
+  },
+  {
+    "name": "Alitalia Express",
+    "iata": "XM",
+    "icao": "SMX"
+  },
+  {
+    "name": "All Africa",
+    "iata": "9A",
+    "icao": "99F"
+  },
+  {
+    "name": "All America",
+    "iata": "A2",
+    "icao": "AL2"
+  },
+  {
+    "name": "All America AR",
+    "iata": "2R",
+    "icao": "M7A"
+  },
+  {
+    "name": "All America BOPY",
+    "iata": "0P",
+    "icao": "PYB"
+  },
+  {
+    "name": "All America BR",
+    "iata": "1Y",
+    "icao": "A9B"
+  },
+  {
+    "name": "All America CL",
+    "iata": "1R",
+    "icao": "R1R"
+  },
+  {
+    "name": "All America CO",
+    "iata": "0Y",
+    "icao": "7ZC"
+  },
+  {
+    "name": "All America MX",
+    "iata": "0M",
+    "icao": "0MM"
+  },
+  {
+    "name": "All America US",
+    "iata": "AG",
+    "icao": "SSA"
+  },
+  {
+    "name": "All Argentina",
+    "iata": "L1",
+    "icao": "AL1"
+  },
+  {
+    "name": "All Argentina Express",
+    "iata": "Z0",
+    "icao": "Z9H"
+  },
+  {
+    "name": "All Asia",
+    "iata": "L9",
+    "icao": "AL3"
+  },
+  {
+    "name": "All Australia",
+    "iata": "88",
+    "icao": "8K8"
+  },
+  {
+    "name": "All Colombia",
+    "iata": "7O",
+    "icao": "7KK"
+  },
+  {
+    "name": "All Europe",
+    "iata": "N9",
+    "icao": "N99"
+  },
+  {
+    "name": "All Nippon Airways",
+    "iata": "NH",
+    "icao": "ANA"
+  },
+  {
+    "name": "All Spain",
+    "iata": "N7",
+    "icao": "N77"
+  },
+  {
+    "name": "Allegiant Air",
+    "iata": "G4",
+    "icao": "AAY"
+  },
+  {
+    "name": "Alliance Airlines",
+    "iata": "QQ",
+    "icao": "UTY"
+  },
+  {
+    "name": "AlMasria Universal Airlines",
+    "iata": "UJ",
+    "icao": "LMU"
+  },
+  {
+    "name": "Aloha Airlines",
+    "iata": "AQ",
+    "icao": "AAH"
+  },
+  {
+    "name": "Alrosa Mirny Air Enterprise",
+    "iata": "6R",
+    "icao": "DRU"
+  },
+  {
+    "name": "Amaszonas",
+    "iata": "Z8",
+    "icao": "AZN"
+  },
+  {
+    "name": "America West Airlines",
+    "iata": "HP",
+    "icao": "AWE"
+  },
+  {
+    "name": "American Airlines",
+    "iata": "AA",
+    "icao": "AAL"
+  },
+  {
+    "name": "American Eagle Airlines",
+    "iata": "MQ",
+    "icao": "EGF"
+  },
+  {
+    "name": "Amsterdam Airlines",
+    "iata": "WD",
+    "icao": "AAN"
+  },
+  {
+    "name": "Ansett Australia",
+    "iata": "AN",
+    "icao": "AAA"
+  },
+  {
+    "name": "Apache Air",
+    "iata": "ZM",
+    "icao": "IWA"
+  },
+  {
+    "name": "Ariana Afghan Airlines",
+    "iata": "FG",
+    "icao": "AFG"
+  },
+  {
+    "name": "Arik Niger",
+    "iata": "Q9",
+    "icao": "NAK"
+  },
+  {
+    "name": "Arkefly",
+    "iata": "OR",
+    "icao": "TFL"
+  },
+  {
+    "name": "Arkia Israel Airlines",
+    "iata": "IZ",
+    "icao": "AIZ"
+  },
+  {
+    "name": "Armavia",
+    "iata": "U8",
+    "icao": "RNV"
+  },
+  {
+    "name": "Arrow Air",
+    "iata": "JW",
+    "icao": "APW"
+  },
+  {
+    "name": "Aserca Airlines",
+    "iata": "R7",
+    "icao": "OCA"
+  },
+  {
+    "name": "Asia Wings",
+    "iata": "Y5",
+    "icao": "AWA"
+  },
+  {
+    "name": "Asian Spirit",
+    "iata": "6K",
+    "icao": "RIT"
+  },
+  {
+    "name": "Asian Wings Airways",
+    "iata": "AW",
+    "icao": "AWM"
+  },
+  {
+    "name": "Asiana Airlines",
+    "iata": "OZ",
+    "icao": "AAR"
+  },
+  {
+    "name": "Askari Aviation",
+    "iata": "4K",
+    "icao": "AAS"
+  },
+  {
+    "name": "Astair",
+    "iata": "8D",
+    "icao": ""
+  },
+  {
+    "name": "Astraeus",
+    "iata": "5W",
+    "icao": "AEU"
+  },
+  {
+    "name": "Astrakhan Airlines",
+    "iata": "OB",
+    "icao": "ASZ"
+  },
+  {
+    "name": "Astral Aviation",
+    "iata": "8V",
+    "icao": "ACP"
+  },
+  {
+    "name": "ATA Airlines (Iran)",
+    "iata": "I3",
+    "icao": ""
+  },
+  {
+    "name": "Athens Airways",
+    "iata": "ZF",
+    "icao": ""
+  },
+  {
+    "name": "Atifly",
+    "iata": "A1",
+    "icao": "A1F"
+  },
+  {
+    "name": "Atlant-Soyuz Airlines",
+    "iata": "3G",
+    "icao": "AYZ"
+  },
+  {
+    "name": "Atlantic Airways",
+    "iata": "RC",
+    "icao": "FLI"
+  },
+  {
+    "name": "Atlantic Southeast Airlines",
+    "iata": "EV",
+    "icao": "ASQ"
+  },
+  {
+    "name": "Atlantis European Airways",
+    "iata": "TD",
+    "icao": "LUR"
+  },
+  {
+    "name": "Atlas Air",
+    "iata": "5Y",
+    "icao": "GTI"
+  },
+  {
+    "name": "Atlas Blue",
+    "iata": "8A",
+    "icao": "BMM"
+  },
+  {
+    "name": "Atlasjet",
+    "iata": "KK",
+    "icao": "KKK"
+  },
+  {
+    "name": "ATRAN Cargo Airlines",
+    "iata": "V8",
+    "icao": "VAS"
+  },
+  {
+    "name": "Augsburg Airways",
+    "iata": "IQ",
+    "icao": "AUB"
+  },
+  {
+    "name": "Aurigny Air Services",
+    "iata": "GR",
+    "icao": "AUR"
+  },
+  {
+    "name": "Austral Brasil",
+    "iata": "W7",
+    "icao": ""
+  },
+  {
+    "name": "Austral Lineas Aereas",
+    "iata": "AU",
+    "icao": "AUT"
+  },
+  {
+    "name": "Austrian Airlines",
+    "iata": "OS",
+    "icao": "AUA"
+  },
+  {
+    "name": "Aviabus",
+    "iata": "U1",
+    "icao": "ABI"
+  },
+  {
+    "name": "Avialeasing Aviation Company",
+    "iata": "EC",
+    "icao": "TWN"
+  },
+  {
+    "name": "Avianca - Aerovias Nacionales de Colombia",
+    "iata": "AV",
+    "icao": "AVA"
+  },
+  {
+    "name": "Avianova (Russia)",
+    "iata": "AO",
+    "icao": ""
+  },
+  {
+    "name": "Avient Aviation",
+    "iata": "Z3",
+    "icao": "SMJ"
+  },
+  {
+    "name": "Avies",
+    "iata": "U3",
+    "icao": "AIA"
+  },
+  {
+    "name": "Avilu",
+    "iata": "..",
+    "icao": "..."
+  },
+  {
+    "name": "Aws express",
+    "iata": "B0",
+    "icao": "666"
+  },
+  {
+    "name": "Azerbaijan Airlines",
+    "iata": "J2",
+    "icao": "AHY"
+  },
+  {
+    "name": "Azul",
+    "iata": "AD",
+    "icao": "AZU"
+  },
+  {
+    "name": "BA CityFlyer",
+    "iata": "CJ",
+    "icao": "CFE"
+  },
+  {
+    "name": "Bahamasair",
+    "iata": "UP",
+    "icao": "BHS"
+  },
+  {
+    "name": "Baikotovitchestrian Airlines",
+    "iata": "BU",
+    "icao": "BUU"
+  },
+  {
+    "name": "Balkan Bulgarian Airlines",
+    "iata": "LZ",
+    "icao": ""
+  },
+  {
+    "name": "Baltic Air lines",
+    "iata": "B1",
+    "icao": "BA1"
+  },
+  {
+    "name": "Bangkok Airways",
+    "iata": "PG",
+    "icao": "BKP"
+  },
+  {
+    "name": "Barents AirLink",
+    "iata": "8N",
+    "icao": "NKF"
+  },
+  {
+    "name": "Bassaka airlines",
+    "iata": "5B",
+    "icao": "BSX"
+  },
+  {
+    "name": "Bearskin Lake Air Service",
+    "iata": "JV",
+    "icao": "BLS"
+  },
+  {
+    "name": "Belair Airlines",
+    "iata": "4T",
+    "icao": "BHP"
+  },
+  {
+    "name": "Belavia Belarusian Airlines",
+    "iata": "B2",
+    "icao": "BRU"
+  },
+  {
+    "name": "Bellview Airlines",
+    "iata": "B3",
+    "icao": "BLV"
+  },
+  {
+    "name": "Bemidji Airlines",
+    "iata": "CH",
+    "icao": "BMJ"
+  },
+  {
+    "name": "Bering Air",
+    "iata": "8E",
+    "icao": "BRG"
+  },
+  {
+    "name": "Berjaya Air",
+    "iata": "J8",
+    "icao": "BVT"
+  },
+  {
+    "name": "Biman Bangladesh Airlines",
+    "iata": "BG",
+    "icao": "BBC"
+  },
+  {
+    "name": "Binter Canarias",
+    "iata": "NT",
+    "icao": "IBB"
+  },
+  {
+    "name": "Black Stallion Airways",
+    "iata": "BZ",
+    "icao": "BSA"
+  },
+  {
+    "name": "Blue Air",
+    "iata": "0B",
+    "icao": "JOR"
+  },
+  {
+    "name": "Blue Panorama Airlines",
+    "iata": "BV",
+    "icao": "BPA"
+  },
+  {
+    "name": "Blue Wings",
+    "iata": "QW",
+    "icao": "BWG"
+  },
+  {
+    "name": "Blue1",
+    "iata": "KF",
+    "icao": "BLF"
+  },
+  {
+    "name": "bmi",
+    "iata": "BD",
+    "icao": "BMA"
+  },
+  {
+    "name": "bmibaby",
+    "iata": "WW",
+    "icao": "BMI"
+  },
+  {
+    "name": "Bobb Air Freight",
+    "iata": "01",
+    "icao": ""
+  },
+  {
+    "name": "Boutique Air (Priv)",
+    "iata": "4B",
+    "icao": "BTQ"
+  },
+  {
+    "name": "BQB Lineas Aereas",
+    "iata": "5Q",
+    "icao": ""
+  },
+  {
+    "name": "BRAZIL AIR",
+    "iata": "GB",
+    "icao": "BZE"
+  },
+  {
+    "name": "Brit Air",
+    "iata": "DB",
+    "icao": "BZH"
+  },
+  {
+    "name": "British Airways",
+    "iata": "BA",
+    "icao": "BAW"
+  },
+  {
+    "name": "British International Helicopters",
+    "iata": "BS",
+    "icao": "BIH"
+  },
+  {
+    "name": "British Mediterranean Airways",
+    "iata": "KJ",
+    "icao": "LAJ"
+  },
+  {
+    "name": "Brussels Airlines",
+    "iata": "SN",
+    "icao": "DAT"
+  },
+  {
+    "name": "BudgetAir",
+    "iata": "1K",
+    "icao": "BG1"
+  },
+  {
+    "name": "Bulgaria Air",
+    "iata": "FB",
+    "icao": "LZB"
+  },
+  {
+    "name": "Buquebus Líneas Aéreas",
+    "iata": "BQ",
+    "icao": "BQB"
+  },
+  {
+    "name": "Business Aviation",
+    "iata": "4P",
+    "icao": ""
+  },
+  {
+    "name": "BusinessAir",
+    "iata": "8B",
+    "icao": "BCC"
+  },
+  {
+    "name": "BVI Airways",
+    "iata": "XV",
+    "icao": ""
+  },
+  {
+    "name": "CAL Cargo Air Lines",
+    "iata": "5C",
+    "icao": "ICL"
+  },
+  {
+    "name": "Calima Aviacion",
+    "iata": "XG",
+    "icao": "CLI"
+  },
+  {
+    "name": "Camair-co",
+    "iata": "QC",
+    "icao": ""
+  },
+  {
+    "name": "Cambodia Angkor Air (K6)",
+    "iata": "K6",
+    "icao": ""
+  },
+  {
+    "name": "Canadian Airlines",
+    "iata": "CP",
+    "icao": "CDN"
+  },
+  {
+    "name": "Canadian National Airways",
+    "iata": "CN",
+    "icao": "YCP"
+  },
+  {
+    "name": "Canadian North",
+    "iata": "5T",
+    "icao": "MPE"
+  },
+  {
+    "name": "CanXplorer",
+    "iata": "C2",
+    "icao": "CAP"
+  },
+  {
+    "name": "CanXpress",
+    "iata": "C1",
+    "icao": "CA1"
+  },
+  {
+    "name": "Cape Air",
+    "iata": "9K",
+    "icao": "KAP"
+  },
+  {
+    "name": "Cargo Plus Aviation",
+    "iata": "8L",
+    "icao": "CGP"
+  },
+  {
+    "name": "Caribbean Airlines",
+    "iata": "BW",
+    "icao": "BWA"
+  },
+  {
+    "name": "Carnival Air Lines",
+    "iata": "KW",
+    "icao": ""
+  },
+  {
+    "name": "Carpatair",
+    "iata": "V3",
+    "icao": "KRP"
+  },
+  {
+    "name": "Caspian Airlines",
+    "iata": "RV",
+    "icao": "CPN"
+  },
+  {
+    "name": "Cathay Pacific",
+    "iata": "CX",
+    "icao": "CPA"
+  },
+  {
+    "name": "Catovair",
+    "iata": "OC",
+    "icao": ""
+  },
+  {
+    "name": "Caucasus Airlines",
+    "iata": "NS",
+    "icao": ""
+  },
+  {
+    "name": "Cayman Airways",
+    "iata": "KX",
+    "icao": "CAY"
+  },
+  {
+    "name": "CB Airways UK ( Interliging Flights )",
+    "iata": "1F",
+    "icao": "CIF"
+  },
+  {
+    "name": "CCML Airlines",
+    "iata": "CB",
+    "icao": "CCC"
+  },
+  {
+    "name": "Cebu Pacific",
+    "iata": "5J",
+    "icao": "CEB"
+  },
+  {
+    "name": "Centralwings",
+    "iata": "C0",
+    "icao": "CLW"
+  },
+  {
+    "name": "Chautauqua Airlines",
+    "iata": "RP",
+    "icao": "CHQ"
+  },
+  {
+    "name": "China Airlines",
+    "iata": "CI",
+    "icao": "CAL"
+  },
+  {
+    "name": "China Eastern Airlines",
+    "iata": "MU",
+    "icao": "CES"
+  },
+  {
+    "name": "China Northwest Airlines (WH)",
+    "iata": "WH",
+    "icao": ""
+  },
+  {
+    "name": "China Southern Airlines",
+    "iata": "CZ",
+    "icao": "CSN"
+  },
+  {
+    "name": "China SSS",
+    "iata": "9C",
+    "icao": ""
+  },
+  {
+    "name": "China United",
+    "iata": "KN",
+    "icao": ""
+  },
+  {
+    "name": "China United Airlines",
+    "iata": "HR",
+    "icao": "CUA"
+  },
+  {
+    "name": "Chongqing Airlines",
+    "iata": "OQ",
+    "icao": "CQN"
+  },
+  {
+    "name": "Ciao Air",
+    "iata": "99",
+    "icao": ""
+  },
+  {
+    "name": "Ciel Canadien",
+    "iata": "YC",
+    "icao": "YCC"
+  },
+  {
+    "name": "Cimber Air",
+    "iata": "QI",
+    "icao": "CIM"
+  },
+  {
+    "name": "Cirrus Airlines",
+    "iata": "C9",
+    "icao": "RUS"
+  },
+  {
+    "name": "Citilink Indonesia",
+    "iata": "QG",
+    "icao": ""
+  },
+  {
+    "name": "City Airline",
+    "iata": "CF",
+    "icao": "SDR"
+  },
+  {
+    "name": "City Airways",
+    "iata": "E8",
+    "icao": "GTA"
+  },
+  {
+    "name": "City Connexion Airlines",
+    "iata": "G3",
+    "icao": "CIX"
+  },
+  {
+    "name": "CityJet",
+    "iata": "WX",
+    "icao": "BCY"
+  },
+  {
+    "name": "Click (Mexicana)",
+    "iata": "QA",
+    "icao": ""
+  },
+  {
+    "name": "Coastal Air",
+    "iata": "DQ",
+    "icao": ""
+  },
+  {
+    "name": "Colgan Air",
+    "iata": "9L",
+    "icao": "CJC"
+  },
+  {
+    "name": "Comair",
+    "iata": "OH",
+    "icao": "COM"
+  },
+  {
+    "name": "Comair",
+    "iata": "MN",
+    "icao": "CAW"
+  },
+  {
+    "name": "CommutAir",
+    "iata": "C5",
+    "icao": "UCA"
+  },
+  {
+    "name": "Comores Airlines",
+    "iata": "KR",
+    "icao": "CWK"
+  },
+  {
+    "name": "Compagnie Africaine d\\\\'Aviation",
+    "iata": "E9",
+    "icao": ""
+  },
+  {
+    "name": "Condor Flugdienst",
+    "iata": "DE",
+    "icao": "CFG"
+  },
+  {
+    "name": "Congo Express",
+    "iata": "XZ",
+    "icao": ""
+  },
+  {
+    "name": "Consorcio Aviaxsa",
+    "iata": "6A",
+    "icao": "CHP"
+  },
+  {
+    "name": "Contact Air",
+    "iata": "C3",
+    "icao": "KIS"
+  },
+  {
+    "name": "Continental Airlines",
+    "iata": "CO",
+    "icao": "COA"
+  },
+  {
+    "name": "Continental Micronesia",
+    "iata": "CS",
+    "icao": "CMI"
+  },
+  {
+    "name": "Conviasa",
+    "iata": "V0",
+    "icao": "VCV"
+  },
+  {
+    "name": "Copa Airlines",
+    "iata": "CM",
+    "icao": "CMP"
+  },
+  {
+    "name": "Copenhagen Express",
+    "iata": "0X",
+    "icao": "CX0"
+  },
+  {
+    "name": "Corsairfly",
+    "iata": "SS",
+    "icao": "CRL"
+  },
+  {
+    "name": "Corse-Mediterranee",
+    "iata": "XK",
+    "icao": "CCM"
+  },
+  {
+    "name": "Croatia Airlines",
+    "iata": "OU",
+    "icao": "CTN"
+  },
+  {
+    "name": "Cubana de Aviación",
+    "iata": "CU",
+    "icao": "CUB"
+  },
+  {
+    "name": "Cyprus Airways",
+    "iata": "CY",
+    "icao": "CYP"
+  },
+  {
+    "name": "Cyprus Turkish Airlines",
+    "iata": "YK",
+    "icao": ""
+  },
+  {
+    "name": "Czech Airlines",
+    "iata": "OK",
+    "icao": "CSA"
+  },
+  {
+    "name": "Daallo Airlines",
+    "iata": "D3",
+    "icao": "DAO"
+  },
+  {
+    "name": "Dalavia",
+    "iata": "H8",
+    "icao": "KHB"
+  },
+  {
+    "name": "Dana Air",
+    "iata": "DA",
+    "icao": ""
+  },
+  {
+    "name": "Danube Wings (V5)",
+    "iata": "V5",
+    "icao": ""
+  },
+  {
+    "name": "Darwin Airline",
+    "iata": "0D",
+    "icao": "DWT"
+  },
+  {
+    "name": "DAT Danish Air Transport",
+    "iata": "DX",
+    "icao": "DTR"
+  },
+  {
+    "name": "dba",
+    "iata": "DI",
+    "icao": "BAG"
+  },
+  {
+    "name": "Delta Air Lines",
+    "iata": "DL",
+    "icao": "DAL"
+  },
+  {
+    "name": "Denim Air",
+    "iata": "J7",
+    "icao": ""
+  },
+  {
+    "name": "Dennis Sky",
+    "iata": "DH",
+    "icao": "DSY"
+  },
+  {
+    "name": "Dense Airways",
+    "iata": "KP",
+    "icao": "DWA"
+  },
+  {
+    "name": "Dense Connection",
+    "iata": "KZ",
+    "icao": "DC2"
+  },
+  {
+    "name": "Deutsche Bahn",
+    "iata": "2A",
+    "icao": ""
+  },
+  {
+    "name": "Djibouti Airlines",
+    "iata": "D8",
+    "icao": "DJB"
+  },
+  {
+    "name": "Dobrolet",
+    "iata": "QD",
+    "icao": "DOB"
+  },
+  {
+    "name": "Domenican Airlines",
+    "iata": "D1",
+    "icao": "MDO"
+  },
+  {
+    "name": "Dominicana de Aviaci",
+    "iata": "DO",
+    "icao": "DOA"
+  },
+  {
+    "name": "Domodedovo Airlines",
+    "iata": "E3",
+    "icao": "DMO"
+  },
+  {
+    "name": "Dragonair",
+    "iata": "KA",
+    "icao": "HDA"
+  },
+  {
+    "name": "Druk Air",
+    "iata": "KB",
+    "icao": "DRK"
+  },
+  {
+    "name": "Eagle Air",
+    "iata": "H7",
+    "icao": ""
+  },
+  {
+    "name": "Eagle Atlantic Airlines",
+    "iata": "E2",
+    "icao": ""
+  },
+  {
+    "name": "East African",
+    "iata": "QU",
+    "icao": "UGX"
+  },
+  {
+    "name": "Eastar Jet",
+    "iata": "ZE",
+    "icao": "ESR"
+  },
+  {
+    "name": "Eastern Airways",
+    "iata": "T3",
+    "icao": "EZE"
+  },
+  {
+    "name": "Eastern Atlantic Virtual Airlines",
+    "iata": "13",
+    "icao": "EAV"
+  },
+  {
+    "name": "Eastland Air",
+    "iata": "DK",
+    "icao": "ELA"
+  },
+  {
+    "name": "easyJet",
+    "iata": "U2",
+    "icao": "EZY"
+  },
+  {
+    "name": "EasyJet (DS)",
+    "iata": "DS",
+    "icao": ""
+  },
+  {
+    "name": "Edelweiss Air",
+    "iata": "WK",
+    "icao": "EDW"
+  },
+  {
+    "name": "Egyptair",
+    "iata": "MS",
+    "icao": "MSR"
+  },
+  {
+    "name": "El Al Israel Airlines",
+    "iata": "LY",
+    "icao": "ELY"
+  },
+  {
+    "name": "El-Buraq Air Transport",
+    "iata": "UZ",
+    "icao": "BRQ"
+  },
+  {
+    "name": "ELK Airways",
+    "iata": "--",
+    "icao": "ELK"
+  },
+  {
+    "name": "Elysian Airlines",
+    "iata": "E4",
+    "icao": "GIE"
+  },
+  {
+    "name": "Emirates",
+    "iata": "EK",
+    "icao": "UAE"
+  },
+  {
+    "name": "Empresa Ecuatoriana De Aviacion",
+    "iata": "EU",
+    "icao": "EEA"
+  },
+  {
+    "name": "Epic Holiday",
+    "iata": "FA",
+    "icao": "4AA"
+  },
+  {
+    "name": "Era Alaska",
+    "iata": "7H",
+    "icao": "ERR"
+  },
+  {
+    "name": "Eritrean Airlines",
+    "iata": "B8",
+    "icao": "ERT"
+  },
+  {
+    "name": "Estonian Air",
+    "iata": "OV",
+    "icao": "ELL"
+  },
+  {
+    "name": "Ethiopian Airlines",
+    "iata": "ET",
+    "icao": "ETH"
+  },
+  {
+    "name": "Etihad Airways",
+    "iata": "EY",
+    "icao": "ETD"
+  },
+  {
+    "name": "Euro Exec Express",
+    "iata": "RZ",
+    "icao": ""
+  },
+  {
+    "name": "Euro Jet",
+    "iata": "24",
+    "icao": ""
+  },
+  {
+    "name": "Eurocypria Airlines",
+    "iata": "UI",
+    "icao": "ECA"
+  },
+  {
+    "name": "Eurofly Service",
+    "iata": "GJ",
+    "icao": "EEU"
+  },
+  {
+    "name": "Euroline",
+    "iata": "4L",
+    "icao": "MJX"
+  },
+  {
+    "name": "Eurolot",
+    "iata": "K2",
+    "icao": "ELO"
+  },
+  {
+    "name": "Europe Jet",
+    "iata": "EX",
+    "icao": "EU9"
+  },
+  {
+    "name": "European Air Express",
+    "iata": "EA",
+    "icao": "EAL"
+  },
+  {
+    "name": "EuropeSky",
+    "iata": "ES",
+    "icao": "EUV"
+  },
+  {
+    "name": "Eurowings",
+    "iata": "EW",
+    "icao": "EWG"
+  },
+  {
+    "name": "EVA Air",
+    "iata": "BR",
+    "icao": "EVA"
+  },
+  {
+    "name": "Evergreen International Airlines",
+    "iata": "EZ",
+    "icao": "EIA"
+  },
+  {
+    "name": "Excel Airways",
+    "iata": "JN",
+    "icao": "XLA"
+  },
+  {
+    "name": "Express One International",
+    "iata": "EO",
+    "icao": "LHN"
+  },
+  {
+    "name": "ExpressJet",
+    "iata": "XE",
+    "icao": "BTA"
+  },
+  {
+    "name": "Far Eastern Air Transport",
+    "iata": "EF",
+    "icao": "EFA"
+  },
+  {
+    "name": "Felix Airways",
+    "iata": "FU",
+    "icao": "FXX"
+  },
+  {
+    "name": "Finnair",
+    "iata": "AY",
+    "icao": "FIN"
+  },
+  {
+    "name": "Finncomm Airlines",
+    "iata": "FC",
+    "icao": "WBA"
+  },
+  {
+    "name": "Firefly",
+    "iata": "FY",
+    "icao": "FFM"
+  },
+  {
+    "name": "First Air",
+    "iata": "7F",
+    "icao": "FAB"
+  },
+  {
+    "name": "First Choice Airways",
+    "iata": "DP",
+    "icao": "FCA"
+  },
+  {
+    "name": "Flightline",
+    "iata": "B5",
+    "icao": "FLT"
+  },
+  {
+    "name": "Flightlink Tanzania",
+    "iata": "Z9",
+    "icao": ""
+  },
+  {
+    "name": "Florida West International Airways",
+    "iata": "RF",
+    "icao": "FWL"
+  },
+  {
+    "name": "Fly 6ix",
+    "iata": "6I",
+    "icao": ""
+  },
+  {
+    "name": "Fly Brasil",
+    "iata": "F1",
+    "icao": "FBL"
+  },
+  {
+    "name": "Fly Colombia ( Interliging Flights )",
+    "iata": "3F",
+    "icao": "3FF"
+  },
+  {
+    "name": "Fly Dubai",
+    "iata": "FZ",
+    "icao": "FDB"
+  },
+  {
+    "name": "Fly Europa",
+    "iata": "ER",
+    "icao": "RWW"
+  },
+  {
+    "name": "Fly France",
+    "iata": "FF",
+    "icao": "FRF"
+  },
+  {
+    "name": "Fly One",
+    "iata": "F5",
+    "icao": "FI5"
+  },
+  {
+    "name": "Fly Romania",
+    "iata": "X5",
+    "icao": "OTJ"
+  },
+  {
+    "name": "Fly540",
+    "iata": "5H",
+    "icao": "FFV"
+  },
+  {
+    "name": "Flybaboo",
+    "iata": "F7",
+    "icao": "BBO"
+  },
+  {
+    "name": "Flybe",
+    "iata": "BE",
+    "icao": "BEE"
+  },
+  {
+    "name": "Flyglobespan",
+    "iata": "B4",
+    "icao": "GSM"
+  },
+  {
+    "name": "FlyHigh Airlines Ireland (FH)",
+    "iata": "FH",
+    "icao": "FHI"
+  },
+  {
+    "name": "FlyLal",
+    "iata": "TE",
+    "icao": "LIL"
+  },
+  {
+    "name": "FlyNordic",
+    "iata": "LF",
+    "icao": "NDC"
+  },
+  {
+    "name": "FlyPortugal",
+    "iata": "PO",
+    "icao": "FPT"
+  },
+  {
+    "name": "Formosa Airlines",
+    "iata": "VY",
+    "icao": "FOS"
+  },
+  {
+    "name": "FOX Linhas Aereas",
+    "iata": "FX",
+    "icao": "FOX"
+  },
+  {
+    "name": "Freedom Air",
+    "iata": "FP",
+    "icao": "FRE"
+  },
+  {
+    "name": "Frontier Airlines",
+    "iata": "F9",
+    "icao": "FFT"
+  },
+  {
+    "name": "Frontier Flying Service",
+    "iata": "2F",
+    "icao": "FTA"
+  },
+  {
+    "name": "Fuji Dream Airlines",
+    "iata": "JH",
+    "icao": ""
+  },
+  {
+    "name": "Gabon Airlines",
+    "iata": "GY",
+    "icao": "GBK"
+  },
+  {
+    "name": "Gadair European Airlines",
+    "iata": "GP",
+    "icao": "GDR"
+  },
+  {
+    "name": "Garuda Indonesia",
+    "iata": "GA",
+    "icao": "GIA"
+  },
+  {
+    "name": "Gazpromavia",
+    "iata": "4G",
+    "icao": "GZP"
+  },
+  {
+    "name": "GB Airways",
+    "iata": "GT",
+    "icao": "GBL"
+  },
+  {
+    "name": "Genesis",
+    "iata": "GK",
+    "icao": ""
+  },
+  {
+    "name": "Georgian Airways",
+    "iata": "A9",
+    "icao": "TGZ"
+  },
+  {
+    "name": "Georgian National Airlines",
+    "iata": "QB",
+    "icao": "GFG"
+  },
+  {
+    "name": "German International Air Lines",
+    "iata": "GM",
+    "icao": "GER"
+  },
+  {
+    "name": "Germania",
+    "iata": "ST",
+    "icao": "GMI"
+  },
+  {
+    "name": "Germanwings",
+    "iata": "4U",
+    "icao": "GWI"
+  },
+  {
+    "name": "GermanXL",
+    "iata": "GX",
+    "icao": "GXG"
+  },
+  {
+    "name": "Ghana International Airlines",
+    "iata": "G0",
+    "icao": "GHB"
+  },
+  {
+    "name": "Global Airlines",
+    "iata": "0G",
+    "icao": "GA0"
+  },
+  {
+    "name": "Globus",
+    "iata": "GH",
+    "icao": "GLP"
+  },
+  {
+    "name": "GNB Linhas Aereas",
+    "iata": "GN",
+    "icao": ""
+  },
+  {
+    "name": "Go Air",
+    "iata": "G8",
+    "icao": "GOW"
+  },
+  {
+    "name": "GoJet Airlines",
+    "iata": "G7",
+    "icao": "GJS"
+  },
+  {
+    "name": "Golden Air",
+    "iata": "DC",
+    "icao": "GAO"
+  },
+  {
+    "name": "Gomelavia",
+    "iata": "YD",
+    "icao": ""
+  },
+  {
+    "name": "Great Lakes Airlines",
+    "iata": "ZK",
+    "icao": "GLA"
+  },
+  {
+    "name": "Greenfly",
+    "iata": "XX",
+    "icao": "GFY"
+  },
+  {
+    "name": "Grupo TACA",
+    "iata": "TA",
+    "icao": "TAT"
+  },
+  {
+    "name": "Gryphon Airlines",
+    "iata": "6P",
+    "icao": ""
+  },
+  {
+    "name": "Gulf Air Bahrain",
+    "iata": "GF",
+    "icao": "GBA"
+  },
+  {
+    "name": "Hageland Aviation Services",
+    "iata": "H6",
+    "icao": "HAG"
+  },
+  {
+    "name": "Hainan Airlines",
+    "iata": "HU",
+    "icao": "CHH"
+  },
+  {
+    "name": "Haiti Ambassador Airlines",
+    "iata": "2T",
+    "icao": "HAM"
+  },
+  {
+    "name": "Halcyonair",
+    "iata": "7Z",
+    "icao": ""
+  },
+  {
+    "name": "Hamburg International",
+    "iata": "4R",
+    "icao": "HHI"
+  },
+  {
+    "name": "Hankook Air US",
+    "iata": "H1",
+    "icao": "HA1"
+  },
+  {
+    "name": "Hankook Airline",
+    "iata": "HN",
+    "icao": "HNX"
+  },
+  {
+    "name": "Hapagfly",
+    "iata": "HF",
+    "icao": "HLF"
+  },
+  {
+    "name": "Harbour Air (Priv)",
+    "iata": "H3",
+    "icao": ""
+  },
+  {
+    "name": "Hawaiian Airlines",
+    "iata": "HA",
+    "icao": "HAL"
+  },
+  {
+    "name": "Hawkair",
+    "iata": "BH",
+    "icao": ""
+  },
+  {
+    "name": "Heli France",
+    "iata": "8H",
+    "icao": "HFR"
+  },
+  {
+    "name": "Helijet",
+    "iata": "JB",
+    "icao": "JBA"
+  },
+  {
+    "name": "Hellas Jet",
+    "iata": "T4",
+    "icao": "HEJ"
+  },
+  {
+    "name": "Hellenic Imperial Airways",
+    "iata": "HT",
+    "icao": "IMP"
+  },
+  {
+    "name": "Hello",
+    "iata": "HW",
+    "icao": "FHE"
+  },
+  {
+    "name": "Helvetic Airways",
+    "iata": "2L",
+    "icao": "OAW"
+  },
+  {
+    "name": "Hex'Air",
+    "iata": "UD",
+    "icao": "HER"
+  },
+  {
+    "name": "Hi Fly (5K)",
+    "iata": "5K",
+    "icao": ""
+  },
+  {
+    "name": "Himalayan Airlines",
+    "iata": "HC",
+    "icao": "HYM"
+  },
+  {
+    "name": "Hokkaido International Airlines",
+    "iata": "HD",
+    "icao": "ADO"
+  },
+  {
+    "name": "Homer Air",
+    "iata": "MR",
+    "icao": "OME"
+  },
+  {
+    "name": "Hong Kong Airlines",
+    "iata": "HX",
+    "icao": "CRK"
+  },
+  {
+    "name": "Hong Kong Express Airways",
+    "iata": "UO",
+    "icao": "HKE"
+  },
+  {
+    "name": "Horizon Air",
+    "iata": "QX",
+    "icao": "QXE"
+  },
+  {
+    "name": "Horizon Airlines",
+    "iata": "BN",
+    "icao": "HZA"
+  },
+  {
+    "name": "Huaxia",
+    "iata": "G5",
+    "icao": ""
+  },
+  {
+    "name": "I-Fly",
+    "iata": "H5",
+    "icao": "RSY"
+  },
+  {
+    "name": "Iberia Airlines",
+    "iata": "IB",
+    "icao": "IBE"
+  },
+  {
+    "name": "Iberia Express",
+    "iata": "I2",
+    "icao": "IBS"
+  },
+  {
+    "name": "Iberworld",
+    "iata": "TY",
+    "icao": "IWD"
+  },
+  {
+    "name": "Ibex Airlines",
+    "iata": "FW",
+    "icao": "IBX"
+  },
+  {
+    "name": "Icelandair",
+    "iata": "FI",
+    "icao": "ICE"
+  },
+  {
+    "name": "Imair Airlines",
+    "iata": "IK",
+    "icao": "ITX"
+  },
+  {
+    "name": "INAVIA Internacional",
+    "iata": "Z5",
+    "icao": "IIR"
+  },
+  {
+    "name": "Indian Airlines",
+    "iata": "IC",
+    "icao": "IAC"
+  },
+  {
+    "name": "IndiGo Airlines",
+    "iata": "6E",
+    "icao": "IGO"
+  },
+  {
+    "name": "Indonesia AirAsia",
+    "iata": "QZ",
+    "icao": "AWQ"
+  },
+  {
+    "name": "Indonesia Sky",
+    "iata": "I5",
+    "icao": "IDS"
+  },
+  {
+    "name": "Indonesian Airlines",
+    "iata": "IO",
+    "icao": "IAA"
+  },
+  {
+    "name": "Indya Airline Group",
+    "iata": "G1",
+    "icao": "IG1"
+  },
+  {
+    "name": "Insel Air (7I/INC) (Priv)",
+    "iata": "7I",
+    "icao": ""
+  },
+  {
+    "name": "Interair South Africa",
+    "iata": "D6",
+    "icao": "ILN"
+  },
+  {
+    "name": "Interjet (ABC Aerolineas)",
+    "iata": "4O",
+    "icao": ""
+  },
+  {
+    "name": "Interlink Airlines",
+    "iata": "ID",
+    "icao": "ITK"
+  },
+  {
+    "name": "International AirLink",
+    "iata": "I4",
+    "icao": ""
+  },
+  {
+    "name": "International Europe",
+    "iata": "9I",
+    "icao": "INE"
+  },
+  {
+    "name": "Intersky",
+    "iata": "3L",
+    "icao": "ISK"
+  },
+  {
+    "name": "Iran Air",
+    "iata": "IR",
+    "icao": "IRA"
+  },
+  {
+    "name": "Iran Aseman Airlines",
+    "iata": "EP",
+    "icao": "IRC"
+  },
+  {
+    "name": "Iraqi Airways",
+    "iata": "IA",
+    "icao": "IAW"
+  },
+  {
+    "name": "Island Air (WP)",
+    "iata": "WP",
+    "icao": "MKU"
+  },
+  {
+    "name": "Island Airlines",
+    "iata": "IS",
+    "icao": ""
+  },
+  {
+    "name": "Island Express Air",
+    "iata": "1X",
+    "icao": ""
+  },
+  {
+    "name": "Island Spirit",
+    "iata": "IP",
+    "icao": "ISX"
+  },
+  {
+    "name": "Islas Airways",
+    "iata": "IF",
+    "icao": "ISW"
+  },
+  {
+    "name": "Islena De Inversiones",
+    "iata": "WC",
+    "icao": "ISV"
+  },
+  {
+    "name": "Israir",
+    "iata": "6H",
+    "icao": "ISR"
+  },
+  {
+    "name": "Itek Air",
+    "iata": "GI",
+    "icao": "IKA"
+  },
+  {
+    "name": "IzAvia",
+    "iata": "I8",
+    "icao": ""
+  },
+  {
+    "name": "JAL Express",
+    "iata": "JC",
+    "icao": "JEX"
+  },
+  {
+    "name": "JALways",
+    "iata": "JO",
+    "icao": "JAZ"
+  },
+  {
+    "name": "Japan Air System",
+    "iata": "JD",
+    "icao": "JAS"
+  },
+  {
+    "name": "Japan Airlines",
+    "iata": "JL",
+    "icao": "JAL"
+  },
+  {
+    "name": "Japan Asia Airways",
+    "iata": "EG",
+    "icao": "JAA"
+  },
+  {
+    "name": "Japan Regio",
+    "iata": "ZX",
+    "icao": "ZXY"
+  },
+  {
+    "name": "Japan Transocean Air",
+    "iata": "NU",
+    "icao": "JTA"
+  },
+  {
+    "name": "Jayrow",
+    "iata": "\\\\'",
+    "icao": "\\\\'\\\\"
+  },
+  {
+    "name": "Jazeera Airways",
+    "iata": "J9",
+    "icao": "JZR"
+  },
+  {
+    "name": "Jeju Air",
+    "iata": "7C",
+    "icao": "JJA"
+  },
+  {
+    "name": "Jet Airways",
+    "iata": "9W",
+    "icao": "JAI"
+  },
+  {
+    "name": "Jet Airways",
+    "iata": "QJ",
+    "icao": ""
+  },
+  {
+    "name": "Jet2.com",
+    "iata": "LS",
+    "icao": "EXS"
+  },
+  {
+    "name": "Jet4You",
+    "iata": "8J",
+    "icao": "JFU"
+  },
+  {
+    "name": "Jetairfly",
+    "iata": "JF",
+    "icao": "JAF"
+  },
+  {
+    "name": "JetBlue Airways",
+    "iata": "B6",
+    "icao": "JBU"
+  },
+  {
+    "name": "Jetgo Australia",
+    "iata": "JG",
+    "icao": ""
+  },
+  {
+    "name": "Jetstar Airways",
+    "iata": "JQ",
+    "icao": "JST"
+  },
+  {
+    "name": "Jetstar Asia Airways",
+    "iata": "3K",
+    "icao": "JSA"
+  },
+  {
+    "name": "Jetstar Pacific",
+    "iata": "BL",
+    "icao": "PIC"
+  },
+  {
+    "name": "Jettor Airlines",
+    "iata": "NR",
+    "icao": "JTO"
+  },
+  {
+    "name": "Jin Air",
+    "iata": "LJ",
+    "icao": "JNA"
+  },
+  {
+    "name": "JobAir",
+    "iata": "3B",
+    "icao": ""
+  },
+  {
+    "name": "Joy Air",
+    "iata": "JR",
+    "icao": "JOY"
+  },
+  {
+    "name": "Juneyao Airlines",
+    "iata": "HO",
+    "icao": "DKH"
+  },
+  {
+    "name": "Jusur airways",
+    "iata": "JX",
+    "icao": "JSR"
+  },
+  {
+    "name": "Kam Air",
+    "iata": "RQ",
+    "icao": "KMF"
+  },
+  {
+    "name": "Kavminvodyavia",
+    "iata": "KV",
+    "icao": "MVD"
+  },
+  {
+    "name": "KD Avia",
+    "iata": "KD",
+    "icao": "KNI"
+  },
+  {
+    "name": "Kenmore Air",
+    "iata": "M5",
+    "icao": "KEN"
+  },
+  {
+    "name": "Kenya Airways",
+    "iata": "KQ",
+    "icao": "KQA"
+  },
+  {
+    "name": "Kharkiv Airlines",
+    "iata": "KH",
+    "icao": "KHK"
+  },
+  {
+    "name": "Kingfisher Airlines",
+    "iata": "IT",
+    "icao": "KFR"
+  },
+  {
+    "name": "Kish Air",
+    "iata": "Y9",
+    "icao": "IRK"
+  },
+  {
+    "name": "KLM Cityhopper",
+    "iata": "WA",
+    "icao": "KLC"
+  },
+  {
+    "name": "KLM Royal Dutch Airlines",
+    "iata": "KL",
+    "icao": "KLM"
+  },
+  {
+    "name": "KMV",
+    "iata": "МИ",
+    "icao": ""
+  },
+  {
+    "name": "Kogalymavia Air Company",
+    "iata": "7K",
+    "icao": "KGL"
+  },
+  {
+    "name": "KoralBlue Airlines",
+    "iata": "K7",
+    "icao": "KBR"
+  },
+  {
+    "name": "Korean Air",
+    "iata": "KE",
+    "icao": "KAL"
+  },
+  {
+    "name": "Korongo Airlines",
+    "iata": "ZC",
+    "icao": "KGO"
+  },
+  {
+    "name": "Kostromskie avialinii",
+    "iata": "K1",
+    "icao": "KOQ"
+  },
+  {
+    "name": "Krasnojarsky Airlines",
+    "iata": "7B",
+    "icao": "KJC"
+  },
+  {
+    "name": "KSY",
+    "iata": "KY",
+    "icao": "KSY"
+  },
+  {
+    "name": "Kuban Airlines",
+    "iata": "GW",
+    "icao": "KIL"
+  },
+  {
+    "name": "Kuwait Airways",
+    "iata": "KU",
+    "icao": "KAC"
+  },
+  {
+    "name": "Kuzu Airlines Cargo",
+    "iata": "GO",
+    "icao": "KZU"
+  },
+  {
+    "name": "L",
+    "iata": "MJ",
+    "icao": "LPR"
+  },
+  {
+    "name": "LACSA",
+    "iata": "LR",
+    "icao": "LRC"
+  },
+  {
+    "name": "LAN Airlines",
+    "iata": "LA",
+    "icao": "LAN"
+  },
+  {
+    "name": "LAN Argentina",
+    "iata": "4M",
+    "icao": "DSM"
+  },
+  {
+    "name": "LAN Express",
+    "iata": "LU",
+    "icao": "LXP"
+  },
+  {
+    "name": "LAN Peru",
+    "iata": "LP",
+    "icao": "LPE"
+  },
+  {
+    "name": "Lao Airlines",
+    "iata": "QV",
+    "icao": "LAO"
+  },
+  {
+    "name": "Lauda Air",
+    "iata": "NG",
+    "icao": "LDA"
+  },
+  {
+    "name": "LCM AIRLINES",
+    "iata": "LQ",
+    "icao": "LMM"
+  },
+  {
+    "name": "Leeward Islands Air Transport",
+    "iata": "LI",
+    "icao": "LIA"
+  },
+  {
+    "name": "Liberty Airways",
+    "iata": "LE",
+    "icao": "LTY"
+  },
+  {
+    "name": "Libyan Arab Airlines",
+    "iata": "LN",
+    "icao": "LAA"
+  },
+  {
+    "name": "Line Blue",
+    "iata": "L8",
+    "icao": "LBL"
+  },
+  {
+    "name": "Linhas A",
+    "iata": "LM",
+    "icao": "LAM"
+  },
+  {
+    "name": "Lion Mentari Airlines",
+    "iata": "JT",
+    "icao": "LNI"
+  },
+  {
+    "name": "LionXpress",
+    "iata": "C4",
+    "icao": "LIX"
+  },
+  {
+    "name": "Locair",
+    "iata": "ZQ",
+    "icao": "LOC"
+  },
+  {
+    "name": "LOT Polish Airlines",
+    "iata": "LO",
+    "icao": "LOT"
+  },
+  {
+    "name": "LSM Airlines",
+    "iata": "PQ",
+    "icao": "LOO"
+  },
+  {
+    "name": "LSM AIRLINES",
+    "iata": "YZ",
+    "icao": "YZZ"
+  },
+  {
+    "name": "LSM International",
+    "iata": "II",
+    "icao": "UWW"
+  },
+  {
+    "name": "LTE International Airways",
+    "iata": "XO",
+    "icao": "LTE"
+  },
+  {
+    "name": "LTU Austria",
+    "iata": "L3",
+    "icao": "LTO"
+  },
+  {
+    "name": "Luchsh Airlines",
+    "iata": "L4",
+    "icao": "LJJ"
+  },
+  {
+    "name": "Luftfahrtgesellschaft Walter",
+    "iata": "HE",
+    "icao": "LGW"
+  },
+  {
+    "name": "Lufthansa",
+    "iata": "LH",
+    "icao": "DLH"
+  },
+  {
+    "name": "Lufthansa CityLine",
+    "iata": "CL",
+    "icao": "CLH"
+  },
+  {
+    "name": "Lufttransport",
+    "iata": "L5",
+    "icao": "LTR"
+  },
+  {
+    "name": "Lugansk Airlines",
+    "iata": "L7",
+    "icao": ""
+  },
+  {
+    "name": "Luxair",
+    "iata": "LG",
+    "icao": "LGL"
+  },
+  {
+    "name": "Maastricht Airlines",
+    "iata": "W2",
+    "icao": ""
+  },
+  {
+    "name": "Maersk",
+    "iata": "DM",
+    "icao": ""
+  },
+  {
+    "name": "Mahan Air",
+    "iata": "W5",
+    "icao": "IRM"
+  },
+  {
+    "name": "Malawian Airlines",
+    "iata": "3W",
+    "icao": ""
+  },
+  {
+    "name": "Malaysia Airlines",
+    "iata": "MH",
+    "icao": "MAS"
+  },
+  {
+    "name": "Maldivian",
+    "iata": "Q2",
+    "icao": ""
+  },
+  {
+    "name": "Maldivo Airlines",
+    "iata": "ML",
+    "icao": "MAV"
+  },
+  {
+    "name": "Malév",
+    "iata": "MA",
+    "icao": "MAH"
+  },
+  {
+    "name": "Malindo Air",
+    "iata": "OD",
+    "icao": "MXD"
+  },
+  {
+    "name": "Malmö Aviation",
+    "iata": "TF",
+    "icao": "SCW"
+  },
+  {
+    "name": "Malta Air Charter",
+    "iata": "R5",
+    "icao": "MAC"
+  },
+  {
+    "name": "Mandala Airlines",
+    "iata": "RI",
+    "icao": "MDL"
+  },
+  {
+    "name": "Mandarin Airlines",
+    "iata": "AE",
+    "icao": "MDA"
+  },
+  {
+    "name": "Mango",
+    "iata": "JE",
+    "icao": "MNO"
+  },
+  {
+    "name": "Martinair",
+    "iata": "MP",
+    "icao": "MPH"
+  },
+  {
+    "name": "Marusya Airways",
+    "iata": "Y8",
+    "icao": "MRS"
+  },
+  {
+    "name": "Maryland Air",
+    "iata": "M1",
+    "icao": "M1F"
+  },
+  {
+    "name": "Marysya Airlines",
+    "iata": "M4",
+    "icao": "1QA"
+  },
+  {
+    "name": "MasAir",
+    "iata": "M7",
+    "icao": "MAA"
+  },
+  {
+    "name": "MAT Airways",
+    "iata": "6F",
+    "icao": "MKD"
+  },
+  {
+    "name": "MAT Macedonian Airlines",
+    "iata": "IN",
+    "icao": "MAK"
+  },
+  {
+    "name": "Mauritania Airlines International",
+    "iata": "L6",
+    "icao": "MAI"
+  },
+  {
+    "name": "Maxair",
+    "iata": "8M",
+    "icao": "MXL"
+  },
+  {
+    "name": "Maya Island Air",
+    "iata": "MW",
+    "icao": "MYD"
+  },
+  {
+    "name": "MDLR Airlines",
+    "iata": "9H",
+    "icao": ""
+  },
+  {
+    "name": "Med Airways",
+    "iata": "7Y",
+    "icao": ""
+  },
+  {
+    "name": "Meridiana",
+    "iata": "IG",
+    "icao": "ISS"
+  },
+  {
+    "name": "Merpati Nusantara Airlines",
+    "iata": "MZ",
+    "icao": "MNA"
+  },
+  {
+    "name": "Mesa Airlines",
+    "iata": "YV",
+    "icao": "ASH"
+  },
+  {
+    "name": "Mesaba Airlines",
+    "iata": "XJ",
+    "icao": "MES"
+  },
+  {
+    "name": "Metro Batavia",
+    "iata": "7P",
+    "icao": "BTV"
+  },
+  {
+    "name": "Mexicana de Aviaci",
+    "iata": "MX",
+    "icao": "MXA"
+  },
+  {
+    "name": "MexicanaLink",
+    "iata": "I6",
+    "icao": "MXI"
+  },
+  {
+    "name": "MHS Aviation GmbH",
+    "iata": "M2",
+    "icao": ""
+  },
+  {
+    "name": "MIAT Mongolian Airlines",
+    "iata": "OM",
+    "icao": "MGL"
+  },
+  {
+    "name": "Michael Airlines",
+    "iata": "DF",
+    "icao": "MJG"
+  },
+  {
+    "name": "Middle East Airlines",
+    "iata": "ME",
+    "icao": "MEA"
+  },
+  {
+    "name": "Midway Airlines",
+    "iata": "JI",
+    "icao": "MDW"
+  },
+  {
+    "name": "Midwest Airlines",
+    "iata": "YX",
+    "icao": "MEP"
+  },
+  {
+    "name": "Midwest Airlines (Egypt)",
+    "iata": "MY",
+    "icao": "MWA"
+  },
+  {
+    "name": "MNG Airlines",
+    "iata": "MB",
+    "icao": "MNB"
+  },
+  {
+    "name": "Moldavian Airlines",
+    "iata": "2M",
+    "icao": "MDV"
+  },
+  {
+    "name": "Mongolian International Air Lines",
+    "iata": "7M",
+    "icao": "ZTF"
+  },
+  {
+    "name": "Montenegro Airlines",
+    "iata": "YM",
+    "icao": "MGX"
+  },
+  {
+    "name": "Moskovia Airlines",
+    "iata": "3R",
+    "icao": "GAI"
+  },
+  {
+    "name": "Motor Sich",
+    "iata": "M9",
+    "icao": "MSI"
+  },
+  {
+    "name": "Myanma Airways",
+    "iata": "UB",
+    "icao": "UBA"
+  },
+  {
+    "name": "MyTravel Airways",
+    "iata": "VZ",
+    "icao": "MYT"
+  },
+  {
+    "name": "Myway Airlines",
+    "iata": "8I",
+    "icao": ""
+  },
+  {
+    "name": "N1",
+    "iata": "N1",
+    "icao": ""
+  },
+  {
+    "name": "Nas Air",
+    "iata": "XY",
+    "icao": "KNE"
+  },
+  {
+    "name": "Nasair",
+    "iata": "UE",
+    "icao": "NAS"
+  },
+  {
+    "name": "National Air Cargo",
+    "iata": "N8",
+    "icao": "NCR"
+  },
+  {
+    "name": "National Jet Systems",
+    "iata": "NC",
+    "icao": "NJS"
+  },
+  {
+    "name": "Nationwide Airlines",
+    "iata": "CE",
+    "icao": "NTW"
+  },
+  {
+    "name": "Nauru Air Corporation",
+    "iata": "ON",
+    "icao": "RON"
+  },
+  {
+    "name": "Nepal Airlines",
+    "iata": "RA",
+    "icao": "RNA"
+  },
+  {
+    "name": "NetJets",
+    "iata": "1I",
+    "icao": "EJA"
+  },
+  {
+    "name": "New England Airlines",
+    "iata": "EJ",
+    "icao": "NEA"
+  },
+  {
+    "name": "NEXT Brasil",
+    "iata": "XB",
+    "icao": "NXB"
+  },
+  {
+    "name": "NextJet",
+    "iata": "2N",
+    "icao": "NTJ"
+  },
+  {
+    "name": "Niki",
+    "iata": "HG",
+    "icao": "NLY"
+  },
+  {
+    "name": "Nile Air",
+    "iata": "NP",
+    "icao": "NIA"
+  },
+  {
+    "name": "Nok Air",
+    "iata": "DD",
+    "icao": "NOK"
+  },
+  {
+    "name": "Nordic Global Airlines",
+    "iata": "NJ",
+    "icao": "NGB"
+  },
+  {
+    "name": "Nordica",
+    "iata": "EE",
+    "icao": ""
+  },
+  {
+    "name": "NordStar Airlines",
+    "iata": "Y7",
+    "icao": ""
+  },
+  {
+    "name": "Norte Lineas Aereas",
+    "iata": "N0",
+    "icao": ""
+  },
+  {
+    "name": "Northern Dene Airways",
+    "iata": "U7",
+    "icao": ""
+  },
+  {
+    "name": "Northwest Airlines",
+    "iata": "NW",
+    "icao": "NWA"
+  },
+  {
+    "name": "Northwestern Air",
+    "iata": "J3",
+    "icao": "PLR"
+  },
+  {
+    "name": "Norwegian Air Shuttle",
+    "iata": "DY",
+    "icao": "NAX"
+  },
+  {
+    "name": "Norwegian Long Haul AS",
+    "iata": "DU",
+    "icao": "NLH"
+  },
+  {
+    "name": "Nouvel Air Tunisie",
+    "iata": "BJ",
+    "icao": "LBT"
+  },
+  {
+    "name": "Oasis Hong Kong Airlines",
+    "iata": "O8",
+    "icao": "OHK"
+  },
+  {
+    "name": "Oceanair",
+    "iata": "O6",
+    "icao": "ONE"
+  },
+  {
+    "name": "Oceanic Airlines",
+    "iata": "O2",
+    "icao": ""
+  },
+  {
+    "name": "Olympic Airlines",
+    "iata": "OA",
+    "icao": "OAL"
+  },
+  {
+    "name": "Oman Air",
+    "iata": "WY",
+    "icao": "OMA"
+  },
+  {
+    "name": "Omni Air International",
+    "iata": "OY",
+    "icao": "OAE"
+  },
+  {
+    "name": "OneChina",
+    "iata": "1C",
+    "icao": "1CH"
+  },
+  {
+    "name": "OneJet",
+    "iata": "J1",
+    "icao": ""
+  },
+  {
+    "name": "Onur Air",
+    "iata": "8Q",
+    "icao": "OHY"
+  },
+  {
+    "name": "Orbit Airlines Azerbaijan",
+    "iata": "O1",
+    "icao": "OAB"
+  },
+  {
+    "name": "Orchid Airlines",
+    "iata": "OI",
+    "icao": "ORC"
+  },
+  {
+    "name": "Orenburg Airlines",
+    "iata": "R2",
+    "icao": "ORB"
+  },
+  {
+    "name": "Orient Thai Airlines",
+    "iata": "OX",
+    "icao": "OEA"
+  },
+  {
+    "name": "Origin Pacific Airways",
+    "iata": "QO",
+    "icao": "OGN"
+  },
+  {
+    "name": "Ostfriesische Lufttransport",
+    "iata": "OL",
+    "icao": "OLT"
+  },
+  {
+    "name": "Overland Airways",
+    "iata": "OJ",
+    "icao": "OLA"
+  },
+  {
+    "name": "Ozjet Airlines",
+    "iata": "O7",
+    "icao": "OZJ"
+  },
+  {
+    "name": "Pacific Coastal Airline",
+    "iata": "8P",
+    "icao": "PCO"
+  },
+  {
+    "name": "Pacific East Asia Cargo Airlines",
+    "iata": "Q8",
+    "icao": "PEC"
+  },
+  {
+    "name": "Pacific Wings",
+    "iata": "LW",
+    "icao": "NMI"
+  },
+  {
+    "name": "Pakistan International Airlines",
+    "iata": "PK",
+    "icao": "PIA"
+  },
+  {
+    "name": "Pal airlines",
+    "iata": "5P",
+    "icao": ""
+  },
+  {
+    "name": "PAN Air",
+    "iata": "PV",
+    "icao": "PNR"
+  },
+  {
+    "name": "Pan Am World Airways Dominicana",
+    "iata": "7Q",
+    "icao": ""
+  },
+  {
+    "name": "PanAm World Airways",
+    "iata": "WQ",
+    "icao": "PQW"
+  },
+  {
+    "name": "Papillon Grand Canyon Helicopters",
+    "iata": "HI",
+    "icao": ""
+  },
+  {
+    "name": "Paramount Airways",
+    "iata": "I7",
+    "icao": "PMW"
+  },
+  {
+    "name": "Parmiss Airlines (IPV)",
+    "iata": "PA",
+    "icao": "IPV"
+  },
+  {
+    "name": "Patriot Airways",
+    "iata": "P4",
+    "icao": ""
+  },
+  {
+    "name": "PB Air",
+    "iata": "9Q",
+    "icao": "PBA"
+  },
+  {
+    "name": "Peach Aviation",
+    "iata": "MM",
+    "icao": ""
+  },
+  {
+    "name": "Pegasus Airlines",
+    "iata": "PC",
+    "icao": "PGT"
+  },
+  {
+    "name": "PEGASUS AIRLINES-",
+    "iata": "H9",
+    "icao": ""
+  },
+  {
+    "name": "Pelita",
+    "iata": "6D",
+    "icao": ""
+  },
+  {
+    "name": "Peninsula Airways",
+    "iata": "KS",
+    "icao": "PEN"
+  },
+  {
+    "name": "Peruvian Airlines",
+    "iata": "P9",
+    "icao": ""
+  },
+  {
+    "name": "Philippine Airlines",
+    "iata": "PR",
+    "icao": "PAL"
+  },
+  {
+    "name": "Piedmont Airlines (1948-1989)",
+    "iata": "PI",
+    "icao": "PDT"
+  },
+  {
+    "name": "Pinnacle Airlines",
+    "iata": "9E",
+    "icao": "FLG"
+  },
+  {
+    "name": "PLUNA",
+    "iata": "PU",
+    "icao": "PUA"
+  },
+  {
+    "name": "PMTair",
+    "iata": "U4",
+    "icao": "PMT"
+  },
+  {
+    "name": "Polar Airlines",
+    "iata": "ЯП",
+    "icao": ""
+  },
+  {
+    "name": "Polet Airlines (Priv)",
+    "iata": "YQ",
+    "icao": ""
+  },
+  {
+    "name": "Polynesian Airlines",
+    "iata": "PH",
+    "icao": "PAO"
+  },
+  {
+    "name": "Porter Airlines",
+    "iata": "PD",
+    "icao": "POE"
+  },
+  {
+    "name": "Portugalia",
+    "iata": "NI",
+    "icao": "PGA"
+  },
+  {
+    "name": "Potomac Air",
+    "iata": "BK",
+    "icao": "PDC"
+  },
+  {
+    "name": "Precision Air",
+    "iata": "PW",
+    "icao": "PRF"
+  },
+  {
+    "name": "Primera Air",
+    "iata": "PF",
+    "icao": ""
+  },
+  {
+    "name": "Proflight Commuter Services",
+    "iata": "P0",
+    "icao": ""
+  },
+  {
+    "name": "Qantas",
+    "iata": "QF",
+    "icao": "QFA"
+  },
+  {
+    "name": "Qatar Airways",
+    "iata": "QR",
+    "icao": "QTR"
+  },
+  {
+    "name": "RACSA",
+    "iata": "R6",
+    "icao": ""
+  },
+  {
+    "name": "Rainbow Air (RAI)",
+    "iata": "RN",
+    "icao": "RAB"
+  },
+  {
+    "name": "Rainbow Air Canada",
+    "iata": "RY",
+    "icao": "RAY"
+  },
+  {
+    "name": "Rainbow Air Euro",
+    "iata": "RU",
+    "icao": "RUE"
+  },
+  {
+    "name": "Rainbow Air Polynesia",
+    "iata": "RX",
+    "icao": "RPO"
+  },
+  {
+    "name": "Rainbow Air US",
+    "iata": "RM",
+    "icao": "RNY"
+  },
+  {
+    "name": "Real Tonga",
+    "iata": "RT",
+    "icao": ""
+  },
+  {
+    "name": "Red Jet Andes",
+    "iata": "PT",
+    "icao": ""
+  },
+  {
+    "name": "Red Jet Canada",
+    "iata": "QY",
+    "icao": ""
+  },
+  {
+    "name": "Red Jet Mexico",
+    "iata": "4X",
+    "icao": ""
+  },
+  {
+    "name": "Red Wings",
+    "iata": "WZ",
+    "icao": "RWZ"
+  },
+  {
+    "name": "REDjet",
+    "iata": "Z7",
+    "icao": ""
+  },
+  {
+    "name": "Régional",
+    "iata": "YS",
+    "icao": "RAE"
+  },
+  {
+    "name": "Regional Air Iceland",
+    "iata": "9N",
+    "icao": "N78"
+  },
+  {
+    "name": "Regional Airlines",
+    "iata": "FN",
+    "icao": ""
+  },
+  {
+    "name": "Regional Express",
+    "iata": "ZL",
+    "icao": "RXA"
+  },
+  {
+    "name": "Regional Paraguaya",
+    "iata": "P7",
+    "icao": "REP"
+  },
+  {
+    "name": "Regionalia Chile",
+    "iata": "9J",
+    "icao": "CR1"
+  },
+  {
+    "name": "Regionalia México",
+    "iata": "N4",
+    "icao": "J88"
+  },
+  {
+    "name": "Regionalia Uruguay",
+    "iata": "2X",
+    "icao": "2K2"
+  },
+  {
+    "name": "Regionalia Venezuela",
+    "iata": "9X",
+    "icao": "9XX"
+  },
+  {
+    "name": "Republic Airlines",
+    "iata": "RW",
+    "icao": "RPA"
+  },
+  {
+    "name": "Republic Express Airlines",
+    "iata": "RH",
+    "icao": "RPH"
+  },
+  {
+    "name": "REXAIR VIRTUEL",
+    "iata": "RR",
+    "icao": "RXR"
+  },
+  {
+    "name": "Rossiya",
+    "iata": "R4",
+    "icao": ""
+  },
+  {
+    "name": "Rossiya-Russian Airlines",
+    "iata": "FV",
+    "icao": "SDM"
+  },
+  {
+    "name": "Royal Air Cambodge",
+    "iata": "VJ",
+    "icao": "RAC"
+  },
+  {
+    "name": "Royal Air Maroc",
+    "iata": "AT",
+    "icao": "RAM"
+  },
+  {
+    "name": "Royal Airways",
+    "iata": "KG",
+    "icao": "RAW"
+  },
+  {
+    "name": "Royal Brunei Airlines",
+    "iata": "BI",
+    "icao": "RBA"
+  },
+  {
+    "name": "Royal European Airlines",
+    "iata": "69",
+    "icao": ""
+  },
+  {
+    "name": "Royal Falcon",
+    "iata": "RL",
+    "icao": "RFJ"
+  },
+  {
+    "name": "Royal Jordanian",
+    "iata": "RJ",
+    "icao": "RJA"
+  },
+  {
+    "name": "Rwandair Express",
+    "iata": "WB",
+    "icao": "RWD"
+  },
+  {
+    "name": "Ryan International Airlines",
+    "iata": "RD",
+    "icao": "RYN"
+  },
+  {
+    "name": "Ryanair",
+    "iata": "FR",
+    "icao": "RYR"
+  },
+  {
+    "name": "S7 Airlines",
+    "iata": "S7",
+    "icao": "SBI"
+  },
+  {
+    "name": "Safi Airlines",
+    "iata": "4Q",
+    "icao": ""
+  },
+  {
+    "name": "Salmon Air",
+    "iata": "S6",
+    "icao": ""
+  },
+  {
+    "name": "Salsa d\\\\'Haiti",
+    "iata": "SO",
+    "icao": "SLC"
+  },
+  {
+    "name": "Salzburg arrows",
+    "iata": "SZ",
+    "icao": ""
+  },
+  {
+    "name": "Sama Airlines",
+    "iata": "ZS",
+    "icao": "SMY"
+  },
+  {
+    "name": "Santa Barbara Airlines",
+    "iata": "S3",
+    "icao": "BBR"
+  },
+  {
+    "name": "Saratov Aviation Division",
+    "iata": "6W",
+    "icao": "SOV"
+  },
+  {
+    "name": "Sat Airlines",
+    "iata": "HZ",
+    "icao": "SOZ"
+  },
+  {
+    "name": "SATA Air Acores",
+    "iata": "SP",
+    "icao": "SAT"
+  },
+  {
+    "name": "SATA International",
+    "iata": "S4",
+    "icao": "RZO"
+  },
+  {
+    "name": "SATENA",
+    "iata": "9R",
+    "icao": "NSE"
+  },
+  {
+    "name": "Saudi Arabian Airlines",
+    "iata": "SV",
+    "icao": "SVA"
+  },
+  {
+    "name": "Scandinavian Airlines System",
+    "iata": "SK",
+    "icao": "SAS"
+  },
+  {
+    "name": "Scat Air",
+    "iata": "DV",
+    "icao": "VSV"
+  },
+  {
+    "name": "Scoot",
+    "iata": "TZ",
+    "icao": "SCO"
+  },
+  {
+    "name": "Seaborne Airlines",
+    "iata": "BB",
+    "icao": "SBS"
+  },
+  {
+    "name": "SeaPort Airlines",
+    "iata": "K5",
+    "icao": "SQH"
+  },
+  {
+    "name": "Senegal Airlines",
+    "iata": "DN",
+    "icao": "SGG"
+  },
+  {
+    "name": "SENIC AIRLINES",
+    "iata": "YR",
+    "icao": ""
+  },
+  {
+    "name": "Serbian Airlines",
+    "iata": "S1",
+    "icao": "SA1"
+  },
+  {
+    "name": "Servicios de Transportes A",
+    "iata": "FS",
+    "icao": "STU"
+  },
+  {
+    "name": "Severstal Air Company",
+    "iata": "D2",
+    "icao": ""
+  },
+  {
+    "name": "SGA Airlines",
+    "iata": "5E",
+    "icao": ""
+  },
+  {
+    "name": "Shaheen Air International",
+    "iata": "NL",
+    "icao": "SAI"
+  },
+  {
+    "name": "Shandong Airlines",
+    "iata": "SC",
+    "icao": "CDG"
+  },
+  {
+    "name": "Shanghai Airlines",
+    "iata": "FM",
+    "icao": "CSH"
+  },
+  {
+    "name": "Sharp Airlines",
+    "iata": "SH",
+    "icao": "SHA"
+  },
+  {
+    "name": "Shenzhen Airlines",
+    "iata": "ZH",
+    "icao": "CSZ"
+  },
+  {
+    "name": "Shuttle America",
+    "iata": "S5",
+    "icao": "TCF"
+  },
+  {
+    "name": "Sibaviatrans",
+    "iata": "5M",
+    "icao": "SIB"
+  },
+  {
+    "name": "Sichuan Airlines",
+    "iata": "3U",
+    "icao": "CSC"
+  },
+  {
+    "name": "Siem Reap Airways",
+    "iata": "FT",
+    "icao": "SRH"
+  },
+  {
+    "name": "SilkAir",
+    "iata": "MI",
+    "icao": "SLK"
+  },
+  {
+    "name": "Silver Airways (3M)",
+    "iata": "3M",
+    "icao": ""
+  },
+  {
+    "name": "Singapore Airlines",
+    "iata": "SQ",
+    "icao": "SIA"
+  },
+  {
+    "name": "Skagway Air Service",
+    "iata": "N5",
+    "icao": "SGY"
+  },
+  {
+    "name": "Sky Airline",
+    "iata": "H2",
+    "icao": "SKU"
+  },
+  {
+    "name": "Sky Express",
+    "iata": "XW",
+    "icao": "SXR"
+  },
+  {
+    "name": "Sky Regional",
+    "iata": "RS",
+    "icao": "SKV"
+  },
+  {
+    "name": "Sky Wing Pacific",
+    "iata": "C7",
+    "icao": "CR7"
+  },
+  {
+    "name": "SkyBahamas Airlines",
+    "iata": "Q7",
+    "icao": ""
+  },
+  {
+    "name": "SkyEurope",
+    "iata": "NE",
+    "icao": "ESK"
+  },
+  {
+    "name": "Skyjet Airlines",
+    "iata": "UQ",
+    "icao": "SJU"
+  },
+  {
+    "name": "Skymark Airlines",
+    "iata": "BC",
+    "icao": "SKY"
+  },
+  {
+    "name": "Skynet Airlines",
+    "iata": "SI",
+    "icao": "SIH"
+  },
+  {
+    "name": "Skynet Asia Airways",
+    "iata": "6J",
+    "icao": "SNJ"
+  },
+  {
+    "name": "Skyservice Airlines",
+    "iata": "5G",
+    "icao": "SSV"
+  },
+  {
+    "name": "Skywalk Airlines",
+    "iata": "AL",
+    "icao": "SYX"
+  },
+  {
+    "name": "Skyways Express",
+    "iata": "JZ",
+    "icao": "SKX"
+  },
+  {
+    "name": "SkyWest",
+    "iata": "OO",
+    "icao": "SKW"
+  },
+  {
+    "name": "Skywest Australia",
+    "iata": "XR",
+    "icao": ""
+  },
+  {
+    "name": "SkyWork Airlines",
+    "iata": "SX",
+    "icao": ""
+  },
+  {
+    "name": "SmartLynx Airlines",
+    "iata": "6Y",
+    "icao": ""
+  },
+  {
+    "name": "Snowbird Airlines",
+    "iata": "S8",
+    "icao": "SBD"
+  },
+  {
+    "name": "SOCHI AIR",
+    "iata": "CQ",
+    "icao": "KOL"
+  },
+  {
+    "name": "SOCHI AIR CHATER",
+    "iata": "Q3",
+    "icao": "QER"
+  },
+  {
+    "name": "SOCHI AIR EXPRESS",
+    "iata": "Q4",
+    "icao": "SAE"
+  },
+  {
+    "name": "Solomon Airlines",
+    "iata": "IE",
+    "icao": "SOL"
+  },
+  {
+    "name": "South African Airways",
+    "iata": "SA",
+    "icao": "SAA"
+  },
+  {
+    "name": "South East Asian Airlines",
+    "iata": "DG",
+    "icao": "SRQ"
+  },
+  {
+    "name": "Southern Winds Airlines",
+    "iata": "A4",
+    "icao": "SWD"
+  },
+  {
+    "name": "Southjet",
+    "iata": "76",
+    "icao": "SJS"
+  },
+  {
+    "name": "Southjet cargo",
+    "iata": "78",
+    "icao": "XAN"
+  },
+  {
+    "name": "Southjet connect",
+    "iata": "77",
+    "icao": "ZCS"
+  },
+  {
+    "name": "Southwest Airlines",
+    "iata": "WN",
+    "icao": "SWA"
+  },
+  {
+    "name": "Spanair",
+    "iata": "JK",
+    "icao": "JKK"
+  },
+  {
+    "name": "Spicejet",
+    "iata": "SG",
+    "icao": "SEJ"
+  },
+  {
+    "name": "Spike Airlines",
+    "iata": "S0",
+    "icao": "SAL"
+  },
+  {
+    "name": "Spirit Airlines",
+    "iata": "NK",
+    "icao": "NKS"
+  },
+  {
+    "name": "Spirit of Manila Airlines",
+    "iata": "SM",
+    "icao": "MNP"
+  },
+  {
+    "name": "Spring Airlines",
+    "iata": "9S",
+    "icao": "CQH"
+  },
+  {
+    "name": "Spring Airlines Japan",
+    "iata": "IJ",
+    "icao": "SJO"
+  },
+  {
+    "name": "SriLankan Airlines",
+    "iata": "UL",
+    "icao": "ALK"
+  },
+  {
+    "name": "Sriwijaya Air",
+    "iata": "SJ",
+    "icao": "SJY"
+  },
+  {
+    "name": "Star Flyer",
+    "iata": "7G",
+    "icao": "SFJ"
+  },
+  {
+    "name": "Star Peru (2I)",
+    "iata": "2I",
+    "icao": ""
+  },
+  {
+    "name": "Star1 Airlines",
+    "iata": "V9",
+    "icao": "HCW"
+  },
+  {
+    "name": "Starbow Airlines",
+    "iata": "S9",
+    "icao": ""
+  },
+  {
+    "name": "Starline.kz",
+    "iata": "DZ",
+    "icao": ""
+  },
+  {
+    "name": "Sterling Airlines",
+    "iata": "NB",
+    "icao": "SNB"
+  },
+  {
+    "name": "STP Airways",
+    "iata": "8F",
+    "icao": "STP"
+  },
+  {
+    "name": "Strategic Airlines",
+    "iata": "VC",
+    "icao": ""
+  },
+  {
+    "name": "Sudan Airways",
+    "iata": "SD",
+    "icao": "SUD"
+  },
+  {
+    "name": "Sun Country Airlines",
+    "iata": "SY",
+    "icao": "SCX"
+  },
+  {
+    "name": "Sun D'Or",
+    "iata": "7L",
+    "icao": "ERO"
+  },
+  {
+    "name": "SunExpress",
+    "iata": "XQ",
+    "icao": "SXS"
+  },
+  {
+    "name": "Sunwing",
+    "iata": "WG",
+    "icao": ""
+  },
+  {
+    "name": "Surinam Airways",
+    "iata": "PY",
+    "icao": "SLM"
+  },
+  {
+    "name": "Svyaz Rossiya",
+    "iata": "7R",
+    "icao": "SJM"
+  },
+  {
+    "name": "Swe Fly",
+    "iata": "WV",
+    "icao": "SWV"
+  },
+  {
+    "name": "Swiss International Air Lines",
+    "iata": "LX",
+    "icao": "SWR"
+  },
+  {
+    "name": "Swissair",
+    "iata": "SR",
+    "icao": "SWR"
+  },
+  {
+    "name": "Syrian Arab Airlines",
+    "iata": "RB",
+    "icao": "SYR"
+  },
+  {
+    "name": "T.J. Air",
+    "iata": "TJ",
+    "icao": "TJA"
+  },
+  {
+    "name": "TAAG Angola Airlines",
+    "iata": "DT",
+    "icao": "DTA"
+  },
+  {
+    "name": "TACA Peru",
+    "iata": "T0",
+    "icao": ""
+  },
+  {
+    "name": "TACV",
+    "iata": "VR",
+    "icao": "TCV"
+  },
+  {
+    "name": "Tajik Air",
+    "iata": "7J",
+    "icao": ""
+  },
+  {
+    "name": "TAM Brazilian Airlines",
+    "iata": "JJ",
+    "icao": "TAM"
+  },
+  {
+    "name": "TAM Mercosur",
+    "iata": "PZ",
+    "icao": "LAP"
+  },
+  {
+    "name": "TAME",
+    "iata": "EQ",
+    "icao": "TAE"
+  },
+  {
+    "name": "TAMPA",
+    "iata": "QT",
+    "icao": "TPA"
+  },
+  {
+    "name": "TAP Portugal",
+    "iata": "TP",
+    "icao": "TAP"
+  },
+  {
+    "name": "Tarom",
+    "iata": "RO",
+    "icao": "ROT"
+  },
+  {
+    "name": "Tatarstan Airlines",
+    "iata": "U9",
+    "icao": "TAK"
+  },
+  {
+    "name": "Texas Wings",
+    "iata": "TQ",
+    "icao": "TXW"
+  },
+  {
+    "name": "Thai Air Cargo",
+    "iata": "T2",
+    "icao": "TCG"
+  },
+  {
+    "name": "Thai AirAsia",
+    "iata": "FD",
+    "icao": "AIQ"
+  },
+  {
+    "name": "Thai Airways International",
+    "iata": "TG",
+    "icao": "THA"
+  },
+  {
+    "name": "Thai Lion Air",
+    "iata": "SL",
+    "icao": ""
+  },
+  {
+    "name": "Thai Smile Airways",
+    "iata": "WE",
+    "icao": ""
+  },
+  {
+    "name": "Thomas Cook Airlines",
+    "iata": "FQ",
+    "icao": "TCW"
+  },
+  {
+    "name": "Thomas Cook Airlines",
+    "iata": "MT",
+    "icao": "TCX"
+  },
+  {
+    "name": "Thomsonfly",
+    "iata": "BY",
+    "icao": "TOM"
+  },
+  {
+    "name": "Tiara Air",
+    "iata": "3P",
+    "icao": "TNM"
+  },
+  {
+    "name": "Tiger Airways",
+    "iata": "TR",
+    "icao": "TGW"
+  },
+  {
+    "name": "Tiger Airways Australia",
+    "iata": "TT",
+    "icao": "TGW"
+  },
+  {
+    "name": "Tom\\\\'s & co airliners",
+    "iata": "&T",
+    "icao": "T&O"
+  },
+  {
+    "name": "Tomp Airlines",
+    "iata": "ZT",
+    "icao": "T9P"
+  },
+  {
+    "name": "Trans Pas Air",
+    "iata": "T6",
+    "icao": "TP6"
+  },
+  {
+    "name": "Trans States Airlines",
+    "iata": "AX",
+    "icao": "LOF"
+  },
+  {
+    "name": "Transaero Airlines",
+    "iata": "UN",
+    "icao": "TSO"
+  },
+  {
+    "name": "TransAsia Airways",
+    "iata": "GE",
+    "icao": "TNA"
+  },
+  {
+    "name": "Transavia France",
+    "iata": "TO",
+    "icao": "TVF"
+  },
+  {
+    "name": "Transavia Holland",
+    "iata": "HV",
+    "icao": "TRA"
+  },
+  {
+    "name": "TransBrasil Airlines",
+    "iata": "TH",
+    "icao": "THS"
+  },
+  {
+    "name": "TransHolding",
+    "iata": "TI",
+    "icao": "THI"
+  },
+  {
+    "name": "TransHolding System",
+    "iata": "YO",
+    "icao": "TYS"
+  },
+  {
+    "name": "TransNusa Air",
+    "iata": "M8",
+    "icao": "TNU"
+  },
+  {
+    "name": "TransRussiaAirlines",
+    "iata": "1E",
+    "icao": "RGG"
+  },
+  {
+    "name": "Transwest Air",
+    "iata": "9T",
+    "icao": "ABS"
+  },
+  {
+    "name": "TrasBrasil",
+    "iata": "TB",
+    "icao": "TBZ"
+  },
+  {
+    "name": "Travel Service",
+    "iata": "QS",
+    "icao": "TVS"
+  },
+  {
+    "name": "TRIP Linhas A",
+    "iata": "8R",
+    "icao": "TIB"
+  },
+  {
+    "name": "Tropic Air",
+    "iata": "PM",
+    "icao": "TOS"
+  },
+  {
+    "name": "TUIfly",
+    "iata": "X3",
+    "icao": "HLX"
+  },
+  {
+    "name": "TUIfly (X3)",
+    "iata": "11",
+    "icao": ""
+  },
+  {
+    "name": "TUIfly Nordic",
+    "iata": "6B",
+    "icao": "BLX"
+  },
+  {
+    "name": "Tuninter",
+    "iata": "UG",
+    "icao": "TUI"
+  },
+  {
+    "name": "Tunisair",
+    "iata": "TU",
+    "icao": "TAR"
+  },
+  {
+    "name": "Turan Air",
+    "iata": "3T",
+    "icao": "URN"
+  },
+  {
+    "name": "Turkish Airlines",
+    "iata": "TK",
+    "icao": "THY"
+  },
+  {
+    "name": "Turkmenistan Airlines",
+    "iata": "T5",
+    "icao": "TUA"
+  },
+  {
+    "name": "Tway Airlines",
+    "iata": "TW",
+    "icao": "TWB"
+  },
+  {
+    "name": "Twin Jet",
+    "iata": "T7",
+    "icao": "TJT"
+  },
+  {
+    "name": "Tyrolean Airways",
+    "iata": "VO",
+    "icao": "TYR"
+  },
+  {
+    "name": "U.S. Air",
+    "iata": "-+",
+    "icao": "--+"
+  },
+  {
+    "name": "Ukraine International Airlines",
+    "iata": "PS",
+    "icao": "AUI"
+  },
+  {
+    "name": "UM Airlines",
+    "iata": "UF",
+    "icao": "UKM"
+  },
+  {
+    "name": "Uni Air",
+    "iata": "B7",
+    "icao": "UIA"
+  },
+  {
+    "name": "United Airlines",
+    "iata": "UA",
+    "icao": "UAL"
+  },
+  {
+    "name": "United Airways",
+    "iata": "4H",
+    "icao": "UBD"
+  },
+  {
+    "name": "Unknown",
+    "iata": "-",
+    "icao": "N/A"
+  },
+  {
+    "name": "Ural Airlines",
+    "iata": "U6",
+    "icao": "SVR"
+  },
+  {
+    "name": "US Airways",
+    "iata": "US",
+    "icao": "USA"
+  },
+  {
+    "name": "US Helicopter Corporation",
+    "iata": "UH",
+    "icao": ""
+  },
+  {
+    "name": "Usa Sky Cargo",
+    "iata": "E1",
+    "icao": "ES2"
+  },
+  {
+    "name": "USA3000 Airlines",
+    "iata": "U5",
+    "icao": "GWY"
+  },
+  {
+    "name": "UTair Aviation",
+    "iata": "UT",
+    "icao": "UTA"
+  },
+  {
+    "name": "UTair-Express",
+    "iata": "UR",
+    "icao": ""
+  },
+  {
+    "name": "UVT Aero",
+    "iata": "UW",
+    "icao": ""
+  },
+  {
+    "name": "Uzbekistan Airways",
+    "iata": "HY",
+    "icao": "UZB"
+  },
+  {
+    "name": "V Air",
+    "iata": "ZV",
+    "icao": "VAX"
+  },
+  {
+    "name": "Valuair",
+    "iata": "VF",
+    "icao": "VLU"
+  },
+  {
+    "name": "Varig Log",
+    "iata": "LC",
+    "icao": "VLO"
+  },
+  {
+    "name": "VASP",
+    "iata": "VP",
+    "icao": "VSP"
+  },
+  {
+    "name": "Via Conectia Airlines",
+    "iata": "6V",
+    "icao": "CZV"
+  },
+  {
+    "name": "VIA Líneas Aéreas",
+    "iata": "V1",
+    "icao": "VIA"
+  },
+  {
+    "name": "VickJet",
+    "iata": "KT",
+    "icao": "VKJ"
+  },
+  {
+    "name": "Vietnam Airlines",
+    "iata": "VN",
+    "icao": "HVN"
+  },
+  {
+    "name": "Viking Hellas",
+    "iata": "VQ",
+    "icao": "VKH"
+  },
+  {
+    "name": "VIM Airlines",
+    "iata": "NN",
+    "icao": "MOV"
+  },
+  {
+    "name": "VIP Ecuador",
+    "iata": "V6",
+    "icao": ""
+  },
+  {
+    "name": "Virgin America",
+    "iata": "VX",
+    "icao": "VRD"
+  },
+  {
+    "name": "Virgin Atlantic Airways",
+    "iata": "VS",
+    "icao": "VIR"
+  },
+  {
+    "name": "Virgin Australia",
+    "iata": "VA",
+    "icao": "VOZ"
+  },
+  {
+    "name": "Virgin Express",
+    "iata": "TV",
+    "icao": "VEX"
+  },
+  {
+    "name": "Virgin Nigeria Airways",
+    "iata": "VK",
+    "icao": "VGN"
+  },
+  {
+    "name": "Virgin Pacific",
+    "iata": "VH",
+    "icao": "VNP"
+  },
+  {
+    "name": "Virginwings",
+    "iata": "YY",
+    "icao": "VWA"
+  },
+  {
+    "name": "Vision Airlines (V2)",
+    "iata": "V2",
+    "icao": "RBY"
+  },
+  {
+    "name": "Viva Macau",
+    "iata": "ZG",
+    "icao": "VVM"
+  },
+  {
+    "name": "VivaColombia",
+    "iata": "5Z",
+    "icao": "VVC"
+  },
+  {
+    "name": "Vladivostok Air",
+    "iata": "XF",
+    "icao": "VLK"
+  },
+  {
+    "name": "VLM Airlines",
+    "iata": "VG",
+    "icao": "VLM"
+  },
+  {
+    "name": "Voestar",
+    "iata": "8K",
+    "icao": "K88"
+  },
+  {
+    "name": "Volare Airlines",
+    "iata": "VE",
+    "icao": "VLE"
+  },
+  {
+    "name": "Volaris",
+    "iata": "Y4",
+    "icao": "VOI"
+  },
+  {
+    "name": "Volga-Dnepr Airlines",
+    "iata": "VI",
+    "icao": "VDA"
+  },
+  {
+    "name": "VOLOTEA Airways",
+    "iata": "V7",
+    "icao": "VOE"
+  },
+  {
+    "name": "Volotea Costa Rica",
+    "iata": "9V",
+    "icao": "VC9"
+  },
+  {
+    "name": "VRG Linhas Aereas",
+    "iata": "RG",
+    "icao": "VRN"
+  },
+  {
+    "name": "Vuela Cuba",
+    "iata": "6C",
+    "icao": "6CC"
+  },
+  {
+    "name": "Vuola Italia",
+    "iata": "4S",
+    "icao": "VI4"
+  },
+  {
+    "name": "Wayraper",
+    "iata": "7W",
+    "icao": ""
+  },
+  {
+    "name": "WebJet Linhas A",
+    "iata": "WJ",
+    "icao": "WEB"
+  },
+  {
+    "name": "Welcome Air",
+    "iata": "2W",
+    "icao": "WLC"
+  },
+  {
+    "name": "West Air China",
+    "iata": "PN",
+    "icao": "CHB"
+  },
+  {
+    "name": "West Coast Air",
+    "iata": "8O",
+    "icao": ""
+  },
+  {
+    "name": "WestJet",
+    "iata": "WS",
+    "icao": "WJA"
+  },
+  {
+    "name": "WestJet Encore",
+    "iata": "WR",
+    "icao": "WEN"
+  },
+  {
+    "name": "Whitaker Air",
+    "iata": "^^",
+    "icao": ""
+  },
+  {
+    "name": "Widerøe",
+    "iata": "WF",
+    "icao": "WIF"
+  },
+  {
+    "name": "Wilderness Air",
+    "iata": ";;",
+    "icao": ""
+  },
+  {
+    "name": "Wind Jet",
+    "iata": "IV",
+    "icao": "JET"
+  },
+  {
+    "name": "Windward Islands Airways",
+    "iata": "WM",
+    "icao": ""
+  },
+  {
+    "name": "Wings Air",
+    "iata": "IW",
+    "icao": "WON"
+  },
+  {
+    "name": "Wizz Air",
+    "iata": "W6",
+    "icao": "WZZ"
+  },
+  {
+    "name": "Wizz Air Hungary",
+    "iata": "8Z",
+    "icao": "WVL"
+  },
+  {
+    "name": "Wizz Air Ukraine",
+    "iata": "WU",
+    "icao": "WAU"
+  },
+  {
+    "name": "World Airways",
+    "iata": "WO",
+    "icao": "WOA"
+  },
+  {
+    "name": "World Experience Airline",
+    "iata": "W1",
+    "icao": "WE1"
+  },
+  {
+    "name": "World Scale Airlines",
+    "iata": "W3",
+    "icao": "WSS"
+  },
+  {
+    "name": "XAIR USA",
+    "iata": "XA",
+    "icao": "XAU"
+  },
+  {
+    "name": "Xiamen Airlines",
+    "iata": "MF",
+    "icao": "CXA"
+  },
+  {
+    "name": "XL Airways France",
+    "iata": "SE",
+    "icao": "SEU"
+  },
+  {
+    "name": "Xpressair",
+    "iata": "XN",
+    "icao": ""
+  },
+  {
+    "name": "XPTO",
+    "iata": "XP",
+    "icao": "XPT"
+  },
+  {
+    "name": "Yamal Airlines",
+    "iata": "YL",
+    "icao": "LLM"
+  },
+  {
+    "name": "Yangon Airways",
+    "iata": "HK",
+    "icao": ""
+  },
+  {
+    "name": "Yangon Airways Ltd.",
+    "iata": "YH",
+    "icao": ""
+  },
+  {
+    "name": "Yellowstone Club Private Shuttle",
+    "iata": "Y1",
+    "icao": ""
+  },
+  {
+    "name": "Yellowtail",
+    "iata": "YE",
+    "icao": "YEL"
+  },
+  {
+    "name": "Yemenia",
+    "iata": "IY",
+    "icao": "IYE"
+  },
+  {
+    "name": "Yeti Airways",
+    "iata": "YT",
+    "icao": ""
+  },
+  {
+    "name": "Yunnan Airlines",
+    "iata": "3Q",
+    "icao": "CYH"
+  },
+  {
+    "name": "ZABAIKAL AIRLINES",
+    "iata": "Z6",
+    "icao": "ZTT"
+  },
+  {
+    "name": "Zabaykalskii Airlines",
+    "iata": "ZP",
+    "icao": "ZZZ"
+  },
+  {
+    "name": "Zambezi Airlines (ZMA)",
+    "iata": "ZJ",
+    "icao": ""
+  },
+  {
+    "name": "Zambia Skyways",
+    "iata": "K8",
+    "icao": ""
+  },
+  {
+    "name": "Zenith International Airline",
+    "iata": "ZN",
+    "icao": "ZNA"
+  },
+  {
+    "name": "Zest Air",
+    "iata": "Z2",
+    "icao": ""
+  },
+  {
+    "name": "Zoom Airlines",
+    "iata": "Z4",
+    "icao": "OOM"
+  },
+  {
+    "name": "Zz",
+    "iata": "ZZ",
+    "icao": ""
+  },
+  {
+    "name": "Аэросервис",
+    "iata": "АЯ",
+    "icao": ""
+  }
+]
