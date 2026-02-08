@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, ChangeDetectorRef, Injector, runInInjectionContext } from '@angular/core'
+import { Component, ChangeDetectorRef, Injector, runInInjectionContext, OnInit } from '@angular/core'
 import type { AbstractControl, ValidationErrors } from '@angular/forms'
 import { FormBuilder, ReactiveFormsModule, Validators, type FormGroup } from '@angular/forms'
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
@@ -20,6 +20,22 @@ function trimmedRequired(control: AbstractControl): ValidationErrors | null {
   return value.length > 0 ? null : { trimmedRequired: true }
 }
 
+function airlineValidator(control: AbstractControl): ValidationErrors | null {
+  const value = String(control.value ?? '').trim()
+  if (!value) return null
+
+  const letters = value.match(/[A-Za-z]/g)?.length ?? 0
+  if (letters < 2) return { airlineLength: 'min' }
+  if (value.length > 50) return { airlineLength: 'max' }
+  if (!/[A-Za-z]/.test(value)) return { airlineNotOnlyNumbers: true }
+
+  const allowedPattern = /^[A-Za-z0-9][A-Za-z0-9\s&.,'()\/-]*[A-Za-z0-9)]$/
+  if (!allowedPattern.test(value)) return { airlineCharacters: true }
+
+  return null
+}
+
+
 function guestsRangeValidator(control: AbstractControl): ValidationErrors | null {
   const rawValue = control.value
   const parsed = Number(rawValue)
@@ -38,12 +54,28 @@ function guestsRangeValidator(control: AbstractControl): ValidationErrors | null
   templateUrl: './flight-form.html',
   styleUrl: './flight-form.scss',
 })
-export class FlightForm {
+export class FlightForm implements OnInit {
   isSubmitting = false
   hasSubmitted = false
   //To prevent lot of POST during testing
   //TODO: Remove before final submission
   private readonly isDryRun = true
+
+  airlineSuggestions: string[] = []
+  ngOnInit(): void {
+  this.http.get<Array<{ name: string }>>('assets/airlines.json').subscribe({
+    next: (rows) => {
+      this.airlineSuggestions = (rows ?? [])
+        .map((r) => String(r.name ?? '').trim())
+        .filter((n) => n.length > 0)
+      this.changeDetectorRef.detectChanges()
+    },
+  })
+}
+  airlinesFromDataset: Array<{ name: string; iata?: string; icao?: string }> = []
+  airlineSuggestionValues: string[] = []
+  private airlineLookupSet = new Set<string>()
+  isAirlinesDatasetLoaded = false
 
   submitErrorMessage = ''
   submitSuccessMessage = ''
@@ -70,12 +102,48 @@ export class FlightForm {
     private changeDetectorRef: ChangeDetectorRef
   ) {
     this.flightForm = this.formBuilder.group({
-      airline: ['', [trimmedRequired]],
+      airline: ['', [trimmedRequired, airlineValidator]],
       flightNumber: ['', [trimmedRequired]],
       arrivalDate: ['', [Validators.required]],
       arrivalTime: ['', [Validators.required]],
       numOfGuests: ['', [Validators.required, guestsRangeValidator]],
       comments: [''],
+    })
+    this.http.get<Array<{ name: string; iata?: string; icao?: string }>>('/assets/airlines.json')
+    .subscribe({
+      next: (rows) => {
+        const cleaned = (rows || [])
+          .map((row) => ({
+            name: String(row?.name ?? '').trim(),
+            iata: String(row?.iata ?? '').trim(),
+            icao: String(row?.icao ?? '').trim(),
+          }))
+          .filter((row) => row.name.length > 0)
+
+        this.airlinesFromDataset = cleaned
+        this.airlineSuggestionValues = cleaned
+          .map((row) => {
+            const parts = []
+            if (row.iata) parts.push(row.iata)
+            if (row.icao) parts.push(row.icao)
+            parts.push(row.name)
+            return parts.join(' · ')
+          })
+
+        this.airlineLookupSet.clear()
+        for (const row of cleaned) {
+          this.airlineLookupSet.add(row.name.toLowerCase())
+          if (row.iata) this.airlineLookupSet.add(row.iata.toLowerCase())
+          if (row.icao) this.airlineLookupSet.add(row.icao.toLowerCase())
+        }
+
+        this.isAirlinesDatasetLoaded = true
+        this.changeDetectorRef.detectChanges()
+      },
+      error: () => {
+        this.isAirlinesDatasetLoaded = false
+        this.changeDetectorRef.detectChanges()
+      }
     })
   }
 
@@ -188,8 +256,30 @@ formatReceiptDateTime(dateString: string, timeString: string): string {
   }).format(date)
 }
 
+  private normalizeAirlineInput(raw: string): string {
+    const value = String(raw ?? '').trim()
+    if (!value) return value
+
+    const parts = value.split('·').map((p) => p.trim()).filter(Boolean)
+    if (parts.length >= 2) {
+      return parts[parts.length - 1]
+    }
+
+    return value
+  }
+
+  get airlineLooksUnknown(): boolean {
+    if (!this.isAirlinesDatasetLoaded) return false
+    const raw = this.normalizeAirlineInput(this.flightForm.get('airline')?.value)
+    const value = String(raw ?? '').trim().toLowerCase()
+    if (!value) return false
+    const airlineControl = this.flightForm.get('airline')
+    if (airlineControl && airlineControl.invalid) return false
+    return !this.airlineLookupSet.has(value)
+  }
+
   private buildPayload(): FlightInfoPayload {
-    const airline = String(this.flightForm.get('airline')?.value ?? '').trim()
+    const airline = this.normalizeAirlineInput(this.flightForm.get('airline')?.value).trim().replace(/\s+/g, ' ')
     const flightNumber = String(this.flightForm.get('flightNumber')?.value ?? '').trim()
     const arrivalDate = String(this.flightForm.get('arrivalDate')?.value ?? '').trim()
     const arrivalTime = String(this.flightForm.get('arrivalTime')?.value ?? '').trim()

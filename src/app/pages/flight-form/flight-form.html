@@ -102,14 +102,26 @@
                 <span class="srOnly">Required</span>
             </span>
             <input
-              type="text"
-              placeholder="Delta"
-              formControlName="airline"
-              (input)="clearSubmissionMessages()"
-              aria-describedby="airlineError"
+                type="text"
+                placeholder="Delta"
+                formControlName="airline"
+                list="airlineList"
+                autocomplete="off"
+                (input)="clearSubmissionMessages()"
+                aria-describedby="airlineError"
             />
-            <span id="airlineError" class="error" *ngIf="shouldShowError('airline')">
-              Airline is required.
+            <datalist id="airlineList">
+                <option *ngFor="let name of airlineSuggestions" [value]="name"></option>
+            </datalist>
+            <span class="hint" *ngIf="airlineLooksUnknown">
+                We couldn’t match this to our airline list. If it’s correct, you can still submit.
+            </span>
+            <span class="error" *ngIf="shouldShowError('airline')">
+                <span *ngIf="flightForm.get('airline')?.errors?.['trimmedRequired']">Airline is required.</span>
+                <span *ngIf="flightForm.get('airline')?.errors?.['airlineLength'] === 'min'">Use at least 2 characters.</span>
+                <span *ngIf="flightForm.get('airline')?.errors?.['airlineLength'] === 'max'">Keep it under 50 characters.</span>
+                <span *ngIf="flightForm.get('airline')?.errors?.['airlineCharacters']">Use letters, numbers, spaces and common punctuation only.</span>
+                <span *ngIf="flightForm.get('airline')?.errors?.['airlineNotOnlyNumbers']">Airline must include at least one letter.</span>
             </span>
           </label>
 
