@@ -24,6 +24,7 @@
         <div>
           <div class="receiptTitle">Submitted successfully</div>
           <div class="receiptSubtitle">You’re all set. Here’s what we received.</div>
+          <div class="receiptCheers">Have a great trip - see you soon! 🌴</div>
         </div>
       </div>
 
@@ -108,6 +109,7 @@
                 list="airlineList"
                 autocomplete="off"
                 (input)="clearSubmissionMessages()"
+                (blur)="onAirlineBlur()"
                 aria-describedby="airlineError"
             />
             <datalist id="airlineList">
@@ -136,6 +138,7 @@
               placeholder="DL 123"
               formControlName="flightNumber"
               (input)="clearSubmissionMessages()"
+              (blur)="onFlightNumberBlur()"
               aria-describedby="flightError"
             />
             <span id="flightError" class="error" *ngIf="shouldShowError('flightNumber')">
@@ -189,12 +192,15 @@
             <input
                 type="time"
                 formControlName="arrivalTime"
-                [min]="minArrivalTimeForSelectedDate"
+                (blur)="flightForm.get('arrivalTime')?.markAsTouched()"
                 (input)="clearSubmissionMessages()"
                 aria-describedby="timeError"
             />
-            <span id="timeError" class="error" *ngIf="shouldShowError('arrivalTime')">
-                Arrival time is required.
+            <span id="timeError" class="error" *ngIf="shouldShowError('arrivalTime') || shouldShowArrivalTimePastTodayError">
+                <span *ngIf="flightForm.get('arrivalTime')?.errors?.['required']">Arrival time is required.</span>
+                <span *ngIf="flightForm.get('arrivalTime')?.errors?.['arrivalTimeFormat']">Enter time as HH:MM.</span>
+                <span *ngIf="flightForm.get('arrivalTime')?.errors?.['arrivalTimeInvalid']">Enter a valid time.</span>
+                <span *ngIf="shouldShowArrivalTimePastTodayError">For today, pick a time after {{ arrivalTimeMinLabelForToday }}.</span>
             </span>
             </label>
         </div>
@@ -235,7 +241,7 @@
             />
             <span class="hint">1–20 guests</span>
             <span id="guestError" class="error" *ngIf="shouldShowError('numOfGuests')">
-              Enter a number between 1 and 20.
+              Enter a whole number between 1 and 20.
             </span>
           </label>
         </div>
@@ -255,6 +261,10 @@
             formControlName="comments"
             (input)="clearSubmissionMessages()"
           ></textarea>
+        <span class="error" *ngIf="shouldShowError('comments')">
+            <span *ngIf="flightForm.get('comments')?.errors?.['commentsLength'] === 'max'">Keep comments under 300 characters.</span>
+            <span *ngIf="flightForm.get('comments')?.errors?.['commentsCharacters']">Use letters, numbers, spaces and common punctuation only.</span>
+        </span>
         </label>
       </div>
 

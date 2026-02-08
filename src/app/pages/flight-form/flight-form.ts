@@ -1,10 +1,13 @@
 import { CommonModule } from '@angular/common'
-import { Component, ChangeDetectorRef, Injector, runInInjectionContext, OnInit } from '@angular/core'
+import { Component, ChangeDetectorRef, Injector, runInInjectionContext, OnInit, OnDestroy } from '@angular/core'
 import type { AbstractControl, ValidationErrors } from '@angular/forms'
 import { FormBuilder, ReactiveFormsModule, Validators, type FormGroup } from '@angular/forms'
 import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { Router } from '@angular/router'
 import { Auth, signOut } from '@angular/fire/auth'
+import type { Unsubscribe } from '@angular/fire/auth'
+import { onAuthStateChanged } from '@angular/fire/auth'
+
 
 interface FlightInfoPayload {
   airline: string
@@ -91,14 +94,74 @@ function arrivalDateValidator(control: AbstractControl): ValidationErrors | null
   return null
 }
 
-function guestsRangeValidator(control: AbstractControl): ValidationErrors | null {
-  const rawValue = control.value
-  const parsed = Number(rawValue)
+function arrivalTimeValidator(control: AbstractControl): ValidationErrors | null {
+  const raw = String(control.value ?? '').trim()
+  if (!raw) return null
 
+  // Expected for input[type="time"]: HH:MM (24-hour)
+  const match = raw.match(/^(\d{2}):(\d{2})$/)
+  if (!match) return { arrivalTimeFormat: true }
+
+  const hours = Number(match[1])
+  const minutes = Number(match[2])
+
+  if (!Number.isInteger(hours) || !Number.isInteger(minutes)) return { arrivalTimeInvalid: true }
+  if (hours < 0 || hours > 23) return { arrivalTimeInvalid: true }
+  if (minutes < 0 || minutes > 59) return { arrivalTimeInvalid: true }
+
+  return null
+}
+
+function arrivalDateTimeNotPastValidator(group: AbstractControl): ValidationErrors | null {
+  const dateValue = String(group.get('arrivalDate')?.value ?? '').trim()
+  const timeValue = String(group.get('arrivalTime')?.value ?? '').trim()
+
+  if (!dateValue || !timeValue) return null
+
+  // arrivalDate from input[type="date"] is typically YYYY-MM-DD
+  const dateMatch = dateValue.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+  if (!dateMatch) return null
+
+  const year = Number(dateMatch[1])
+  const month = Number(dateMatch[2])
+  const day = Number(dateMatch[3])
+
+  const timeMatch = timeValue.match(/^(\d{2}):(\d{2})$/)
+  if (!timeMatch) return null 
+  const hours = Number(timeMatch[1])
+  const minutes = Number(timeMatch[2])
+  const selected = new Date(year, month - 1, day, hours, minutes, 0, 0)
+  if (Number.isNaN(selected.getTime())) return null
+  const now = new Date()
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0)
+  const selectedDay = new Date(year, month - 1, day, 0, 0, 0, 0)
+
+  if (selectedDay.getTime() !== today.getTime()) return null
+  if (selected.getTime() < now.getTime()) return { arrivalTimePastToday: true }
+  return null
+}
+
+function guestsRangeValidator(control: AbstractControl): ValidationErrors | null {
+  const raw = control.value
+  const rawString = String(raw ?? '').trim()
+  if (!rawString) return null
+  if (!/^\d+$/.test(rawString)) return { guestsRange: true }
+
+  const parsed = Number(rawString)
   if (!Number.isFinite(parsed)) return { guestsRange: true }
   if (!Number.isInteger(parsed)) return { guestsRange: true }
   if (parsed < 1 || parsed > 20) return { guestsRange: true }
+  return null
+}
 
+function commentsValidator(control: AbstractControl): ValidationErrors | null {
+  const raw = String(control.value ?? '')
+  const trimmed = raw.trim()
+
+  if (!trimmed) return null
+  if (trimmed.length > 300) return { commentsLength: 'max' }
+  const allowedPattern = /^[A-Za-z0-9\s.,'"!?()\-/:;&@#%+*=\[\]{}\\|<>~`\n\r\t]+$/
+  if (!allowedPattern.test(raw)) return { commentsCharacters: true }
   return null
 }
 
@@ -109,15 +172,33 @@ function guestsRangeValidator(control: AbstractControl): ValidationErrors | null
   templateUrl: './flight-form.html',
   styleUrl: './flight-form.scss',
 })
-export class FlightForm implements OnInit {
+export class FlightForm implements OnInit,  OnDestroy {
   isSubmitting = false
   hasSubmitted = false
   //To prevent lot of POST during testing
   //TODO: Remove before final submission
   private readonly isDryRun = true
 
+  private authUnsubscribe: Unsubscribe | null = null
+
   airlineSuggestions: string[] = []
   ngOnInit(): void {
+  this.authUnsubscribe = onAuthStateChanged(this.auth, (user) => {
+  if (!user) {
+    this.flightForm.disable({ emitEvent: false })
+    this.submissionReceipt = null
+    this.submitErrorMessage = ''
+    this.submitSuccessMessage = ''
+    this.changeDetectorRef.detectChanges()
+
+    void this.router.navigate(['/login'], { queryParams: { reason: 'session-expired' } })
+    return
+  }
+
+  this.flightForm.enable({ emitEvent: false })
+  this.changeDetectorRef.detectChanges()
+})
+
   this.http.get<Array<{ name: string }>>('assets/airlines.json').subscribe({
     next: (rows) => {
       this.airlineSuggestions = (rows ?? [])
@@ -127,6 +208,14 @@ export class FlightForm implements OnInit {
     },
   })
 }
+
+ngOnDestroy(): void {
+  if (this.authUnsubscribe) {
+    this.authUnsubscribe()
+    this.authUnsubscribe = null
+  }
+}
+
   airlinesFromDataset: Array<{ name: string; iata?: string; icao?: string }> = []
   airlineSuggestionValues: string[] = []
   private airlineLookupSet = new Set<string>()
@@ -160,10 +249,12 @@ export class FlightForm implements OnInit {
       airline: ['', [trimmedRequired, airlineValidator]],
       flightNumber: ['', [trimmedRequired, flightNumberValidator]],
       arrivalDate: ['', [Validators.required, arrivalDateValidator]],
-      arrivalTime: ['', [Validators.required]],
+      arrivalTime: ['', [Validators.required, arrivalTimeValidator]],
       numOfGuests: ['', [Validators.required, guestsRangeValidator]],
-      comments: [''],
-    })
+      comments: ['', [commentsValidator]],
+    },
+    { validators: [arrivalDateTimeNotPastValidator] }
+    )
     this.http.get<Array<{ name: string; iata?: string; icao?: string }>>('/assets/airlines.json')
     .subscribe({
       next: (rows) => {
@@ -200,6 +291,26 @@ export class FlightForm implements OnInit {
         this.changeDetectorRef.detectChanges()
       }
     })
+  }
+
+  get shouldShowArrivalTimePastTodayError(): boolean {
+  const dateControl = this.flightForm.get('arrivalDate')
+  const timeControl = this.flightForm.get('arrivalTime')
+
+  const userInteracted =
+    !!dateControl && (dateControl.touched || dateControl.dirty) ||
+    !!timeControl && (timeControl.touched || timeControl.dirty)
+
+  return userInteracted && !!this.flightForm.errors?.['arrivalTimePastToday']
+}
+
+  get arrivalTimeMinLabelForToday(): string {
+    const now = new Date()
+    const min = new Date(now.getTime() + 60 * 1000) // +1 minute to avoid edge flicker
+    return new Intl.DateTimeFormat(undefined, {
+      hour: 'numeric',
+      minute: '2-digit',
+    }).format(min)
   }
 
   clearSubmissionMessages(): void {
@@ -333,6 +444,51 @@ formatReceiptDateTime(dateString: string, timeString: string): string {
   }).format(date)
 }
 
+  onAirlineBlur(): void {
+    const control = this.flightForm.get('airline')
+    if (!control) return
+    const normalized = this.normalizeAirlineInput(control.value).trim().replace(/\s+/g, ' ')
+    if (normalized !== String(control.value ?? '')) {
+      control.setValue(normalized)
+    }
+  }
+
+  onFlightNumberBlur(): void {
+    const control = this.flightForm.get('flightNumber')
+    if (!control) return
+    const normalized = this.normalizeFlightNumberInput(control.value)
+    if (normalized !== String(control.value ?? '')) {
+      control.setValue(normalized)
+    }
+  }
+
+  private normalizeFlightNumberInput(raw: string): string {
+  const value = String(raw ?? '').trim()
+  if (!value) return value
+  return value
+    .toUpperCase()
+    .replace(/[\s-]+/g, '')
+  }
+
+  private normalizeArrivalTimeInput(raw: string): string {
+    const value = String(raw ?? '').trim()
+    if (!value) return value
+    const match = value.match(/^(\d{1,2}):(\d{2})$/)
+    if (!match) return value
+    const hh = String(Number(match[1])).padStart(2, '0')
+    const mm = String(Number(match[2])).padStart(2, '0')
+    return `${hh}:${mm}`
+  }
+
+  private normalizeCommentsInput(raw: string): string {
+    const value = String(raw ?? '').trim()
+    if (!value) return ''
+    return value
+      .split('\n')
+      .map((line) => line.trim())
+      .join('\n')
+  }
+
   private normalizeAirlineInput(raw: string): string {
     const value = String(raw ?? '').trim()
     if (!value) return value
@@ -357,14 +513,12 @@ formatReceiptDateTime(dateString: string, timeString: string): string {
 
   private buildPayload(): FlightInfoPayload {
     const airline = this.normalizeAirlineInput(this.flightForm.get('airline')?.value).trim().replace(/\s+/g, ' ')
-    const flightNumber = String(this.flightForm.get('flightNumber')?.value ?? '').trim()
+    const flightNumber = this.normalizeFlightNumberInput(this.flightForm.get('flightNumber')?.value)
     const arrivalDate = String(this.flightForm.get('arrivalDate')?.value ?? '').trim()
-    const arrivalTime = String(this.flightForm.get('arrivalTime')?.value ?? '').trim()
-
+    const arrivalTime = this.normalizeArrivalTimeInput(this.flightForm.get('arrivalTime')?.value)
     const guestsRaw = this.flightForm.get('numOfGuests')?.value
-    const numOfGuests = Number(guestsRaw)
-
-    const commentsRaw = String(this.flightForm.get('comments')?.value ?? '').trim()
+    const numOfGuests = Number(String(guestsRaw ?? '').trim())
+    const commentsNormalized = this.normalizeCommentsInput(this.flightForm.get('comments')?.value)
 
     const payload: FlightInfoPayload = {
       airline,
@@ -374,10 +528,9 @@ formatReceiptDateTime(dateString: string, timeString: string): string {
       numOfGuests,
     }
 
-    if (commentsRaw.length > 0) {
-      payload.comments = commentsRaw
+    if (commentsNormalized.length > 0) {
+      payload.comments = commentsNormalized
     }
-
     return payload
   }
 

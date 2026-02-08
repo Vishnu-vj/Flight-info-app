@@ -1,5 +1,11 @@
 <div class="page">
   <div class="card" role="main" aria-label="Login">
+    <div *ngIf="sessionExpiredMessage" class="alert warning" role="alert" aria-live="polite">
+        <div class="alertText">
+          <div class="alertTitle">‼️ Session expired</div>
+          <div class="alertMessage">{{ sessionExpiredMessage }}</div>
+        </div>
+    </div>
     <div class="accentBar" aria-hidden="true"></div>
     <header class="header">
       <div class="brandMark" aria-hidden="true">✈️</div>
@@ -21,7 +27,6 @@
           formControlName="email"
           (input)="authErrorMessage=''"
         />
-
         <span class="error" *ngIf="(emailControl?.touched || hasSubmitted) && emailControl?.invalid">
           <span *ngIf="emailControl?.errors?.['required']">Email is required.</span>
           <span *ngIf="emailControl?.errors?.['consumerEmail']">

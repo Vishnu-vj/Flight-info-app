@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, ChangeDetectorRef, Injector, runInInjectionContext } from '@angular/core'
+import { Component, ChangeDetectorRef, Injector, runInInjectionContext, OnInit, OnDestroy } from '@angular/core'
 import type { AbstractControl, ValidationErrors } from '@angular/forms'
 import { FormBuilder, ReactiveFormsModule, Validators, type FormGroup } from '@angular/forms'
 import {
@@ -8,8 +8,11 @@ import {
   sendPasswordResetEmail,
   signInWithPopup,
   GoogleAuthProvider,
+  onAuthStateChanged,
+  type Unsubscribe,
 } from '@angular/fire/auth'
 import { Router } from '@angular/router'
+import { ActivatedRoute } from '@angular/router'
 
 function consumerEmailValidator(control: AbstractControl): ValidationErrors | null {
   const rawValue = String(control.value ?? '').trim()
@@ -26,7 +29,7 @@ function consumerEmailValidator(control: AbstractControl): ValidationErrors | nu
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
-export class Login {
+export class Login implements OnInit, OnDestroy {
   showPassword = false
   isSubmitting = false
   authErrorMessage = ''
@@ -38,15 +41,18 @@ export class Login {
 
   isGoogleSigningIn = false
   googleAuthErrorMessage = ''
+  sessionExpiredMessage = ''
 
   loginForm: FormGroup
+  private authUnsubscribe: Unsubscribe | null = null
 
   constructor(
     private formBuilder: FormBuilder,
     private auth: Auth,
     private router: Router,
     private injector: Injector,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private route: ActivatedRoute
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, consumerEmailValidator]],
@@ -70,6 +76,27 @@ export class Login {
         this.changeDetectorRef.detectChanges()
       }
     })
+
+    this.route.queryParamMap.subscribe((params) => {
+      const reason = params.get('reason')
+      this.sessionExpiredMessage =
+      reason === 'session-expired' ? 'Please sign in again to continue.' : ''
+    })
+  }
+
+  ngOnInit(): void {
+    this.authUnsubscribe = onAuthStateChanged(this.auth, (user) => {
+      if (user) {
+        void this.router.navigateByUrl('/flight-form')
+      }
+    })
+  }
+
+  ngOnDestroy(): void {
+    if (this.authUnsubscribe) {
+      this.authUnsubscribe()
+      this.authUnsubscribe = null
+    }
   }
 
   get emailControl() {
