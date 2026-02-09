@@ -6,10 +6,12 @@
       <div class="brandMark" aria-hidden="true">🧳</div>
       <div>
         <h1>Arrival Details</h1>
-        <p class="subtitle">Enter flight information so we can prepare for your arrival.</p>
-        <p class="requiredNote">Fields marked with <span class="requiredMark" aria-hidden="true">*</span> are required.</p>
-      </div>
+        <p class="subtitle" *ngIf="!hasSubmitted">Enter flight information so we can prepare for your arrival.</p>
+        <p class="requiredNote" *ngIf="!hasSubmitted">Fields marked with <span class="requiredMark" aria-hidden="true">*</span> are required.</p>
 
+        <p class="subtitle" *ngIf="hasSubmitted"> Your arrival details have been recorded. </p>
+        <p class="helper" *ngIf="hasSubmitted"> You can review or update them below if needed. </p>
+      </div>
       <div class="headerActions">
         <a class="monsterLink" href="https://monsterrg.com/" target="_blank" rel="noreferrer">
           Monster RG
@@ -23,7 +25,6 @@
         <div class="receiptIcon" aria-hidden="true">✅</div>
         <div>
           <div class="receiptTitle">Submitted successfully</div>
-          <div class="receiptSubtitle">You’re all set. Here’s what we received.</div>
           <div class="receiptCheers">Have a great trip - see you soon! 🌴</div>
         </div>
       </div>

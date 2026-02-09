@@ -61,7 +61,6 @@ function flightNumberValidator(control: AbstractControl): ValidationErrors | nul
   return null
 }
 
-
 function arrivalDateValidator(control: AbstractControl): ValidationErrors | null {
   const raw = String(control.value ?? '').trim()
   if (!raw) return null
@@ -193,23 +192,50 @@ export class FlightForm implements OnInit, OnDestroy {
 
   airlineSuggestions: string[] = []
 
+  private readonly receiptStorageKey = 'flightSubmissionReceipt'
+  private readonly receiptSuccessMessageKey = 'flightSubmissionSuccessMessage'
+  private readonly flightSubmittedKey = 'flightSubmitted'
+  private readonly flightReceiptKey = 'flightReceipt'
+
   ngOnInit(): void {
-    this.authUnsubscribe = onAuthStateChanged(this.auth, (user) => {
-      if (!user) {
-        this.flightForm.disable({ emitEvent: false })
+  const wasSubmitted = sessionStorage.getItem(this.flightSubmittedKey) === 'true'
+  this.hasSubmitted = wasSubmitted
+
+  if (wasSubmitted) {
+    const rawReceipt = sessionStorage.getItem(this.flightReceiptKey)
+    if (rawReceipt) {
+      try {
+        this.submissionReceipt = JSON.parse(rawReceipt) as FlightInfoPayload
+      } catch {
         this.submissionReceipt = null
-        this.submitErrorMessage = ''
-        this.submitSuccessMessage = ''
-        this.changeDetectorRef.detectChanges()
-
-        void this.router.navigate(['/login'], { queryParams: { reason: 'session-expired' } })
-        return
       }
+    }
 
-      this.flightForm.enable({ emitEvent: false })
-      this.changeDetectorRef.detectChanges()
-    })
+    this.lastSubmittedPayload = this.submissionReceipt
   }
+
+  this.authUnsubscribe = onAuthStateChanged(this.auth, (user) => {
+    if (!user) {
+      this.flightForm.disable({ emitEvent: false })
+      this.submissionReceipt = null
+      this.submitErrorMessage = ''
+      this.submitSuccessMessage = ''
+      this.clearPersistedReceipt()
+
+      this.lastSubmittedPayload = null
+      this.changeDetectorRef.detectChanges()
+      void this.router.navigate(['/login'], { queryParams: { reason: 'session-expired' } })
+      return
+    }
+
+    this.restorePersistedReceipt()
+    this.lastSubmittedPayload = this.submissionReceipt
+
+    this.flightForm.enable({ emitEvent: false })
+    this.changeDetectorRef.detectChanges()
+  })
+}
+
 
   ngOnDestroy(): void {
     if (this.authUnsubscribe) {
@@ -227,6 +253,7 @@ export class FlightForm implements OnInit, OnDestroy {
   submitSuccessMessage = ''
 
   submissionReceipt: FlightInfoPayload | null = null
+  lastSubmittedPayload: FlightInfoPayload | null = null
 
   flightForm: FormGroup
 
@@ -299,6 +326,43 @@ export class FlightForm implements OnInit, OnDestroy {
       })
   }
 
+  private persistReceipt(receipt: FlightInfoPayload, message: string): void {
+    try {
+      sessionStorage.setItem(this.receiptStorageKey, JSON.stringify(receipt))
+      sessionStorage.setItem(this.receiptSuccessMessageKey, String(message ?? ''))
+    } catch {
+      
+    }
+  }
+
+  private restorePersistedReceipt(): void {
+    try {
+      if (this.submissionReceipt) return 
+      const raw = sessionStorage.getItem(this.receiptStorageKey)
+      if (!raw) return
+      const parsed = JSON.parse(raw) as FlightInfoPayload
+      if (!parsed || typeof parsed !== 'object') return
+
+      if (!parsed.airline || !parsed.flightNumber || !parsed.arrivalDate || !parsed.arrivalTime) return
+      if (typeof parsed.numOfGuests !== 'number') return
+
+      this.submissionReceipt = parsed
+      const msg = sessionStorage.getItem(this.receiptSuccessMessageKey)
+      if (msg) this.submitSuccessMessage = msg
+    } catch {
+      this.clearPersistedReceipt()
+    }
+  }
+
+  private clearPersistedReceipt(): void {
+    try {
+      sessionStorage.removeItem(this.receiptStorageKey)
+      sessionStorage.removeItem(this.receiptSuccessMessageKey)
+    } catch {
+      
+    }
+  }
+
   get shouldShowArrivalTimePastTodayError(): boolean {
     const dateControl = this.flightForm.get('arrivalDate')
     const timeControl = this.flightForm.get('arrivalTime')
@@ -328,112 +392,110 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   onTicketFileSelected(event: Event): void {
-  const input = event.target as HTMLInputElement
-  const file = input.files?.[0] ?? null
+    const input = event.target as HTMLInputElement
+    const file = input.files?.[0] ?? null
 
-  this.ticketParseError = ''
-  this.ticketParseConfidence = null
+    this.ticketParseError = ''
+    this.ticketParseConfidence = null
 
-  if (!file) {
-    this.selectedTicketFile = null
-    return
-  }
-
-  const isPdf = file.type === 'application/pdf'
-  const isImage = file.type.startsWith('image/')
-  if (!isPdf && !isImage) {
-    this.ticketParseError = 'Please upload a PDF or image.'
-    this.selectedTicketFile = null
-    return
-  }
-
-  if (file.size > 6 * 1024 * 1024) {
-    this.ticketParseError = 'File too large (max 6MB).'
-    this.selectedTicketFile = null
-    return
-  }
-
-  this.selectedTicketFile = file
-  this.isParsingTicket = false
-  this.changeDetectorRef.detectChanges()
-}
-
-
-  private clearTicketFields(): void {
-  
-  this.flightForm.patchValue({
-    airline: '',
-    flightNumber: '',
-    arrivalDate: '',
-    arrivalTime: '',
-  })
-}
-
-async parseTicket(): Promise<void> {
-  if (!this.selectedTicketFile || this.isParsingTicket) return
-
-  this.isParsingTicket = true
-  this.ticketParseError = ''
-  this.ticketParseConfidence = null
-  this.changeDetectorRef.detectChanges()
-
-  try {
-    const result = await this.withTimeout(
-      this.ticketParser.parseTicketFile(this.selectedTicketFile),
-      20000
-    )
-
-    this.ticketParseConfidence = result.confidence
-    this.clearTicketFields()
-
-    const patch: any = {}
-    if (result.airline) patch.airline = result.airline
-    if (result.flightNumber) patch.flightNumber = result.flightNumber
-    if (result.arrivalDate) patch.arrivalDate = result.arrivalDate
-    if (result.arrivalTime) patch.arrivalTime = result.arrivalTime
-
-    this.flightForm.patchValue(patch)
-    this.hasSubmitted = false
-    this.flightForm.get('airline')?.markAsUntouched()
-    this.flightForm.get('flightNumber')?.markAsUntouched()
-    this.flightForm.get('arrivalDate')?.markAsUntouched()
-    this.flightForm.get('arrivalTime')?.markAsUntouched()
-    this.flightForm.updateValueAndValidity({ emitEvent: true })
-    this.changeDetectorRef.detectChanges()
-
-    const missing: string[] = []
-    if (!result.airline) missing.push('airline')
-    if (!result.flightNumber) missing.push('flight number')
-    if (!result.arrivalDate) missing.push('arrival date')
-    if (!result.arrivalTime) missing.push('arrival time')
-
-    if (missing.length) {
-      this.ticketParseError = `We couldn’t detect ${missing.join(', ')}. Please confirm it manually.`
-    } else if (result.confidence < 60) {
-      this.ticketParseError = 'Parsed with low confidence. Please verify the autofilled fields.'
+    if (!file) {
+      this.selectedTicketFile = null
+      return
     }
-  } catch (e: any) {
-    this.ticketParseError = e?.message ? String(e.message) : 'Could not parse ticket. Please fill manually.'
-  } finally {
+
+    const isPdf = file.type === 'application/pdf'
+    const isImage = file.type.startsWith('image/')
+    if (!isPdf && !isImage) {
+      this.ticketParseError = 'Please upload a PDF or image.'
+      this.selectedTicketFile = null
+      return
+    }
+
+    if (file.size > 6 * 1024 * 1024) {
+      this.ticketParseError = 'File too large (max 6MB).'
+      this.selectedTicketFile = null
+      return
+    }
+
+    this.selectedTicketFile = file
     this.isParsingTicket = false
     this.changeDetectorRef.detectChanges()
   }
-}
+
+  private clearTicketFields(): void {
+    this.flightForm.patchValue({
+      airline: '',
+      flightNumber: '',
+      arrivalDate: '',
+      arrivalTime: '',
+    })
+  }
+
+  async parseTicket(): Promise<void> {
+    if (!this.selectedTicketFile || this.isParsingTicket) return
+
+    this.isParsingTicket = true
+    this.ticketParseError = ''
+    this.ticketParseConfidence = null
+    this.changeDetectorRef.detectChanges()
+
+    try {
+      const result = await this.withTimeout(
+        this.ticketParser.parseTicketFile(this.selectedTicketFile),
+        20000
+      )
+
+      this.ticketParseConfidence = result.confidence
+      this.clearTicketFields()
+
+      const patch: any = {}
+      if (result.airline) patch.airline = result.airline
+      if (result.flightNumber) patch.flightNumber = result.flightNumber
+      if (result.arrivalDate) patch.arrivalDate = result.arrivalDate
+      if (result.arrivalTime) patch.arrivalTime = result.arrivalTime
+
+      this.flightForm.patchValue(patch)
+      this.hasSubmitted = false
+      this.flightForm.get('airline')?.markAsUntouched()
+      this.flightForm.get('flightNumber')?.markAsUntouched()
+      this.flightForm.get('arrivalDate')?.markAsUntouched()
+      this.flightForm.get('arrivalTime')?.markAsUntouched()
+      this.flightForm.updateValueAndValidity({ emitEvent: true })
+      this.changeDetectorRef.detectChanges()
+
+      const missing: string[] = []
+      if (!result.airline) missing.push('airline')
+      if (!result.flightNumber) missing.push('flight number')
+      if (!result.arrivalDate) missing.push('arrival date')
+      if (!result.arrivalTime) missing.push('arrival time')
+
+      if (missing.length) {
+        this.ticketParseError = `We couldn’t detect ${missing.join(', ')}. Please confirm it manually.`
+      } else if (result.confidence < 60) {
+        this.ticketParseError = 'Parsed with low confidence. Please verify the autofilled fields.'
+      }
+    } catch (e: any) {
+      this.ticketParseError = e?.message ? String(e.message) : 'Could not parse ticket. Please fill manually.'
+    } finally {
+      this.isParsingTicket = false
+      this.changeDetectorRef.detectChanges()
+    }
+  }
 
   private withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
-  return new Promise<T>((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error('Parsing timed out. Please try again.')), ms)
-    promise
-      .then((value) => {
-        clearTimeout(timer)
-        resolve(value)
-      })
-      .catch((err) => {
-        clearTimeout(timer)
-        reject(err)
-      })
-  })
-}
+    return new Promise<T>((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error('Parsing timed out. Please try again.')), ms)
+      promise
+        .then((value) => {
+          clearTimeout(timer)
+          resolve(value)
+        })
+        .catch((err) => {
+          clearTimeout(timer)
+          reject(err)
+        })
+    })
+  }
 
   shouldShowError(controlName: string): boolean {
     const control = this.flightForm.get(controlName)
@@ -446,6 +508,8 @@ async parseTicket(): Promise<void> {
     this.submitErrorMessage = ''
     this.submitSuccessMessage = ''
     this.submissionReceipt = null
+
+    this.clearPersistedReceipt()
 
     this.selectedTicketFile = null
     this.isParsingTicket = false
@@ -465,13 +529,48 @@ async parseTicket(): Promise<void> {
   }
 
   onSubmitAnotherClick(): void {
+    sessionStorage.removeItem(this.flightSubmittedKey)
+    sessionStorage.removeItem(this.flightReceiptKey)
     this.onResetClick()
   }
 
   onEditSubmissionClick(): void {
+    const payload = this.submissionReceipt
+
     this.submissionReceipt = null
+
+    if (!payload) {
+      this.changeDetectorRef.detectChanges()
+      return
+    }
+
+    this.hasSubmitted = false
+    this.submitErrorMessage = ''
+    this.submitSuccessMessage = ''
+
+    this.flightForm.patchValue({
+      airline: payload.airline,
+      flightNumber: payload.flightNumber,
+      arrivalDate: payload.arrivalDate,
+      arrivalTime: payload.arrivalTime,
+      numOfGuests: String(payload.numOfGuests ?? ''),
+      comments: payload.comments ?? '',
+    })
+
+    this.flightForm.markAsPristine()
+    this.flightForm.markAsUntouched()
+
+    this.flightForm.get('airline')?.markAsUntouched()
+    this.flightForm.get('flightNumber')?.markAsUntouched()
+    this.flightForm.get('arrivalDate')?.markAsUntouched()
+    this.flightForm.get('arrivalTime')?.markAsUntouched()
+    this.flightForm.get('numOfGuests')?.markAsUntouched()
+    this.flightForm.get('comments')?.markAsUntouched()
+
+    this.flightForm.updateValueAndValidity({ emitEvent: true })
     this.changeDetectorRef.detectChanges()
   }
+
 
   async onSignOutClick(): Promise<void> {
     try {
@@ -655,9 +754,11 @@ async parseTicket(): Promise<void> {
 
   async onSubmit(): Promise<void> {
     if (this.isSubmitting) return
-    this.hasSubmitted = true
+
     this.submitErrorMessage = ''
     this.submitSuccessMessage = ''
+
+    this.hasSubmitted = true
 
     if (this.flightForm.invalid) {
       this.flightForm.markAllAsTouched()
@@ -667,7 +768,6 @@ async parseTicket(): Promise<void> {
 
     this.isSubmitting = true
     this.changeDetectorRef.detectChanges()
-
     const payload = this.buildPayload()
 
     //TODO: Remove this before submitting
@@ -675,9 +775,15 @@ async parseTicket(): Promise<void> {
       console.log('[DRY RUN] FlightInfoPayload:', payload)
       console.log('[DRY RUN] Headers:', { token: this.tokenHeaderValue, candidate: this.candidateName })
 
-      // simulate success UX without hitting their server
       this.submissionReceipt = payload
+      this.lastSubmittedPayload = payload
       this.submitSuccessMessage = 'Dry run: payload looks good. No request was sent.'
+
+      sessionStorage.setItem(this.flightSubmittedKey, 'true')
+      sessionStorage.setItem(this.flightReceiptKey, JSON.stringify(payload))
+
+      this.persistReceipt(payload, this.submitSuccessMessage)
+
       this.isSubmitting = false
       this.changeDetectorRef.detectChanges()
       return
@@ -690,7 +796,7 @@ async parseTicket(): Promise<void> {
 
     try {
       const response: any = await runInInjectionContext(this.injector, () =>
-      firstValueFrom(this.http.post(this.endpointUrl, payload, { headers }))
+        firstValueFrom(this.http.post(this.endpointUrl, payload, { headers }))
       )
 
       const isSuccess =
@@ -707,7 +813,13 @@ async parseTicket(): Promise<void> {
       }
 
       this.submissionReceipt = payload
+      this.lastSubmittedPayload = payload
       this.submitSuccessMessage = 'Your flight details were submitted successfully.'
+
+      this.persistReceipt(payload, this.submitSuccessMessage)
+      sessionStorage.setItem(this.flightSubmittedKey, 'true')
+      sessionStorage.setItem(this.flightReceiptKey, JSON.stringify(payload))
+
       this.changeDetectorRef.detectChanges()
     } catch (error: any) {
       this.submitErrorMessage =
