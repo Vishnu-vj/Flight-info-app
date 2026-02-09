@@ -8,6 +8,7 @@ import { Auth, signOut } from '@angular/fire/auth'
 import type { Unsubscribe } from '@angular/fire/auth'
 import { onAuthStateChanged } from '@angular/fire/auth'
 import { TicketParserService } from '../../services/ticketParser.service'
+import { firstValueFrom } from 'rxjs'
 
 interface FlightInfoPayload {
   airline: string
@@ -208,15 +209,6 @@ export class FlightForm implements OnInit, OnDestroy {
       this.flightForm.enable({ emitEvent: false })
       this.changeDetectorRef.detectChanges()
     })
-
-    this.http.get<Array<{ name: string }>>('assets/airlines.json').subscribe({
-      next: (rows) => {
-        this.airlineSuggestions = (rows ?? [])
-          .map((r) => String(r.name ?? '').trim())
-          .filter((n) => n.length > 0)
-        this.changeDetectorRef.detectChanges()
-      },
-    })
   }
 
   ngOnDestroy(): void {
@@ -280,6 +272,7 @@ export class FlightForm implements OnInit, OnDestroy {
             .filter((row) => row.name.length > 0)
 
           this.airlinesFromDataset = cleaned
+          this.airlineSuggestions = cleaned.map((row) => row.name)
           this.airlineSuggestionValues = cleaned
             .map((row) => {
               const parts = []
@@ -697,9 +690,7 @@ async parseTicket(): Promise<void> {
 
     try {
       const response: any = await runInInjectionContext(this.injector, () =>
-        this.http
-          .post(this.endpointUrl, payload, { headers })
-          .toPromise()
+      firstValueFrom(this.http.post(this.endpointUrl, payload, { headers }))
       )
 
       const isSuccess =

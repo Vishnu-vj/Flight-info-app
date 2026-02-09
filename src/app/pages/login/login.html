@@ -1,133 +1,219 @@
 <div class="page">
-  <div class="card" role="main" aria-label="Login">
-    <div *ngIf="sessionExpiredMessage" class="alert warning" role="alert" aria-live="polite">
-        <div class="alertText">
-          <div class="alertTitle">‼️ Session expired</div>
-          <div class="alertMessage">{{ sessionExpiredMessage }}</div>
-        </div>
-    </div>
-    <div class="accentBar" aria-hidden="true"></div>
-    <header class="header">
-      <div class="brandMark" aria-hidden="true">✈️</div>
-      <div>
-        <h1>Flight Details</h1>
-        <p class="subtitle">Sign in to submit arrival details.</p>
-        <p class="helper">Authorized users only · Your submission is logged.</p>
-      </div>
-    </header>
-
-    <form class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <label class="field">
-        <span class="label">Email</span>
-        <input
-          type="email"
-          inputmode="email"
-          autocomplete="email"
-          placeholder="you@example.com"
-          formControlName="email"
-          (input)="authErrorMessage=''"
-          [attr.list]="emailSuggestion ? 'emailSuggestions' : null"
-        />
-        <datalist id="emailSuggestions" *ngIf="emailSuggestion">
-          <option [value]="emailSuggestion"></option>
-        </datalist>
-        <span class="error" *ngIf="(emailControl?.touched || hasSubmitted) && emailControl?.invalid">
-          <span *ngIf="emailControl?.errors?.['required']">Email is required.</span>
-          <span *ngIf="emailControl?.errors?.['consumerEmail']">
-            Enter a valid email (example: name@gmail.com).
+  <div class="layout" aria-label="Login layout">
+    <aside class="sidePanel" aria-label="Welcome panel">
+      <div class="sideTop">
+        <div class="sideBadgeRow">
+          <span class="chip">
+            <span class="chipDot" aria-hidden="true"></span>
+            Arrivals
           </span>
-        </span>
-      </label>
+          <span class="chip chipGhost">Secure</span>
+        </div>
 
-      <label class="field">
-        <span class="label">Password</span>
+        <h2 class="sideTitle">Welcome aboard</h2>
+        <p class="sideSub">
+          Share your arrival details in seconds - we will prep the team before you land.
+        </p>
 
-        <div class="inputWithButton">
+        <div class="sideBenefits" role="list" aria-label="Highlights">
+          <div class="benefit" role="listitem">
+            <span class="benefitIcon" aria-hidden="true">🔒</span>
+            <div>
+              <div class="benefitTitle">Secure access</div>
+              <div class="benefitText">Authorized sign-in only</div>
+            </div>
+          </div>
+
+          <div class="benefit" role="listitem">
+            <span class="benefitIcon" aria-hidden="true">⚡</span>
+            <div>
+              <div class="benefitTitle">Fast submission</div>
+              <div class="benefitText">Minimal steps, clear validation</div>
+            </div>
+          </div>
+
+          <div class="benefit" role="listitem">
+            <span class="benefitIcon" aria-hidden="true">✅</span>
+            <div>
+              <div class="benefitTitle">Instant confirmation</div>
+              <div class="benefitText">You will see exactly what we received</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sideBottom" aria-hidden="true">
+        <div class="routeRow">
+          <div class="routeCity">
+            <div class="routeLabel">FROM</div>
+            <div class="routeValue">You</div>
+          </div>
+
+          <div class="routeLine">
+            <div class="routeLineTrack"></div>
+            <div class="routePlane">✈️</div>
+          </div>
+
+          <div class="routeCity">
+            <div class="routeLabel">TO</div>
+            <div class="routeValue">Monster RG</div>
+          </div>
+        </div>
+
+        <div class="sideFooter">MONSTER RG • ARRIVAL DETAILS</div>
+      </div>
+    </aside>
+
+    <div class="card" role="main" aria-label="Login">
+      <div class="noticeStack">
+  <div *ngIf="sessionExpiredMessage" class="notice warning" role="alert" aria-live="polite">
+    <div class="noticeText">
+      <div class="noticeTitle">‼️ Session expired</div>
+      <div class="noticeMessage">{{ sessionExpiredMessage }}</div>
+    </div>
+  </div>
+
+  <div *ngIf="shouldShowNotAuthorizedBanner" class="notice warning" role="alert" aria-live="polite">
+    <div class="noticeText">
+      <div class="noticeTitle">Not authorized</div>
+      <div class="noticeMessage">
+        {{ notAuthorizedMessage }}
+        <br>
+        <span *ngIf="signedInEmail"> (Signed in as: <strong>{{ signedInEmail }}</strong>)</span>
+      </div>
+    </div>
+
+    <div class="noticeActions">
+    <button type="button" class="secondaryButton" (click)="signOutForAccountSwitch()">
+      Sign out
+    </button>
+    </div>
+  </div>
+</div>
+      
+      <div class="accentBar" aria-hidden="true"></div>
+      <header class="header">
+        <div class="brandMark" aria-hidden="true">✈️</div>
+        <div>
+          <h1>Flight Details</h1>
+          <p class="subtitle">Sign in to submit arrival details.</p>
+          <p class="helper">Authorized users only · Your submission is logged.</p>
+        </div>
+      </header>
+
+      <form *ngIf="!shouldShowNotAuthorizedBanner" class="form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <label class="field">
+          <span class="label">Email</span>
           <input
-            class="input"
-            [type]="showPassword ? 'text' : 'password'"
-            autocomplete="current-password"
-            placeholder="Your password"
-            formControlName="password"
+            type="email"
+            inputmode="email"
+            autocomplete="email"
+            placeholder="you@example.com"
+            formControlName="email"
             (input)="authErrorMessage=''"
+            [attr.list]="emailSuggestion ? 'emailSuggestions' : null"
           />
-          <button class="iconButton" type="button" (click)="togglePasswordVisibility()">
-            {{ showPassword ? 'Hide' : 'Show' }}
+          <datalist id="emailSuggestions" *ngIf="emailSuggestion">
+            <option [value]="emailSuggestion"></option>
+          </datalist>
+          <span class="error" *ngIf="(emailControl?.touched || hasSubmitted) && emailControl?.invalid">
+            <span *ngIf="emailControl?.errors?.['required']">Email is required.</span>
+            <span *ngIf="emailControl?.errors?.['consumerEmail']">
+              Enter a valid email (example: name@gmail.com).
+            </span>
+          </span>
+        </label>
+
+        <label class="field">
+          <span class="label">Password</span>
+
+          <div class="inputWithButton">
+            <input
+              class="input"
+              [type]="showPassword ? 'text' : 'password'"
+              autocomplete="current-password"
+              placeholder="Your password"
+              formControlName="password"
+              (input)="authErrorMessage=''"
+            />
+            <button class="iconButton" type="button" (click)="togglePasswordVisibility()">
+              {{ showPassword ? 'Hide' : 'Show' }}
+            </button>
+          </div>
+
+          <span class="error" *ngIf="(passwordControl?.touched || hasSubmitted) && passwordControl?.invalid">
+            <span *ngIf="passwordControl?.errors?.['required']">Password is required.</span>
+            <span *ngIf="passwordControl?.errors?.['minlength']">Password must be at least 6 characters.</span>
+          </span>
+        </label>
+
+        <div *ngIf="authErrorMessage" class="authAlert" role="alert" aria-live="polite">
+          <div class="authAlertIcon" aria-hidden="true">!</div>
+          <div class="authAlertText">
+            <div class="authAlertTitle">Login failed</div>
+            <div class="authAlertMessage">{{ authErrorMessage }}</div>
+          </div>
+        </div>
+
+        <button
+          class="primaryButton"
+          type="submit"
+          [disabled]="loginForm.invalid || isSubmitting"
+          [attr.aria-busy]="isSubmitting ? 'true' : null"
+        >
+          <span *ngIf="!isSubmitting">Log in</span>
+          <span *ngIf="isSubmitting">Logging in…</span>
+        </button>
+
+        <div class="dividerRow" aria-hidden="true">
+          <div class="dividerLine"></div>
+          <div class="dividerText">or</div>
+          <div class="dividerLine"></div>
+        </div>
+
+        <button
+          type="button"
+          class="googleButton"
+          (click)="onGoogleSignIn()"
+          [disabled]="isGoogleSigningIn || isSubmitting || shouldShowNotAuthorizedBanner"
+          [attr.aria-busy]="isGoogleSigningIn ? 'true' : null"
+        >
+          <span *ngIf="!isGoogleSigningIn">Continue with Google</span>
+          <span *ngIf="isGoogleSigningIn">Signing in…</span>
+        </button>
+
+        <div *ngIf="googleAuthErrorMessage" class="authAlert" role="alert" aria-live="polite">
+          <div class="authAlertIcon" aria-hidden="true">!</div>
+          <div class="authAlertText">
+            <div class="authAlertTitle">Google sign-in</div>
+            <div class="authAlertMessage">{{ googleAuthErrorMessage }}</div>
+          </div>
+        </div>
+
+        <div class="footerRow">
+          <button
+            class="linkButton"
+            type="button"
+            (click)="onForgotPasswordClick()"
+            [disabled]="isResettingPassword || isSubmitting"
+          >
+            <span *ngIf="!isResettingPassword">Forgot password?</span>
+            <span *ngIf="isResettingPassword">Sending reset link…</span>
           </button>
         </div>
 
-        <span class="error" *ngIf="(passwordControl?.touched || hasSubmitted) && passwordControl?.invalid">
-          <span *ngIf="passwordControl?.errors?.['required']">Password is required.</span>
-          <span *ngIf="passwordControl?.errors?.['minlength']">Password must be at least 6 characters.</span>
-        </span>
-      </label>
-
-      <div *ngIf="authErrorMessage" class="authAlert" role="alert" aria-live="polite">
-        <div class="authAlertIcon" aria-hidden="true">!</div>
-        <div class="authAlertText">
-          <div class="authAlertTitle">Login failed</div>
-          <div class="authAlertMessage">{{ authErrorMessage }}</div>
+        <div *ngIf="resetEmailSent" class="infoBanner" role="status" aria-live="polite">
+          If an account exists for <strong>{{ emailControl?.value }}</strong>, a password reset link has been sent.
         </div>
-      </div>
 
-      <button
-        class="primaryButton"
-        type="submit"
-        [disabled]="loginForm.invalid || isSubmitting"
-        [attr.aria-busy]="isSubmitting ? 'true' : null"
-      >
-        <span *ngIf="!isSubmitting">Log in</span>
-        <span *ngIf="isSubmitting">Logging in…</span>
-      </button>
-
-      <div class="dividerRow" aria-hidden="true">
-        <div class="dividerLine"></div>
-        <div class="dividerText">or</div>
-        <div class="dividerLine"></div>
-      </div>
-
-      <button
-        type="button"
-        class="googleButton"
-        (click)="onGoogleSignIn()"
-        [disabled]="isGoogleSigningIn || isSubmitting"
-        [attr.aria-busy]="isGoogleSigningIn ? 'true' : null"
-      >
-        <span *ngIf="!isGoogleSigningIn">Continue with Google</span>
-        <span *ngIf="isGoogleSigningIn">Signing in…</span>
-      </button>
-
-      <div *ngIf="googleAuthErrorMessage" class="authAlert" role="alert" aria-live="polite">
-        <div class="authAlertIcon" aria-hidden="true">!</div>
-        <div class="authAlertText">
-          <div class="authAlertTitle">Google sign-in</div>
-          <div class="authAlertMessage">{{ googleAuthErrorMessage }}</div>
+        <div *ngIf="resetErrorMessage" class="authAlert" role="alert" aria-live="polite">
+          <div class="authAlertIcon" aria-hidden="true">!</div>
+          <div class="authAlertText">
+            <div class="authAlertTitle">Password reset</div>
+            <div class="authAlertMessage">{{ resetErrorMessage }}</div>
+          </div>
         </div>
-      </div>
-
-      <div class="footerRow">
-        <button
-          class="linkButton"
-          type="button"
-          (click)="onForgotPasswordClick()"
-          [disabled]="isResettingPassword || isSubmitting"
-        >
-          <span *ngIf="!isResettingPassword">Forgot password?</span>
-          <span *ngIf="isResettingPassword">Sending reset link…</span>
-        </button>
-      </div>
-
-      <div *ngIf="resetEmailSent" class="infoBanner" role="status" aria-live="polite">
-        If an account exists for <strong>{{ emailControl?.value }}</strong>, a password reset link has been sent.
-      </div>
-
-      <div *ngIf="resetErrorMessage" class="authAlert" role="alert" aria-live="polite">
-        <div class="authAlertIcon" aria-hidden="true">!</div>
-        <div class="authAlertText">
-          <div class="authAlertTitle">Password reset</div>
-          <div class="authAlertMessage">{{ resetErrorMessage }}</div>
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </div>

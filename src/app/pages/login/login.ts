@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, ChangeDetectorRef, Injector, runInInjectionContext, OnInit, OnDestroy } from '@angular/core'
+import { Component, ChangeDetectorRef, Injector, inject, runInInjectionContext, OnInit, OnDestroy } from '@angular/core'
 import type { AbstractControl, ValidationErrors } from '@angular/forms'
 import { FormBuilder, ReactiveFormsModule, Validators, type FormGroup } from '@angular/forms'
 import {
@@ -9,10 +9,14 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   onAuthStateChanged,
+  signOut,
   type Unsubscribe,
 } from '@angular/fire/auth'
 import { Router } from '@angular/router'
 import { ActivatedRoute } from '@angular/router'
+import { authState } from 'rxfire/auth'
+import { map } from 'rxjs'
+import { AuthorizationService } from '../../services/authorization.service'
 
 function consumerEmailValidator(control: AbstractControl): ValidationErrors | null {
   const rawValue = String(control.value ?? '').trim()
@@ -43,9 +47,16 @@ export class Login implements OnInit, OnDestroy {
   googleAuthErrorMessage = ''
   sessionExpiredMessage = ''
   emailSuggestion = ''
+  public notAuthorizedMessage =
+  "You are signed in, but this account is not authorized for the flight form. Please sign out and use an approved account."
+  public shouldShowNotAuthorizedBanner = false
+  public signedInEmail = ''
+  private readonly authorizationService = inject(AuthorizationService)
   private readonly lastEmailStorageKey = 'flightInfoLastEmail'
 
   loginForm: FormGroup
+  private queryParamsSubscription: any = null
+  private authStateSubscription: any = null
   private authUnsubscribe: Unsubscribe | null = null
 
   constructor(
@@ -89,19 +100,64 @@ export class Login implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.authUnsubscribe = onAuthStateChanged(this.auth, (user) => {
-      if (user) {
+  this.isSubmitting = false
+  this.isGoogleSigningIn = false
+
+  this.queryParamsSubscription = this.route.queryParamMap.subscribe((params) => {
+  const reason = String(params.get('reason') ?? '')
+  const userEmail = String(this.auth.currentUser?.email ?? '')
+  this.shouldShowNotAuthorizedBanner = reason === 'not-authorized' && userEmail.length > 0
+  })
+
+  this.authUnsubscribe = onAuthStateChanged(this.auth, async (user) => {
+    this.signedInEmail = String(user?.email ?? '')
+
+    if (!user) return
+    if (this.shouldShowNotAuthorizedBanner) return
+
+    try {
+      const isAllowed = await this.authorizationService.isCurrentUserAllowed()
+
+      if (isAllowed) {
         void this.router.navigateByUrl('/flight-form')
+        return
       }
-    })
+      this.shouldShowNotAuthorizedBanner = true
+    } catch {
+      this.shouldShowNotAuthorizedBanner = true
+    }
+  })
+}
+
+
+ngOnDestroy(): void {
+  if (this.authUnsubscribe) {
+    this.authUnsubscribe()
+    this.authUnsubscribe = null
   }
 
-  ngOnDestroy(): void {
-    if (this.authUnsubscribe) {
-      this.authUnsubscribe()
-      this.authUnsubscribe = null
-    }
+  if (this.queryParamsSubscription) {
+    this.queryParamsSubscription.unsubscribe()
+    this.queryParamsSubscription = null
   }
+  }
+
+  public async signOutForAccountSwitch(): Promise<void> {
+  try {
+    this.shouldShowNotAuthorizedBanner = false
+    this.signedInEmail = ''
+
+    await signOut(this.auth)
+
+    await this.router.navigate(['/login'], {
+      queryParams: {},
+      replaceUrl: true,
+    })
+  } catch {
+    this.shouldShowNotAuthorizedBanner = false
+  }
+}
+
 
   private loadEmailSuggestion(): void {
     try {
@@ -175,6 +231,7 @@ export class Login implements OnInit, OnDestroy {
   }
 
   async onGoogleSignIn(): Promise<void> {
+  if (this.shouldShowNotAuthorizedBanner) return
   this.googleAuthErrorMessage = ''
   this.isGoogleSigningIn = true
   this.changeDetectorRef.detectChanges()
@@ -225,6 +282,8 @@ export class Login implements OnInit, OnDestroy {
   async onSubmit(): Promise<void> {
     this.hasSubmitted = true
     this.authErrorMessage = ''
+
+    if (this.shouldShowNotAuthorizedBanner) return
 
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched()
