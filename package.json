@@ -30,8 +30,11 @@
     "@angular/forms": "^21.1.0",
     "@angular/platform-browser": "^21.1.0",
     "@angular/router": "^21.1.0",
+    "dayjs": "^1.11.19",
     "firebase": "^12.9.0",
+    "pdfjs-dist": "^5.4.624",
     "rxjs": "~7.8.0",
+    "tesseract.js": "^7.0.0",
     "tslib": "^2.3.0",
     "zone.js": "^0.16.0"
   },

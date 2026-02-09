@@ -89,6 +89,81 @@
         </div>
       </div>
 
+  <div class="section">
+    <div class="ticketUploader" aria-label="Upload flight ticket to autofill">
+      <div class="ticketHeader">
+        <div class="ticketTitleRow">
+          <span class="ticketIcon" aria-hidden="true">📎</span>
+          <div class="ticketTitles">
+            <div class="ticketTitle"> 
+              Upload ticket (PDF or image)
+              <span class="betaBadge">Beta</span>
+            </div>
+            <div class="ticketSubtitle">We will try to autofill airline, flight number, arrival date and time - please review before submitting.</div>
+          </div>
+        </div>
+      </div>
+
+    <div class="ticketBody">
+      <input
+        #ticketInput
+        class="ticketFileInput"
+        type="file"
+        accept="application/pdf,image/*"
+        (change)="onTicketFileSelected($event)"
+      />
+
+      <div class="ticketRow">
+        <button
+          type="button"
+          class="ticketPickButton"
+          (click)="ticketInput.click()"
+          [disabled]="isParsingTicket"
+        >
+          <span class="ticketPickIcon" aria-hidden="true">⬆️</span>
+          Choose ticket
+        </button>
+
+        <div class="ticketFileMeta" [class.hasFile]="!!selectedTicketFile">
+          <div class="ticketFileName">
+            {{ selectedTicketFile ? selectedTicketFile.name : 'No file selected' }}
+          </div>
+          <div class="ticketFileHint" *ngIf="selectedTicketFile">
+            {{ (selectedTicketFile.size / 1024 / 1024) | number:'1.1-1' }} MB • {{ selectedTicketFile.type || 'file' }}
+          </div>
+          <div class="ticketFileHint" *ngIf="!selectedTicketFile">
+            PDF or image • max 6MB
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="ticketParseButton"
+          [disabled]="!selectedTicketFile || isParsingTicket"
+          [attr.aria-busy]="isParsingTicket ? 'true' : null"
+          (click)="parseTicket()"
+        >
+          <span *ngIf="!isParsingTicket">Parse ticket</span>
+          <span *ngIf="isParsingTicket">Parsing…</span>
+        </button>
+      </div>
+
+      <div class="ticketStatusRow" *ngIf="ticketParseConfidence !== null || ticketParseError">
+        <div class="ticketStatus warn" *ngIf="ticketParseError">
+          <span class="statusDot" aria-hidden="true">●</span>
+          Detected fields (confidence {{ ticketParseConfidence ?? '—' }}%).
+          {{ ticketParseError }}
+        </div>
+
+        <div class="ticketStatus success" *ngIf="!ticketParseError && ticketParseConfidence !== null">
+          <span class="statusDot" aria-hidden="true">●</span>
+          Detected fields (confidence {{ ticketParseConfidence }}%). Please verify before submitting.
+        </div>
+    </div>
+    </div>
+  </div>
+</div>
+
       <div class="section">
         <div class="sectionTitle">
             <span class="sectionIcon" aria-hidden="true">✈️</span>
@@ -148,7 +223,7 @@
                 <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberCharacters']">Use letters, numbers, spaces or a hyphen only.</span>
                 <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberMustContainLetterDigit']">Include both letters and numbers (Eg:DL123).</span>
                 <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberSeparators']">Avoid leading/trailing or repeated separators.</span>
-                <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberFormat']">Format examples: DL123, DL 123, DL-123.</span>
+                <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberFormat']">Format examples: DL123, DL 123, DL-123, 6E2409.</span>
             </span>
           </label>
         </div>

@@ -7,7 +7,7 @@ import { Router } from '@angular/router'
 import { Auth, signOut } from '@angular/fire/auth'
 import type { Unsubscribe } from '@angular/fire/auth'
 import { onAuthStateChanged } from '@angular/fire/auth'
-
+import { TicketParserService } from '../../services/ticketParser.service'
 
 interface FlightInfoPayload {
   airline: string
@@ -40,23 +40,26 @@ function airlineValidator(control: AbstractControl): ValidationErrors | null {
 
 function flightNumberValidator(control: AbstractControl): ValidationErrors | null {
   const value = String(control.value ?? '').trim()
-  if (!value) return null 
+  if (!value) return null
 
   if (value.length < 2) return { flightNumberLength: 'min' }
   if (value.length > 10) return { flightNumberLength: 'max' }
-
   const allowedChars = /^[A-Za-z0-9 -]+$/
   if (!allowedChars.test(value)) return { flightNumberCharacters: true }
-  if (!/[A-Za-z]/.test(value) || !/\d/.test(value)) return { flightNumberMustContainLetterDigit: true }
-
+  if (!/[A-Za-z]/.test(value) || !/\d/.test(value)) {
+    return { flightNumberMustContainLetterDigit: true }
+  }
   if (/^[ -]/.test(value) || /[ -]$/.test(value) || /[ -]{2,}/.test(value)) {
     return { flightNumberSeparators: true }
   }
 
-  const structure = /^[A-Za-z]{1,3}(?:[ -]?\d{1,4}[A-Za-z]?)$/
-  if (!structure.test(value)) return { flightNumberFormat: true }
+  const normalized = value.replace(/[ -]/g, '').toUpperCase()
+  const structure = /^[A-Z0-9]{2,3}\d{1,5}[A-Z]?$/
+  if (!structure.test(normalized)) return { flightNumberFormat: true }
+
   return null
 }
+
 
 function arrivalDateValidator(control: AbstractControl): ValidationErrors | null {
   const raw = String(control.value ?? '').trim()
@@ -127,7 +130,7 @@ function arrivalDateTimeNotPastValidator(group: AbstractControl): ValidationErro
   const day = Number(dateMatch[3])
 
   const timeMatch = timeValue.match(/^(\d{2}):(\d{2})$/)
-  if (!timeMatch) return null 
+  if (!timeMatch) return null
   const hours = Number(timeMatch[1])
   const minutes = Number(timeMatch[2])
   const selected = new Date(year, month - 1, day, hours, minutes, 0, 0)
@@ -172,49 +175,56 @@ function commentsValidator(control: AbstractControl): ValidationErrors | null {
   templateUrl: './flight-form.html',
   styleUrl: './flight-form.scss',
 })
-export class FlightForm implements OnInit,  OnDestroy {
+export class FlightForm implements OnInit, OnDestroy {
   isSubmitting = false
   hasSubmitted = false
+
   //To prevent lot of POST during testing
   //TODO: Remove before final submission
   private readonly isDryRun = true
 
+  selectedTicketFile: File | null = null
+  isParsingTicket = false
+  ticketParseError = ''
+  ticketParseConfidence: number | null = null
+
   private authUnsubscribe: Unsubscribe | null = null
 
   airlineSuggestions: string[] = []
+
   ngOnInit(): void {
-  this.authUnsubscribe = onAuthStateChanged(this.auth, (user) => {
-  if (!user) {
-    this.flightForm.disable({ emitEvent: false })
-    this.submissionReceipt = null
-    this.submitErrorMessage = ''
-    this.submitSuccessMessage = ''
-    this.changeDetectorRef.detectChanges()
+    this.authUnsubscribe = onAuthStateChanged(this.auth, (user) => {
+      if (!user) {
+        this.flightForm.disable({ emitEvent: false })
+        this.submissionReceipt = null
+        this.submitErrorMessage = ''
+        this.submitSuccessMessage = ''
+        this.changeDetectorRef.detectChanges()
 
-    void this.router.navigate(['/login'], { queryParams: { reason: 'session-expired' } })
-    return
-  }
+        void this.router.navigate(['/login'], { queryParams: { reason: 'session-expired' } })
+        return
+      }
 
-  this.flightForm.enable({ emitEvent: false })
-  this.changeDetectorRef.detectChanges()
-})
-
-  this.http.get<Array<{ name: string }>>('assets/airlines.json').subscribe({
-    next: (rows) => {
-      this.airlineSuggestions = (rows ?? [])
-        .map((r) => String(r.name ?? '').trim())
-        .filter((n) => n.length > 0)
+      this.flightForm.enable({ emitEvent: false })
       this.changeDetectorRef.detectChanges()
-    },
-  })
-}
+    })
 
-ngOnDestroy(): void {
-  if (this.authUnsubscribe) {
-    this.authUnsubscribe()
-    this.authUnsubscribe = null
+    this.http.get<Array<{ name: string }>>('assets/airlines.json').subscribe({
+      next: (rows) => {
+        this.airlineSuggestions = (rows ?? [])
+          .map((r) => String(r.name ?? '').trim())
+          .filter((n) => n.length > 0)
+        this.changeDetectorRef.detectChanges()
+      },
+    })
   }
-}
+
+  ngOnDestroy(): void {
+    if (this.authUnsubscribe) {
+      this.authUnsubscribe()
+      this.authUnsubscribe = null
+    }
+  }
 
   airlinesFromDataset: Array<{ name: string; iata?: string; icao?: string }> = []
   airlineSuggestionValues: string[] = []
@@ -230,7 +240,7 @@ ngOnDestroy(): void {
 
   private readonly endpointUrl =
     'https://us-central1-crm-sdk.cloudfunctions.net/flightInfoChallenge'
-  
+
   //TODO: Move it to env.ts instead of hard coding
   private readonly tokenHeaderValue =
     'WW91IG11c3QgYmUgdGhlIGN1cmlvdXMgdHlwZS4gIEJyaW5nIHRoaXMgdXAgYXQgdGhlIGludGVydmlldyBmb3IgYm9udXMgcG9pbnRzICEh'
@@ -243,66 +253,69 @@ ngOnDestroy(): void {
     private auth: Auth,
     private router: Router,
     private injector: Injector,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private ticketParser: TicketParserService
   ) {
-    this.flightForm = this.formBuilder.group({
-      airline: ['', [trimmedRequired, airlineValidator]],
-      flightNumber: ['', [trimmedRequired, flightNumberValidator]],
-      arrivalDate: ['', [Validators.required, arrivalDateValidator]],
-      arrivalTime: ['', [Validators.required, arrivalTimeValidator]],
-      numOfGuests: ['', [Validators.required, guestsRangeValidator]],
-      comments: ['', [commentsValidator]],
-    },
-    { validators: [arrivalDateTimeNotPastValidator] }
-    )
-    this.http.get<Array<{ name: string; iata?: string; icao?: string }>>('/assets/airlines.json')
-    .subscribe({
-      next: (rows) => {
-        const cleaned = (rows || [])
-          .map((row) => ({
-            name: String(row?.name ?? '').trim(),
-            iata: String(row?.iata ?? '').trim(),
-            icao: String(row?.icao ?? '').trim(),
-          }))
-          .filter((row) => row.name.length > 0)
-
-        this.airlinesFromDataset = cleaned
-        this.airlineSuggestionValues = cleaned
-          .map((row) => {
-            const parts = []
-            if (row.iata) parts.push(row.iata)
-            if (row.icao) parts.push(row.icao)
-            parts.push(row.name)
-            return parts.join(' · ')
-          })
-
-        this.airlineLookupSet.clear()
-        for (const row of cleaned) {
-          this.airlineLookupSet.add(row.name.toLowerCase())
-          if (row.iata) this.airlineLookupSet.add(row.iata.toLowerCase())
-          if (row.icao) this.airlineLookupSet.add(row.icao.toLowerCase())
-        }
-
-        this.isAirlinesDatasetLoaded = true
-        this.changeDetectorRef.detectChanges()
+    this.flightForm = this.formBuilder.group(
+      {
+        airline: ['', [trimmedRequired, airlineValidator]],
+        flightNumber: ['', [trimmedRequired, flightNumberValidator]],
+        arrivalDate: ['', [Validators.required, arrivalDateValidator]],
+        arrivalTime: ['', [Validators.required, arrivalTimeValidator]],
+        numOfGuests: ['', [Validators.required, guestsRangeValidator]],
+        comments: ['', [commentsValidator]],
       },
-      error: () => {
-        this.isAirlinesDatasetLoaded = false
-        this.changeDetectorRef.detectChanges()
-      }
-    })
+      { validators: [arrivalDateTimeNotPastValidator] }
+    )
+
+    this.http.get<Array<{ name: string; iata?: string; icao?: string }>>('/assets/airlines.json')
+      .subscribe({
+        next: (rows) => {
+          const cleaned = (rows || [])
+            .map((row) => ({
+              name: String(row?.name ?? '').trim(),
+              iata: String(row?.iata ?? '').trim(),
+              icao: String(row?.icao ?? '').trim(),
+            }))
+            .filter((row) => row.name.length > 0)
+
+          this.airlinesFromDataset = cleaned
+          this.airlineSuggestionValues = cleaned
+            .map((row) => {
+              const parts = []
+              if (row.iata) parts.push(row.iata)
+              if (row.icao) parts.push(row.icao)
+              parts.push(row.name)
+              return parts.join(' · ')
+            })
+
+          this.airlineLookupSet.clear()
+          for (const row of cleaned) {
+            this.airlineLookupSet.add(row.name.toLowerCase())
+            if (row.iata) this.airlineLookupSet.add(row.iata.toLowerCase())
+            if (row.icao) this.airlineLookupSet.add(row.icao.toLowerCase())
+          }
+
+          this.isAirlinesDatasetLoaded = true
+          this.changeDetectorRef.detectChanges()
+        },
+        error: () => {
+          this.isAirlinesDatasetLoaded = false
+          this.changeDetectorRef.detectChanges()
+        }
+      })
   }
 
   get shouldShowArrivalTimePastTodayError(): boolean {
-  const dateControl = this.flightForm.get('arrivalDate')
-  const timeControl = this.flightForm.get('arrivalTime')
+    const dateControl = this.flightForm.get('arrivalDate')
+    const timeControl = this.flightForm.get('arrivalTime')
 
-  const userInteracted =
-    !!dateControl && (dateControl.touched || dateControl.dirty) ||
-    !!timeControl && (timeControl.touched || timeControl.dirty)
+    const userInteracted =
+      (!!dateControl && (dateControl.touched || dateControl.dirty)) ||
+      (!!timeControl && (timeControl.touched || timeControl.dirty))
 
-  return userInteracted && !!this.flightForm.errors?.['arrivalTimePastToday']
-}
+    return userInteracted && !!this.flightForm.errors?.['arrivalTimePastToday']
+  }
 
   get arrivalTimeMinLabelForToday(): string {
     const now = new Date()
@@ -321,6 +334,114 @@ ngOnDestroy(): void {
     }
   }
 
+  onTicketFileSelected(event: Event): void {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0] ?? null
+
+  this.ticketParseError = ''
+  this.ticketParseConfidence = null
+
+  if (!file) {
+    this.selectedTicketFile = null
+    return
+  }
+
+  const isPdf = file.type === 'application/pdf'
+  const isImage = file.type.startsWith('image/')
+  if (!isPdf && !isImage) {
+    this.ticketParseError = 'Please upload a PDF or image.'
+    this.selectedTicketFile = null
+    return
+  }
+
+  if (file.size > 6 * 1024 * 1024) {
+    this.ticketParseError = 'File too large (max 6MB).'
+    this.selectedTicketFile = null
+    return
+  }
+
+  this.selectedTicketFile = file
+  this.isParsingTicket = false
+  this.changeDetectorRef.detectChanges()
+}
+
+
+  private clearTicketFields(): void {
+  
+  this.flightForm.patchValue({
+    airline: '',
+    flightNumber: '',
+    arrivalDate: '',
+    arrivalTime: '',
+  })
+}
+
+async parseTicket(): Promise<void> {
+  if (!this.selectedTicketFile || this.isParsingTicket) return
+
+  this.isParsingTicket = true
+  this.ticketParseError = ''
+  this.ticketParseConfidence = null
+  this.changeDetectorRef.detectChanges()
+
+  try {
+    const result = await this.withTimeout(
+      this.ticketParser.parseTicketFile(this.selectedTicketFile),
+      20000
+    )
+
+    this.ticketParseConfidence = result.confidence
+    this.clearTicketFields()
+
+    const patch: any = {}
+    if (result.airline) patch.airline = result.airline
+    if (result.flightNumber) patch.flightNumber = result.flightNumber
+    if (result.arrivalDate) patch.arrivalDate = result.arrivalDate
+    if (result.arrivalTime) patch.arrivalTime = result.arrivalTime
+
+    this.flightForm.patchValue(patch)
+    this.hasSubmitted = false
+    this.flightForm.get('airline')?.markAsUntouched()
+    this.flightForm.get('flightNumber')?.markAsUntouched()
+    this.flightForm.get('arrivalDate')?.markAsUntouched()
+    this.flightForm.get('arrivalTime')?.markAsUntouched()
+    this.flightForm.updateValueAndValidity({ emitEvent: true })
+    this.changeDetectorRef.detectChanges()
+
+    const missing: string[] = []
+    if (!result.airline) missing.push('airline')
+    if (!result.flightNumber) missing.push('flight number')
+    if (!result.arrivalDate) missing.push('arrival date')
+    if (!result.arrivalTime) missing.push('arrival time')
+
+    if (missing.length) {
+      this.ticketParseError = `We couldn’t detect ${missing.join(', ')}. Please confirm it manually.`
+    } else if (result.confidence < 60) {
+      this.ticketParseError = 'Parsed with low confidence. Please verify the autofilled fields.'
+    }
+  } catch (e: any) {
+    this.ticketParseError = e?.message ? String(e.message) : 'Could not parse ticket. Please fill manually.'
+  } finally {
+    this.isParsingTicket = false
+    this.changeDetectorRef.detectChanges()
+  }
+}
+
+  private withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('Parsing timed out. Please try again.')), ms)
+    promise
+      .then((value) => {
+        clearTimeout(timer)
+        resolve(value)
+      })
+      .catch((err) => {
+        clearTimeout(timer)
+        reject(err)
+      })
+  })
+}
+
   shouldShowError(controlName: string): boolean {
     const control = this.flightForm.get(controlName)
     if (!control) return false
@@ -332,6 +453,11 @@ ngOnDestroy(): void {
     this.submitErrorMessage = ''
     this.submitSuccessMessage = ''
     this.submissionReceipt = null
+
+    this.selectedTicketFile = null
+    this.isParsingTicket = false
+    this.ticketParseError = ''
+    this.ticketParseConfidence = null
 
     this.flightForm.reset({
       airline: '',
@@ -405,44 +531,44 @@ ngOnDestroy(): void {
   }
 
   private parseLocalDate(dateString: string): Date | null {
-  const parts = String(dateString || '').split('-').map(Number)
-  if (parts.length !== 3) return null
+    const parts = String(dateString || '').split('-').map(Number)
+    if (parts.length !== 3) return null
 
-  const [year, month, day] = parts
-  if (!year || !month || !day) return null
+    const [year, month, day] = parts
+    if (!year || !month || !day) return null
 
-  // Local date at midnight (no UTC shift)
-  return new Date(year, month - 1, day, 0, 0, 0, 0)
-}
-
-formatReceiptDate(dateString: string): string {
-  const date = this.parseLocalDate(dateString)
-  if (!date) return dateString
-
-  return new Intl.DateTimeFormat(undefined, {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  }).format(date)
-}
-
-formatReceiptDateTime(dateString: string, timeString: string): string {
-  const date = this.parseLocalDate(dateString)
-  if (!date) return `${dateString} ${timeString}`
-
-  const [hh, mm] = String(timeString || '').split(':').map(Number)
-  if (Number.isFinite(hh) && Number.isFinite(mm)) {
-    date.setHours(hh, mm, 0, 0)
+    // Local date at midnight (no UTC shift)
+    return new Date(year, month - 1, day, 0, 0, 0, 0)
   }
 
-  return new Intl.DateTimeFormat(undefined, {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-  }).format(date)
-}
+  formatReceiptDate(dateString: string): string {
+    const date = this.parseLocalDate(dateString)
+    if (!date) return dateString
+
+    return new Intl.DateTimeFormat(undefined, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    }).format(date)
+  }
+
+  formatReceiptDateTime(dateString: string, timeString: string): string {
+    const date = this.parseLocalDate(dateString)
+    if (!date) return `${dateString} ${timeString}`
+
+    const [hh, mm] = String(timeString || '').split(':').map(Number)
+    if (Number.isFinite(hh) && Number.isFinite(mm)) {
+      date.setHours(hh, mm, 0, 0)
+    }
+
+    return new Intl.DateTimeFormat(undefined, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+    }).format(date)
+  }
 
   onAirlineBlur(): void {
     const control = this.flightForm.get('airline')
@@ -463,11 +589,11 @@ formatReceiptDateTime(dateString: string, timeString: string): string {
   }
 
   private normalizeFlightNumberInput(raw: string): string {
-  const value = String(raw ?? '').trim()
-  if (!value) return value
-  return value
-    .toUpperCase()
-    .replace(/[\s-]+/g, '')
+    const value = String(raw ?? '').trim()
+    if (!value) return value
+    return value
+      .toUpperCase()
+      .replace(/[\s-]+/g, '')
   }
 
   private normalizeArrivalTimeInput(raw: string): string {
@@ -553,16 +679,16 @@ formatReceiptDateTime(dateString: string, timeString: string): string {
 
     //TODO: Remove this before submitting
     if (this.isDryRun) {
-    console.log('[DRY RUN] FlightInfoPayload:', payload)
-    console.log('[DRY RUN] Headers:', { token: this.tokenHeaderValue, candidate: this.candidateName })
+      console.log('[DRY RUN] FlightInfoPayload:', payload)
+      console.log('[DRY RUN] Headers:', { token: this.tokenHeaderValue, candidate: this.candidateName })
 
-    // simulate success UX without hitting their server
-    this.submissionReceipt = payload
-    this.submitSuccessMessage = 'Dry run: payload looks good. No request was sent.'
-    this.isSubmitting = false
-    this.changeDetectorRef.detectChanges()
-    return
-  }
+      // simulate success UX without hitting their server
+      this.submissionReceipt = payload
+      this.submitSuccessMessage = 'Dry run: payload looks good. No request was sent.'
+      this.isSubmitting = false
+      this.changeDetectorRef.detectChanges()
+      return
+    }
 
     const headers = new HttpHeaders({
       token: this.tokenHeaderValue,
