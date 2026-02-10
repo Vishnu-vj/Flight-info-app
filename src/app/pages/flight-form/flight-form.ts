@@ -429,14 +429,21 @@ export class FlightForm implements OnInit, OnDestroy {
       if (result.arrivalDate) patch.arrivalDate = result.arrivalDate
       if (result.arrivalTime) patch.arrivalTime = result.arrivalTime
 
-      this.flightForm.patchValue(patch)
+      this.flightForm.patchValue(patch, { emitEvent: true })
       this.hasSubmitted = false
-      this.flightForm.get('airline')?.markAsUntouched()
-      this.flightForm.get('flightNumber')?.markAsUntouched()
-      this.flightForm.get('arrivalDate')?.markAsUntouched()
-      this.flightForm.get('arrivalTime')?.markAsUntouched()
-      this.flightForm.updateValueAndValidity({ emitEvent: true })
+
+      const parsedFields = ['airline', 'flightNumber', 'arrivalDate', 'arrivalTime']
+      for (const field of parsedFields) {
+        const ctrl = this.flightForm.get(field)
+        if (!ctrl) continue
+        ctrl.markAsDirty()
+        ctrl.markAsTouched()
+        ctrl.updateValueAndValidity({ emitEvent: true })
+      }
+
+      this.flightForm.updateValueAndValidity({ onlySelf: false, emitEvent: true })
       this.changeDetectorRef.detectChanges()
+
 
       const missing: string[] = []
       if (!result.airline) missing.push('airline')
@@ -590,6 +597,11 @@ export class FlightForm implements OnInit, OnDestroy {
     this.flightForm.get('comments')?.markAsUntouched()
 
     this.flightForm.updateValueAndValidity({ emitEvent: true })
+    if (this.flightForm.invalid) {
+      this.hasSubmitted = true
+      this.flightForm.markAllAsTouched()
+      this.flightForm.updateValueAndValidity({ onlySelf: false, emitEvent: true })
+    }
     this.changeDetectorRef.detectChanges()
   }
 
@@ -781,6 +793,7 @@ export class FlightForm implements OnInit, OnDestroy {
     this.submitSuccessMessage = ''
 
     this.hasSubmitted = true
+    this.flightForm.updateValueAndValidity({ onlySelf: false, emitEvent: true })
 
     if (this.flightForm.invalid) {
       this.flightForm.markAllAsTouched()
