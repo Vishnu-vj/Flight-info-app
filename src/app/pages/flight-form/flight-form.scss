@@ -230,9 +230,10 @@ input:focus, textarea:focus {
 
 .actionsRow {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   margin-top: 18px;
   align-items: center;
+  justify-content: space-between;
 }
 
 .primaryButton {
@@ -311,12 +312,6 @@ input:focus, textarea:focus {
   font-weight: 800;
 }
 
-.receiptSubtitle {
-  margin-top: 2px;
-  font-size: 15px;
-  color: rgba(0,0,0,0.7);
-}
-
 .receiptGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -372,13 +367,6 @@ input:focus, textarea:focus {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
-}
-
-.actionsRow {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .actionsLeft {
@@ -591,10 +579,6 @@ input:focus, textarea:focus {
   background: rgba(255, 165, 0, 0.06);
   border-color: rgba(255, 165, 0, 0.18);
   color: rgba(0, 0, 0, 0.78);
-}
-
-.ticketStatus.error {
-  border-color: rgba(0, 0, 0, 0.25);
 }
 
 .betaBadge {

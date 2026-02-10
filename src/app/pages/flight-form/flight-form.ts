@@ -90,7 +90,6 @@ function arrivalDateValidator(control: AbstractControl): ValidationErrors | null
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0)
   if (selected < today) return { arrivalDatePast: true }
 
-  //Don't allow future dates after 2 years
   const maxFuture = new Date(today)
   maxFuture.setFullYear(maxFuture.getFullYear() + 2)
   if (selected > maxFuture) return { arrivalDateTooFar: true }
@@ -101,7 +100,6 @@ function arrivalTimeValidator(control: AbstractControl): ValidationErrors | null
   const raw = String(control.value ?? '').trim()
   if (!raw) return null
 
-  // Expected for input[type="time"]: HH:MM (24-hour)
   const match = raw.match(/^(\d{2}):(\d{2})$/)
   if (!match) return { arrivalTimeFormat: true }
 
@@ -121,7 +119,6 @@ function arrivalDateTimeNotPastValidator(group: AbstractControl): ValidationErro
 
   if (!dateValue || !timeValue) return null
 
-  // arrivalDate from input[type="date"] is typically YYYY-MM-DD
   const dateMatch = dateValue.match(/^(\d{4})-(\d{2})-(\d{2})$/)
   if (!dateMatch) return null
 
@@ -168,6 +165,8 @@ function commentsValidator(control: AbstractControl): ValidationErrors | null {
   return null
 }
 
+type AirlineRow = { name: string; iata?: string; icao?: string }
+
 @Component({
   selector: 'app-flight-form',
   standalone: true,
@@ -191,51 +190,33 @@ export class FlightForm implements OnInit, OnDestroy {
   private authUnsubscribe: Unsubscribe | null = null
 
   airlineSuggestions: string[] = []
+  airlineSuggestionValues: string[] = []
 
   private readonly receiptStorageKey = 'flightSubmissionReceipt'
   private readonly receiptSuccessMessageKey = 'flightSubmissionSuccessMessage'
-  private readonly flightSubmittedKey = 'flightSubmitted'
-  private readonly flightReceiptKey = 'flightReceipt'
 
   ngOnInit(): void {
-  const wasSubmitted = sessionStorage.getItem(this.flightSubmittedKey) === 'true'
-  this.hasSubmitted = wasSubmitted
-
-  if (wasSubmitted) {
-    const rawReceipt = sessionStorage.getItem(this.flightReceiptKey)
-    if (rawReceipt) {
-      try {
-        this.submissionReceipt = JSON.parse(rawReceipt) as FlightInfoPayload
-      } catch {
+    this.authUnsubscribe = onAuthStateChanged(this.auth, (user) => {
+      if (!user) {
+        this.flightForm.disable({ emitEvent: false })
         this.submissionReceipt = null
+        this.submitErrorMessage = ''
+        this.submitSuccessMessage = ''
+        this.clearPersistedReceipt()
+
+        this.lastSubmittedPayload = null
+        this.changeDetectorRef.detectChanges()
+        void this.router.navigate(['/login'], { queryParams: { reason: 'session-expired' } })
+        return
       }
-    }
 
-    this.lastSubmittedPayload = this.submissionReceipt
-  }
+      this.restorePersistedReceipt()
+      this.lastSubmittedPayload = this.submissionReceipt
 
-  this.authUnsubscribe = onAuthStateChanged(this.auth, (user) => {
-    if (!user) {
-      this.flightForm.disable({ emitEvent: false })
-      this.submissionReceipt = null
-      this.submitErrorMessage = ''
-      this.submitSuccessMessage = ''
-      this.clearPersistedReceipt()
-
-      this.lastSubmittedPayload = null
+      this.flightForm.enable({ emitEvent: false })
       this.changeDetectorRef.detectChanges()
-      void this.router.navigate(['/login'], { queryParams: { reason: 'session-expired' } })
-      return
-    }
-
-    this.restorePersistedReceipt()
-    this.lastSubmittedPayload = this.submissionReceipt
-
-    this.flightForm.enable({ emitEvent: false })
-    this.changeDetectorRef.detectChanges()
-  })
-}
-
+    })
+  }
 
   ngOnDestroy(): void {
     if (this.authUnsubscribe) {
@@ -244,8 +225,6 @@ export class FlightForm implements OnInit, OnDestroy {
     }
   }
 
-  airlinesFromDataset: Array<{ name: string; iata?: string; icao?: string }> = []
-  airlineSuggestionValues: string[] = []
   private airlineLookupSet = new Set<string>()
   isAirlinesDatasetLoaded = false
 
@@ -287,57 +266,55 @@ export class FlightForm implements OnInit, OnDestroy {
       { validators: [arrivalDateTimeNotPastValidator] }
     )
 
-    this.http.get<Array<{ name: string; iata?: string; icao?: string }>>('/assets/airlines.json')
-      .subscribe({
-        next: (rows) => {
-          const cleaned = (rows || [])
-            .map((row) => ({
-              name: String(row?.name ?? '').trim(),
-              iata: String(row?.iata ?? '').trim(),
-              icao: String(row?.icao ?? '').trim(),
-            }))
-            .filter((row) => row.name.length > 0)
+    this.http.get<AirlineRow[]>('/assets/airlines.json').subscribe({
+      next: (rows) => {
+        const cleaned: AirlineRow[] = (rows ?? [])
+          .map((row) => ({
+            name: String(row?.name ?? '').trim(),
+            iata: String(row?.iata ?? '').trim(),
+            icao: String(row?.icao ?? '').trim(),
+          }))
+          .filter((row) => row.name.length > 0)
 
-          this.airlinesFromDataset = cleaned
-          this.airlineSuggestions = cleaned.map((row) => row.name)
-          this.airlineSuggestionValues = cleaned
-            .map((row) => {
-              const parts = []
-              if (row.iata) parts.push(row.iata)
-              if (row.icao) parts.push(row.icao)
-              parts.push(row.name)
-              return parts.join(' · ')
-            })
+        // datalist should be plain airline names
+        this.airlineSuggestions = cleaned.map((row) => row.name)
 
-          this.airlineLookupSet.clear()
-          for (const row of cleaned) {
-            this.airlineLookupSet.add(row.name.toLowerCase())
-            if (row.iata) this.airlineLookupSet.add(row.iata.toLowerCase())
-            if (row.icao) this.airlineLookupSet.add(row.icao.toLowerCase())
-          }
+        // optional display strings if you use them elsewhere
+        this.airlineSuggestionValues = cleaned.map((row) => {
+          const parts: string[] = []
+          if (row.iata) parts.push(row.iata)
+          if (row.icao) parts.push(row.icao)
+          parts.push(row.name)
+          return parts.join(' · ')
+        })
 
-          this.isAirlinesDatasetLoaded = true
-          this.changeDetectorRef.detectChanges()
-        },
-        error: () => {
-          this.isAirlinesDatasetLoaded = false
-          this.changeDetectorRef.detectChanges()
+        this.airlineLookupSet.clear()
+        for (const row of cleaned) {
+          this.airlineLookupSet.add(row.name.toLowerCase())
+          if (row.iata) this.airlineLookupSet.add(row.iata.toLowerCase())
+          if (row.icao) this.airlineLookupSet.add(row.icao.toLowerCase())
         }
-      })
+
+        this.isAirlinesDatasetLoaded = true
+        this.changeDetectorRef.detectChanges()
+      },
+      error: () => {
+        this.isAirlinesDatasetLoaded = false
+        this.changeDetectorRef.detectChanges()
+      },
+    })
   }
 
   private persistReceipt(receipt: FlightInfoPayload, message: string): void {
     try {
       sessionStorage.setItem(this.receiptStorageKey, JSON.stringify(receipt))
       sessionStorage.setItem(this.receiptSuccessMessageKey, String(message ?? ''))
-    } catch {
-      
-    }
+    } catch {}
   }
 
   private restorePersistedReceipt(): void {
     try {
-      if (this.submissionReceipt) return 
+      if (this.submissionReceipt) return
       const raw = sessionStorage.getItem(this.receiptStorageKey)
       if (!raw) return
       const parsed = JSON.parse(raw) as FlightInfoPayload
@@ -358,9 +335,7 @@ export class FlightForm implements OnInit, OnDestroy {
     try {
       sessionStorage.removeItem(this.receiptStorageKey)
       sessionStorage.removeItem(this.receiptSuccessMessageKey)
-    } catch {
-      
-    }
+    } catch {}
   }
 
   get shouldShowArrivalTimePastTodayError(): boolean {
@@ -376,7 +351,7 @@ export class FlightForm implements OnInit, OnDestroy {
 
   get arrivalTimeMinLabelForToday(): string {
     const now = new Date()
-    const min = new Date(now.getTime() + 60 * 1000) // +1 minute to avoid edge flicker
+    const min = new Date(now.getTime() + 60 * 1000)
     return new Intl.DateTimeFormat(undefined, {
       hour: 'numeric',
       minute: '2-digit',
@@ -529,8 +504,6 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   onSubmitAnotherClick(): void {
-    sessionStorage.removeItem(this.flightSubmittedKey)
-    sessionStorage.removeItem(this.flightReceiptKey)
     this.onResetClick()
   }
 
@@ -571,8 +544,11 @@ export class FlightForm implements OnInit, OnDestroy {
     this.changeDetectorRef.detectChanges()
   }
 
-
   async onSignOutClick(): Promise<void> {
+    this.clearPersistedReceipt()
+    this.submissionReceipt = null
+    this.lastSubmittedPayload = null
+    this.hasSubmitted = false
     try {
       await runInInjectionContext(this.injector, () => signOut(this.auth))
     } finally {
@@ -629,7 +605,6 @@ export class FlightForm implements OnInit, OnDestroy {
     const [year, month, day] = parts
     if (!year || !month || !day) return null
 
-    // Local date at midnight (no UTC shift)
     return new Date(year, month - 1, day, 0, 0, 0, 0)
   }
 
@@ -683,9 +658,7 @@ export class FlightForm implements OnInit, OnDestroy {
   private normalizeFlightNumberInput(raw: string): string {
     const value = String(raw ?? '').trim()
     if (!value) return value
-    return value
-      .toUpperCase()
-      .replace(/[\s-]+/g, '')
+    return value.toUpperCase().replace(/[\s-]+/g, '')
   }
 
   private normalizeArrivalTimeInput(raw: string): string {
@@ -770,7 +743,6 @@ export class FlightForm implements OnInit, OnDestroy {
     this.changeDetectorRef.detectChanges()
     const payload = this.buildPayload()
 
-    //TODO: Remove this before submitting
     if (this.isDryRun) {
       console.log('[DRY RUN] FlightInfoPayload:', payload)
       console.log('[DRY RUN] Headers:', { token: this.tokenHeaderValue, candidate: this.candidateName })
@@ -778,9 +750,6 @@ export class FlightForm implements OnInit, OnDestroy {
       this.submissionReceipt = payload
       this.lastSubmittedPayload = payload
       this.submitSuccessMessage = 'Dry run: payload looks good. No request was sent.'
-
-      sessionStorage.setItem(this.flightSubmittedKey, 'true')
-      sessionStorage.setItem(this.flightReceiptKey, JSON.stringify(payload))
 
       this.persistReceipt(payload, this.submitSuccessMessage)
 
@@ -817,8 +786,6 @@ export class FlightForm implements OnInit, OnDestroy {
       this.submitSuccessMessage = 'Your flight details were submitted successfully.'
 
       this.persistReceipt(payload, this.submitSuccessMessage)
-      sessionStorage.setItem(this.flightSubmittedKey, 'true')
-      sessionStorage.setItem(this.flightReceiptKey, JSON.stringify(payload))
 
       this.changeDetectorRef.detectChanges()
     } catch (error: any) {

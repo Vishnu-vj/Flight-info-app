@@ -14,8 +14,6 @@ import {
 } from '@angular/fire/auth'
 import { Router } from '@angular/router'
 import { ActivatedRoute } from '@angular/router'
-import { authState } from 'rxfire/auth'
-import { map } from 'rxjs'
 import { AuthorizationService } from '../../services/authorization.service'
 
 function consumerEmailValidator(control: AbstractControl): ValidationErrors | null {
@@ -56,7 +54,6 @@ export class Login implements OnInit, OnDestroy {
 
   loginForm: FormGroup
   private queryParamsSubscription: any = null
-  private authStateSubscription: any = null
   private authUnsubscribe: Unsubscribe | null = null
 
   constructor(
@@ -105,8 +102,7 @@ export class Login implements OnInit, OnDestroy {
 
   this.queryParamsSubscription = this.route.queryParamMap.subscribe((params) => {
   const reason = String(params.get('reason') ?? '')
-  const userEmail = String(this.auth.currentUser?.email ?? '')
-  this.shouldShowNotAuthorizedBanner = reason === 'not-authorized' && userEmail.length > 0
+  this.shouldShowNotAuthorizedBanner = reason === 'not-authorized'
   })
 
   this.authUnsubscribe = onAuthStateChanged(this.auth, async (user) => {
