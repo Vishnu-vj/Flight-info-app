@@ -478,6 +478,55 @@ export class FlightForm implements OnInit, OnDestroy {
     return (control.touched || this.hasSubmitted) && control.invalid
   }
 
+  private buildReceiptFileName(): string {
+    const safeDate = (this.submissionReceipt?.arrivalDate ?? '').replace(/[^0-9-]/g, '')
+    const safeFlight = (this.submissionReceipt?.flightNumber ?? '').replace(/[^A-Za-z0-9]/g, '')
+    const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')
+    const pieces = ['flight-receipt', safeDate || 'date', safeFlight || 'flight', stamp].filter(Boolean)
+    return `${pieces.join('_')}.json`
+  }
+
+  downloadReceiptJson(): void {
+    if (!this.submissionReceipt) return
+
+    const content = JSON.stringify(
+      {
+        receipt: this.submissionReceipt,
+        submittedAt: new Date().toISOString() + "-UTC",
+      },
+      null,
+      2
+    )
+
+    const blob = new Blob([content], { type: 'application/json;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+
+    try {
+      const a = document.createElement('a')
+      a.href = url
+      a.download = this.buildReceiptFileName()
+      a.rel = 'noopener'
+      a.click()
+    } finally {
+      URL.revokeObjectURL(url)
+    }
+  }
+
+  async copyReceiptToClipboard(): Promise<void> {
+    if (!this.submissionReceipt) return
+
+    const content = JSON.stringify(this.submissionReceipt, null, 2)
+
+    try {
+      await navigator.clipboard.writeText(content)
+      this.submitSuccessMessage = 'Receipt copied to clipboard.'
+      this.changeDetectorRef.detectChanges()
+    } catch {
+      this.submitErrorMessage = 'Could not copy receipt. Please try download instead.'
+      this.changeDetectorRef.detectChanges()
+    }
+  }
+
   onResetClick(): void {
     this.hasSubmitted = false
     this.submitErrorMessage = ''
