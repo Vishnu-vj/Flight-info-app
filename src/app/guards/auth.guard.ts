@@ -1,25 +1,35 @@
 import { inject } from '@angular/core'
 import { type CanActivateFn, Router } from '@angular/router'
-import { Auth } from '@angular/fire/auth'
-import { authState } from 'rxfire/auth'
-import { map, take, switchMap, from, catchError, of } from 'rxjs'
+import { Auth, onAuthStateChanged, type User } from '@angular/fire/auth'
 import { AuthorizationService } from '../services/authorization.service'
+import { Observable, of, from } from 'rxjs'
+import { take, switchMap, map, catchError } from 'rxjs/operators'
+
+function authState$(auth: Auth): Observable<User | null> {
+  return new Observable<User | null>((subscriber) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => subscriber.next(user),
+      (error) => subscriber.error(error)
+    )
+    return unsubscribe
+  })
+}
 
 export const authGuard: CanActivateFn = () => {
   const auth = inject(Auth)
   const router = inject(Router)
   const authorizationService = inject(AuthorizationService)
 
-  return authState(auth).pipe(
+  return authState$(auth).pipe(
     take(1),
     switchMap((user) => {
-      if (!user) return of(router.createUrlTree(['/login'], { queryParams: { reason: 'auth-required' } }))
+      if (!user) {
+        return of(router.createUrlTree(['/login'], { queryParams: { reason: 'auth-required' } }))
+      }
 
       return from(authorizationService.isCurrentUserAllowed()).pipe(
-        map((isAllowed) => {
-          if (isAllowed) return true
-          return router.createUrlTree(['/login'], { queryParams: { reason: 'not-authorized' } })
-        }),
+        map((isAllowed) => (isAllowed ? true : router.createUrlTree(['/login'], { queryParams: { reason: 'not-authorized' } }))),
         catchError(() =>
           of(router.createUrlTree(['/login'], { queryParams: { reason: 'not-authorized' } }))
         )
@@ -27,4 +37,3 @@ export const authGuard: CanActivateFn = () => {
     })
   )
 }
-

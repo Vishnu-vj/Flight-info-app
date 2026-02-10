@@ -20,6 +20,9 @@
       }
     ]
   },
+  "overrides": {
+    "firebase": "11.10.0"
+  },
   "private": true,
   "packageManager": "npm@11.6.2",
   "dependencies": {
@@ -31,9 +34,8 @@
     "@angular/platform-browser": "^21.1.0",
     "@angular/router": "^21.1.0",
     "dayjs": "^1.11.19",
-    "firebase": "^12.9.0",
+    "firebase": "11.10.0",
     "pdfjs-dist": "^5.4.624",
-    "rxfire": "^6.1.0",
     "rxjs": "~7.8.0",
     "tesseract.js": "^7.0.0",
     "tslib": "^2.3.0",
