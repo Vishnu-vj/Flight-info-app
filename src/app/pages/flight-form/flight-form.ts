@@ -181,7 +181,7 @@ export class FlightForm implements OnInit, OnDestroy {
 
   //To prevent lot of POST during testing
   //TODO: Remove before final submission
-  private readonly isDryRun = true
+  private readonly isDryRun = false
 
   selectedTicketFile: File | null = null
   isParsingTicket = false

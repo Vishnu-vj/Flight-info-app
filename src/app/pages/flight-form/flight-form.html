@@ -6,13 +6,13 @@
       <div class="brandMark" aria-hidden="true">🧳</div>
       <div>
         <h1>Arrival Details</h1>
-        <p class="subtitle" *ngIf="!hasSubmitted">Enter flight information so we can prepare for your arrival.</p>
-        <p class="requiredNote" *ngIf="!hasSubmitted">
+        <p class="subtitle" *ngIf="!submissionReceipt">Enter flight information so we can prepare for your arrival.</p>
+        <p class="requiredNote" *ngIf="!submissionReceipt">
           Fields marked with <span class="requiredMark" aria-hidden="true">*</span> are required.
         </p>
 
-        <p class="subtitle" *ngIf="hasSubmitted"> Your arrival details have been recorded. </p>
-        <p class="helper" *ngIf="hasSubmitted"> You can review or update them below if needed. </p>
+        <p class="subtitle" *ngIf="submissionReceipt"> Your arrival details have been recorded. </p>
+        <p class="helper" *ngIf="submissionReceipt"> You can review or update them below if needed. </p>
       </div>
 
       <div class="headerActions">

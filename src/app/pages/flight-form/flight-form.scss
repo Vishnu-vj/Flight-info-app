@@ -311,7 +311,7 @@ input:focus, textarea:focus {
 
 .receiptHeader {
   display: flex;
-  gap: 12px;
+  gap: 3px;
   align-items: center;
 }
 
@@ -321,8 +321,6 @@ input:focus, textarea:focus {
   border-radius: 16px;
   display: grid;
   place-items: center;
-  background: rgba(255,255,255,0.7);
-  border: 1px solid rgba(0,0,0,0.08);
   font-size: 22px;
 }
 
