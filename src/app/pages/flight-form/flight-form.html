@@ -7,13 +7,22 @@
       <div>
         <h1>Arrival Details</h1>
         <p class="subtitle" *ngIf="!hasSubmitted">Enter flight information so we can prepare for your arrival.</p>
-        <p class="requiredNote" *ngIf="!hasSubmitted">Fields marked with <span class="requiredMark" aria-hidden="true">*</span> are required.</p>
+        <p class="requiredNote" *ngIf="!hasSubmitted">
+          Fields marked with <span class="requiredMark" aria-hidden="true">*</span> are required.
+        </p>
 
         <p class="subtitle" *ngIf="hasSubmitted"> Your arrival details have been recorded. </p>
         <p class="helper" *ngIf="hasSubmitted"> You can review or update them below if needed. </p>
       </div>
+
       <div class="headerActions">
-        <a class="monsterLink" href="https://monsterrg.com/" target="_blank" rel="noreferrer">
+        <a
+          class="monsterLink"
+          href="https://monsterrg.com/"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Open Monster Reservations Group website in a new tab"
+        >
           Monster RG
         </a>
         <button class="ghostButton" type="button" (click)="onSignOutClick()">Sign out</button>
@@ -41,12 +50,12 @@
         </div>
 
         <div class="receiptItem">
-          <div class="receiptLabel">Local Arrival date</div>
+          <div class="receiptLabel">Local arrival date</div>
           <div class="receiptValue">{{ formatReceiptDate(submissionReceipt.arrivalDate) }}</div>
         </div>
 
         <div class="receiptItem">
-          <div class="receiptLabel">Local Arrival time</div>
+          <div class="receiptLabel">Local arrival time</div>
           <div class="receiptValue">{{ formatReceiptTime(submissionReceipt.arrivalTime) }}</div>
         </div>
 
@@ -55,17 +64,29 @@
           <div class="receiptValue">{{ submissionReceipt.numOfGuests }}</div>
         </div>
 
-        <div class="receiptItem" *ngIf="submissionReceipt.comments">
-          <div class="receiptLabel">Comments</div>
-          <div class="receiptValue">{{ submissionReceipt.comments }}</div>
+        <div class="receiptItem">
+        <div class="receiptLabel">Comments</div>
+
+        <div class="receiptValue" *ngIf="submissionReceipt.comments; else noComments">
+          {{ submissionReceipt.comments }}
         </div>
+
+        <ng-template #noComments>
+          <div class="receiptValue receiptPlaceholder">—</div>
+        </ng-template>
+      </div>
       </div>
 
       <div class="receiptActions">
-        <button class="primaryButton" type="button" (click)="onSubmitAnotherClick()">Submit another</button>
-        <button class="secondaryButton" type="button" (click)="onEditSubmissionClick()">Edit</button>
-        <button type="button" class="secondaryButton" (click)="downloadReceiptJson()">Download receipt</button>
-        <button type="button" class="secondaryButton" (click)="copyReceiptToClipboard()">Copy receipt</button>
+        <div class="receiptActionsMain">
+          <button class="primaryButton" type="button" (click)="onSubmitAnotherClick()">Submit another</button>
+          <button class="secondaryButton" type="button" (click)="onEditSubmissionClick()">Edit</button>
+        </div>
+
+        <div class="receiptActionsMeta">
+          <button type="button" class="tertiaryButton" (click)="downloadReceiptJson()">Download receipt</button>
+          <button type="button" class="tertiaryButton" (click)="copyReceiptToClipboard()">Copy receipt</button>
+        </div>
       </div>
     </div>
 
@@ -77,12 +98,12 @@
       novalidate
     >
       <div *ngIf="draftRestoredBannerVisible" class="draftBanner" role="status" aria-live="polite">
-      <div class="draftBannerText">
-        <span class="draftIcon">ℹ️</span>
-       Your draft from <strong>{{ draftRestoredSavedAtLabel }}</strong> has been restored.
+        <div class="draftBannerText">
+          <span class="draftIcon" aria-hidden="true">ℹ️</span>
+          Your draft from <strong>{{ draftRestoredSavedAtLabel }}</strong> has been restored.
+        </div>
+        <button type="button" class="draftBannerLink" (click)="clearDraft()">Clear</button>
       </div>
-      <button type="button" class="draftBannerLink" (click)="clearDraft()">Clear</button>
-    </div>
 
       <div *ngIf="submitErrorMessage" class="alert error" role="alert" aria-live="polite">
         <div class="alertIcon" aria-hidden="true">!</div>
@@ -100,124 +121,126 @@
         </div>
       </div>
 
-  <div class="section">
-    <div class="ticketUploader" aria-label="Upload flight ticket to autofill">
-      <div class="ticketHeader">
-        <div class="ticketTitleRow">
-          <span class="ticketIcon" aria-hidden="true">📎</span>
-          <div class="ticketTitles">
-            <div class="ticketTitle"> 
-              Upload ticket (PDF or image)
-              <span class="betaBadge">Beta</span>
+      <div class="section">
+        <div class="ticketUploader" aria-label="Upload flight ticket to autofill">
+          <div class="ticketHeader">
+            <div class="ticketTitleRow">
+              <span class="ticketIcon" aria-hidden="true">📎</span>
+              <div class="ticketTitles">
+                <div class="ticketTitle">
+                  Upload ticket (PDF or image)
+                  <span class="betaBadge">Beta</span>
+                </div>
+                <div class="ticketSubtitle">
+                  We will try to autofill airline, flight number, arrival date and time - please review before submitting.
+                </div>
+              </div>
             </div>
-            <div class="ticketSubtitle">We will try to autofill airline, flight number, arrival date and time - please review before submitting.</div>
+          </div>
+
+          <div class="ticketBody">
+            <input
+              #ticketInput
+              class="ticketFileInput"
+              type="file"
+              accept="application/pdf,image/*"
+              (change)="onTicketFileSelected($event)"
+            />
+
+            <div class="ticketRow">
+              <button
+                type="button"
+                class="ticketPickButton"
+                (click)="ticketInput.click()"
+                [disabled]="isParsingTicket"
+              >
+                <span class="ticketPickIcon" aria-hidden="true">⬆️</span>
+                Choose ticket
+              </button>
+
+              <div class="ticketFileMeta" [class.hasFile]="!!selectedTicketFile">
+                <div class="ticketFileName">
+                  {{ selectedTicketFile ? selectedTicketFile.name : 'No file selected' }}
+                </div>
+                <div class="ticketFileHint" *ngIf="selectedTicketFile">
+                  {{ (selectedTicketFile.size / 1024 / 1024) | number:'1.1-1' }} MB • {{ selectedTicketFile.type || 'file' }}
+                </div>
+                <div class="ticketFileHint" *ngIf="!selectedTicketFile">
+                  PDF or image • max 6MB
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="ticketParseButton"
+                [disabled]="!selectedTicketFile || isParsingTicket"
+                [attr.aria-busy]="isParsingTicket ? 'true' : null"
+                (click)="parseTicket()"
+              >
+                <span *ngIf="!isParsingTicket">Parse ticket</span>
+                <span *ngIf="isParsingTicket">Parsing…</span>
+              </button>
+            </div>
+
+            <div class="ticketStatusRow" *ngIf="ticketParseConfidence !== null || ticketParseError">
+              <div class="ticketStatus warn" *ngIf="ticketParseError">
+                <span class="statusDot" aria-hidden="true">●</span>
+                Detected fields (confidence {{ ticketParseConfidence ?? '—' }}%).
+                {{ ticketParseError }}
+              </div>
+
+              <div class="ticketStatus success" *ngIf="!ticketParseError && ticketParseConfidence !== null">
+                <span class="statusDot" aria-hidden="true">●</span>
+                Detected fields (confidence {{ ticketParseConfidence }}%). Please verify before submitting.
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-    <div class="ticketBody">
-      <input
-        #ticketInput
-        class="ticketFileInput"
-        type="file"
-        accept="application/pdf,image/*"
-        (change)="onTicketFileSelected($event)"
-      />
-
-      <div class="ticketRow">
-        <button
-          type="button"
-          class="ticketPickButton"
-          (click)="ticketInput.click()"
-          [disabled]="isParsingTicket"
-        >
-          <span class="ticketPickIcon" aria-hidden="true">⬆️</span>
-          Choose ticket
-        </button>
-
-        <div class="ticketFileMeta" [class.hasFile]="!!selectedTicketFile">
-          <div class="ticketFileName">
-            {{ selectedTicketFile ? selectedTicketFile.name : 'No file selected' }}
-          </div>
-          <div class="ticketFileHint" *ngIf="selectedTicketFile">
-            {{ (selectedTicketFile.size / 1024 / 1024) | number:'1.1-1' }} MB • {{ selectedTicketFile.type || 'file' }}
-          </div>
-          <div class="ticketFileHint" *ngIf="!selectedTicketFile">
-            PDF or image • max 6MB
-          </div>
-        </div>
-
-        <button
-          type="button"
-          class="ticketParseButton"
-          [disabled]="!selectedTicketFile || isParsingTicket"
-          [attr.aria-busy]="isParsingTicket ? 'true' : null"
-          (click)="parseTicket()"
-        >
-          <span *ngIf="!isParsingTicket">Parse ticket</span>
-          <span *ngIf="isParsingTicket">Parsing…</span>
-        </button>
-      </div>
-
-      <div class="ticketStatusRow" *ngIf="ticketParseConfidence !== null || ticketParseError">
-        <div class="ticketStatus warn" *ngIf="ticketParseError">
-          <span class="statusDot" aria-hidden="true">●</span>
-          Detected fields (confidence {{ ticketParseConfidence ?? '—' }}%).
-          {{ ticketParseError }}
-        </div>
-
-        <div class="ticketStatus success" *ngIf="!ticketParseError && ticketParseConfidence !== null">
-          <span class="statusDot" aria-hidden="true">●</span>
-          Detected fields (confidence {{ ticketParseConfidence }}%). Please verify before submitting.
-        </div>
-    </div>
-    </div>
-  </div>
-</div>
 
       <div class="section">
         <div class="sectionTitle">
-            <span class="sectionIcon" aria-hidden="true">✈️</span>
-            Flight
+          <span class="sectionIcon" aria-hidden="true">✈️</span>
+          Flight
         </div>
 
         <div class="gridTwo">
           <label class="field">
             <span class="label">
-                Airline
-                <span class="requiredMark" aria-hidden="true">*</span>
-                <span class="srOnly">Required</span>
+              Airline
+              <span class="requiredMark" aria-hidden="true">*</span>
+              <span class="srOnly">Required</span>
             </span>
             <input
-                type="text"
-                placeholder="Delta"
-                formControlName="airline"
-                list="airlineList"
-                autocomplete="off"
-                (input)="clearSubmissionMessages()"
-                (blur)="onAirlineBlur()"
-                aria-describedby="airlineError"
+              type="text"
+              placeholder="Delta"
+              formControlName="airline"
+              list="airlineList"
+              autocomplete="off"
+              (input)="clearSubmissionMessages()"
+              (blur)="onAirlineBlur()"
+              aria-describedby="airlineError"
             />
             <datalist id="airlineList">
-                <option *ngFor="let name of airlineSuggestions" [value]="name"></option>
+              <option *ngFor="let name of airlineSuggestions" [value]="name"></option>
             </datalist>
             <span class="hint" *ngIf="airlineLooksUnknown">
-                We couldn’t match this to our airline list. If it’s correct, you can still submit.
+              We couldn’t match this to our airline list. If it’s correct, you can still submit.
             </span>
             <span class="error" *ngIf="shouldShowError('airline')">
-                <span *ngIf="flightForm.get('airline')?.errors?.['trimmedRequired']">Airline is required.</span>
-                <span *ngIf="flightForm.get('airline')?.errors?.['airlineLength'] === 'min'">Use at least 2 characters.</span>
-                <span *ngIf="flightForm.get('airline')?.errors?.['airlineLength'] === 'max'">Keep it under 50 characters.</span>
-                <span *ngIf="flightForm.get('airline')?.errors?.['airlineCharacters']">Use letters, numbers, spaces and common punctuation only.</span>
-                <span *ngIf="flightForm.get('airline')?.errors?.['airlineNotOnlyNumbers']">Airline must include at least one letter.</span>
+              <span *ngIf="flightForm.get('airline')?.errors?.['trimmedRequired']">Airline is required.</span>
+              <span *ngIf="flightForm.get('airline')?.errors?.['airlineLength'] === 'min'">Use at least 2 characters.</span>
+              <span *ngIf="flightForm.get('airline')?.errors?.['airlineLength'] === 'max'">Keep it under 50 characters.</span>
+              <span *ngIf="flightForm.get('airline')?.errors?.['airlineCharacters']">Use letters, numbers, spaces and common punctuation only.</span>
+              <span *ngIf="flightForm.get('airline')?.errors?.['airlineNotOnlyNumbers']">Airline must include at least one letter.</span>
             </span>
           </label>
 
           <label class="field">
             <span class="label">
-                Flight number
-                <span class="requiredMark" aria-hidden="true">*</span>
-                <span class="srOnly">Required</span>
+              Flight number
+              <span class="requiredMark" aria-hidden="true">*</span>
+              <span class="srOnly">Required</span>
             </span>
             <input
               type="text"
@@ -228,92 +251,89 @@
               aria-describedby="flightError"
             />
             <span id="flightError" class="error" *ngIf="shouldShowError('flightNumber')">
-                <span *ngIf="flightForm.get('flightNumber')?.errors?.['trimmedRequired']">Flight number is required.</span>
-                <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberLength'] === 'min'">Use at least 2 characters.</span>
-                <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberLength'] === 'max'">Keep it under 10 characters.</span>
-                <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberCharacters']">Use letters, numbers, spaces or a hyphen only.</span>
-                <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberMustContainLetterDigit']">Include both letters and numbers (Eg:DL123).</span>
-                <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberSeparators']">Avoid leading/trailing or repeated separators.</span>
-                <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberFormat']">Format examples: DL123, DL 123, DL-123, 6E2409.</span>
+              <span *ngIf="flightForm.get('flightNumber')?.errors?.['trimmedRequired']">Flight number is required.</span>
+              <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberLength'] === 'min'">Use at least 2 characters.</span>
+              <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberLength'] === 'max'">Keep it under 10 characters.</span>
+              <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberCharacters']">Use letters, numbers, spaces or a hyphen only.</span>
+              <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberMustContainLetterDigit']">Include both letters and numbers (Eg:DL123).</span>
+              <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberSeparators']">Avoid leading/trailing or repeated separators.</span>
+              <span *ngIf="flightForm.get('flightNumber')?.errors?.['flightNumberFormat']">Format examples: DL123, DL 123, DL-123, 6E2409.</span>
             </span>
           </label>
         </div>
       </div>
 
-        <div class="section">
-        <div class="sectionTitle">
-            <span class="sectionIcon" aria-hidden="true">🕒</span>
-            Arrival
-        </div>
-
-        <div class="gridTwo">
-            <label class="field">
-            <span class="label">
-                Arrival date
-                <span class="requiredMark" aria-hidden="true">*</span>
-                <span class="srOnly">Required</span>
-            </span>
-            <input
-                type="date"
-                formControlName="arrivalDate"
-                [min]="todayDateString"
-                (input)="clearSubmissionMessages()"
-                aria-describedby="dateError"
-            />
-            <span id="dateError" class="error" *ngIf="shouldShowError('arrivalDate')">
-                <span *ngIf="flightForm.get('arrivalDate')?.errors?.['required']">Arrival date is required.</span>
-                <span *ngIf="flightForm.get('arrivalDate')?.errors?.['arrivalDatePast']">Arrival date cannot be in the past.</span>
-                <span *ngIf="flightForm.get('arrivalDate')?.errors?.['arrivalDateFormat']">Use the date picker to choose a date.</span>
-                <span *ngIf="flightForm.get('arrivalDate')?.errors?.['arrivalDateInvalid']">Enter a valid date.</span>
-                <span *ngIf="flightForm.get('arrivalDate')?.errors?.['arrivalDateTooFar']">Please choose a date within the next 2 years.</span>
-            </span>
-            </label>
-
-            <label class="field">
-            <span class="label">
-                Arrival time
-                <span class="requiredMark" aria-hidden="true">*</span>
-                <span class="srOnly">Required</span>
-            </span>
-            <input
-                type="time"
-                formControlName="arrivalTime"
-                (blur)="flightForm.get('arrivalTime')?.markAsTouched()"
-                (input)="clearSubmissionMessages()"
-                aria-describedby="timeError"
-            />
-            <span id="timeError" class="error" *ngIf="shouldShowError('arrivalTime') || shouldShowArrivalTimePastTodayError">
-                <span *ngIf="flightForm.get('arrivalTime')?.errors?.['required']">Arrival time is required.</span>
-                <span *ngIf="flightForm.get('arrivalTime')?.errors?.['arrivalTimeFormat']">Enter time as HH:MM.</span>
-                <span *ngIf="flightForm.get('arrivalTime')?.errors?.['arrivalTimeInvalid']">Enter a valid time.</span>
-                <span *ngIf="shouldShowArrivalTimePastTodayError">For today, pick a time after {{ arrivalTimeMinLabelForToday }}.</span>
-            </span>
-            </label>
-        </div>
-
-        <div class="callout arrivalCallout" aria-label="Tip">
-            <div class="calloutTitle">
-                Note
-            </div>
-            <div class="calloutText">
-             Please provide both the arrival date and time in the local time zone of your destination city. This is essential for the team to coordinate your arrival accurately.
-            </div>
-        </div>
-        </div>
-
-
       <div class="section">
         <div class="sectionTitle">
-            <span class="sectionIcon" aria-hidden="true">👥</span>
-            Group
+          <span class="sectionIcon" aria-hidden="true">🕒</span>
+          Arrival
         </div>
 
         <div class="gridTwo">
           <label class="field">
             <span class="label">
-                Number of guests
-                <span class="requiredMark" aria-hidden="true">*</span>
-                <span class="srOnly">Required</span>
+              Arrival date
+              <span class="requiredMark" aria-hidden="true">*</span>
+              <span class="srOnly">Required</span>
+            </span>
+            <input
+              type="date"
+              formControlName="arrivalDate"
+              [min]="todayDateString"
+              (input)="clearSubmissionMessages()"
+              aria-describedby="dateError"
+            />
+            <span id="dateError" class="error" *ngIf="shouldShowError('arrivalDate')">
+              <span *ngIf="flightForm.get('arrivalDate')?.errors?.['required']">Arrival date is required.</span>
+              <span *ngIf="flightForm.get('arrivalDate')?.errors?.['arrivalDatePast']">Arrival date cannot be in the past.</span>
+              <span *ngIf="flightForm.get('arrivalDate')?.errors?.['arrivalDateFormat']">Use the date picker to choose a date.</span>
+              <span *ngIf="flightForm.get('arrivalDate')?.errors?.['arrivalDateInvalid']">Enter a valid date.</span>
+              <span *ngIf="flightForm.get('arrivalDate')?.errors?.['arrivalDateTooFar']">Please choose a date within the next 2 years.</span>
+            </span>
+          </label>
+
+          <label class="field">
+            <span class="label">
+              Arrival time
+              <span class="requiredMark" aria-hidden="true">*</span>
+              <span class="srOnly">Required</span>
+            </span>
+            <input
+              type="time"
+              formControlName="arrivalTime"
+              (blur)="flightForm.get('arrivalTime')?.markAsTouched()"
+              (input)="clearSubmissionMessages()"
+              aria-describedby="timeError"
+            />
+            <span id="timeError" class="error" *ngIf="shouldShowError('arrivalTime') || shouldShowArrivalTimePastTodayError">
+              <span *ngIf="flightForm.get('arrivalTime')?.errors?.['required']">Arrival time is required.</span>
+              <span *ngIf="flightForm.get('arrivalTime')?.errors?.['arrivalTimeFormat']">Enter time as HH:MM.</span>
+              <span *ngIf="flightForm.get('arrivalTime')?.errors?.['arrivalTimeInvalid']">Enter a valid time.</span>
+              <span *ngIf="shouldShowArrivalTimePastTodayError">For today, pick a time after {{ arrivalTimeMinLabelForToday }}.</span>
+            </span>
+          </label>
+        </div>
+
+        <div class="callout arrivalCallout" aria-label="Tip">
+          <div class="calloutTitle">Note</div>
+          <div class="calloutText">
+            Please provide both the arrival date and time in the local time zone of your destination city. This is essential for the team to coordinate your arrival accurately.
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sectionTitle">
+          <span class="sectionIcon" aria-hidden="true">👥</span>
+          Group
+        </div>
+
+        <div class="gridTwo">
+          <label class="field">
+            <span class="label">
+              Number of guests
+              <span class="requiredMark" aria-hidden="true">*</span>
+              <span class="srOnly">Required</span>
             </span>
             <input
               type="number"
@@ -335,8 +355,8 @@
 
       <div class="section">
         <div class="sectionTitle">
-            <span class="sectionIcon" aria-hidden="true">💬</span>
-            Optional
+          <span class="sectionIcon" aria-hidden="true">💬</span>
+          Optional
         </div>
 
         <label class="field">
@@ -347,33 +367,32 @@
             formControlName="comments"
             (input)="clearSubmissionMessages()"
           ></textarea>
-        <span class="error" *ngIf="shouldShowError('comments')">
+          <span class="error" *ngIf="shouldShowError('comments')">
             <span *ngIf="flightForm.get('comments')?.errors?.['commentsLength'] === 'max'">Keep comments under 300 characters.</span>
             <span *ngIf="flightForm.get('comments')?.errors?.['commentsCharacters']">Use letters, numbers, spaces and common punctuation only.</span>
-        </span>
+          </span>
         </label>
       </div>
 
-    <div class="actionsRow">
-    <div class="actionsLeft">
-        <button
-        class="primaryButton"
-        type="submit"
-        [disabled]="flightForm.invalid || isSubmitting"
-        [attr.aria-busy]="isSubmitting ? 'true' : null"
-        >
-        <span *ngIf="!isSubmitting">Submit flight details</span>
-        <span *ngIf="isSubmitting">Submitting…</span>
-        </button>
-    </div>
+      <div class="actionsRow">
+        <div class="actionsLeft">
+          <button
+            class="primaryButton"
+            type="submit"
+            [disabled]="flightForm.invalid || isSubmitting"
+            [attr.aria-busy]="isSubmitting ? 'true' : null"
+          >
+            <span *ngIf="!isSubmitting">Submit flight details</span>
+            <span *ngIf="isSubmitting">Submitting…</span>
+          </button>
+        </div>
 
-    <div class="actionsRight">
-        <button class="secondaryButton dangerLite" type="button" (click)="onResetClick()" [disabled]="isSubmitting">
-        Reset
-        </button>
-    </div>
-    </div>
-
+        <div class="actionsRight">
+          <button class="secondaryButton dangerLite" type="button" (click)="onResetClick()" [disabled]="isSubmitting">
+            Reset
+          </button>
+        </div>
+      </div>
 
       <p class="tinyNote">
         By submitting, you confirm these details are accurate.

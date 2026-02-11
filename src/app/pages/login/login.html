@@ -2,14 +2,6 @@
   <div class="layout" aria-label="Login layout">
     <aside class="sidePanel" aria-label="Welcome panel">
       <div class="sideTop">
-        <div class="sideBadgeRow">
-          <span class="chip">
-            <span class="chipDot" aria-hidden="true"></span>
-            Arrivals
-          </span>
-          <span class="chip chipGhost">Secure</span>
-        </div>
-
         <h2 class="sideTitle">Welcome aboard</h2>
         <p class="sideSub">
           Share your arrival details in seconds - we will prep the team before you land.
@@ -54,7 +46,7 @@
             <div class="routePlane">✈️</div>
           </div>
 
-          <div class="routeCity">
+          <div class="routeCity routeCityRight">
             <div class="routeLabel">TO</div>
             <div class="routeValue">Monster RG</div>
           </div>
@@ -66,38 +58,38 @@
 
     <div class="card" role="main" aria-label="Login">
       <div class="noticeStack">
-  <div *ngIf="sessionExpiredMessage" class="notice warning" role="alert" aria-live="polite">
-    <div class="noticeText">
-      <div class="noticeTitle">‼️ Session expired</div>
-      <div class="noticeMessage">{{ sessionExpiredMessage }}</div>
-    </div>
-  </div>
+        <div *ngIf="sessionExpiredMessage" class="notice warning" role="alert" aria-live="polite">
+          <div class="noticeText">
+            <div class="noticeTitle">‼️ Session expired</div>
+            <div class="noticeMessage">{{ sessionExpiredMessage }}</div>
+          </div>
+        </div>
 
-  <div *ngIf="shouldShowNotAuthorizedBanner" class="notice warning" role="alert" aria-live="polite">
-    <div class="noticeText">
-      <div class="noticeTitle">Not authorized</div>
-      <div class="noticeMessage">
-        {{ notAuthorizedMessage }}
-        <br>
-        <span *ngIf="signedInEmail"> (Signed in as: <strong>{{ signedInEmail }}</strong>)</span>
+        <div *ngIf="shouldShowNotAuthorizedBanner" class="notice warning" role="alert" aria-live="polite">
+          <div class="noticeText">
+            <div class="noticeTitle">Not authorized</div>
+            <div class="noticeMessage">
+              {{ notAuthorizedMessage }}
+              <br>
+              <span *ngIf="signedInEmail"> (Signed in as: <strong>{{ signedInEmail }}</strong>)</span>
+            </div>
+          </div>
+
+          <div class="noticeActions">
+            <button type="button" class="secondaryButton" (click)="signOutForAccountSwitch()">
+              Sign out
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="noticeActions">
-    <button type="button" class="secondaryButton" (click)="signOutForAccountSwitch()">
-      Sign out
-    </button>
-    </div>
-  </div>
-</div>
-      
       <div class="accentBar" aria-hidden="true"></div>
       <header class="header">
         <div class="brandMark" aria-hidden="true">✈️</div>
         <div>
           <h1>Flight Details</h1>
           <p class="subtitle">Sign in to submit arrival details.</p>
-          <p class="helper">Authorized users only · Your submission is logged.</p>
+          <p class="helper">Authorized users only · Submissions are logged for security.</p>
         </div>
       </header>
 
