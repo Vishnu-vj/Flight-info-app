@@ -8,7 +8,8 @@ import { Auth, signOut } from '@angular/fire/auth'
 import type { Unsubscribe } from '@angular/fire/auth'
 import { onAuthStateChanged } from '@angular/fire/auth'
 import { TicketParserService } from '../../services/ticketParser.service'
-import { firstValueFrom } from 'rxjs'
+import { firstValueFrom, Subject } from 'rxjs'
+import { debounceTime, takeUntil } from 'rxjs/operators'
 
 interface FlightInfoPayload {
   airline: string
@@ -194,8 +195,16 @@ export class FlightForm implements OnInit, OnDestroy {
 
   private readonly receiptStorageKey = 'flightSubmissionReceipt'
   private readonly receiptSuccessMessageKey = 'flightSubmissionSuccessMessage'
+  private readonly draftStorageKey = 'flightFormDraft.v1'
+  private readonly draftMaxAgeMs = 24 * 60 * 60 * 1000 
+  private isRestoringDraft = false
+  private destroy$ = new Subject<void>()
 
-  ngOnInit(): void {
+  draftRestoredBannerVisible = false
+  draftRestoredSavedAtLabel = ''
+
+
+    ngOnInit(): void {
     this.authUnsubscribe = onAuthStateChanged(this.auth, (user) => {
       if (!user) {
         this.flightForm.disable({ emitEvent: false })
@@ -203,6 +212,8 @@ export class FlightForm implements OnInit, OnDestroy {
         this.submitErrorMessage = ''
         this.submitSuccessMessage = ''
         this.clearPersistedReceipt()
+
+        this.clearDraft()
 
         this.lastSubmittedPayload = null
         this.changeDetectorRef.detectChanges()
@@ -214,16 +225,26 @@ export class FlightForm implements OnInit, OnDestroy {
       this.lastSubmittedPayload = this.submissionReceipt
 
       this.flightForm.enable({ emitEvent: false })
+
+      // Only restore a draft if we're on the form (not showing receipt)
+      if (!this.submissionReceipt) {
+        this.restoreDraftIfAvailable()
+      }
+
       this.changeDetectorRef.detectChanges()
     })
   }
+
 
   ngOnDestroy(): void {
     if (this.authUnsubscribe) {
       this.authUnsubscribe()
       this.authUnsubscribe = null
     }
+    this.destroy$.next()
+    this.destroy$.complete()
   }
+
 
   private airlineLookupSet = new Set<string>()
   isAirlinesDatasetLoaded = false
@@ -265,6 +286,13 @@ export class FlightForm implements OnInit, OnDestroy {
       },
       { validators: [arrivalDateTimeNotPastValidator] }
     )
+
+    this.flightForm.valueChanges
+    .pipe(debounceTime(500), takeUntil(this.destroy$))
+    .subscribe(() => {
+      this.saveDraftToStorage()
+    })
+
 
     this.http.get<AirlineRow[]>('/assets/airlines.json').subscribe({
       next: (rows) => {
@@ -464,6 +492,109 @@ export class FlightForm implements OnInit, OnDestroy {
     }
   }
 
+  private saveDraftToStorage(): void {
+    if (!this.flightForm) return
+    if (this.isRestoringDraft) return
+    if (!this.flightForm.dirty) return
+
+    const draft = {
+      savedAt: Date.now(),
+      data: this.flightForm.getRawValue(),
+    }
+
+    try {
+      localStorage.setItem(this.draftStorageKey, JSON.stringify(draft))
+    } catch {
+      // ignore storage errors
+    }
+  }
+
+  private readDraftFromStorage(): { savedAt: number; data: any } | null {
+    try {
+      const raw = localStorage.getItem(this.draftStorageKey)
+      if (!raw) return null
+      const parsed = JSON.parse(raw)
+      if (!parsed?.savedAt || !parsed?.data) return null
+      return parsed
+    } catch {
+      return null
+    }
+  }
+
+  private isDraftFresh(savedAt: number): boolean {
+    return Date.now() - savedAt <= this.draftMaxAgeMs
+  }
+
+  private formatSavedAtLabel(savedAt: number): string {
+    const deltaMs = Date.now() - savedAt
+    const deltaMin = Math.floor(deltaMs / 60000)
+
+    if (deltaMin < 1) return 'just now'
+    if (deltaMin === 1) return '1 minute ago'
+    if (deltaMin < 60) return `${deltaMin} minutes ago`
+
+    const deltaHr = Math.floor(deltaMin / 60)
+    if (deltaHr === 1) return '1 hour ago'
+    if (deltaHr < 24) return `${deltaHr} hours ago`
+
+    return new Date(savedAt).toLocaleString()
+  }
+
+  private restoreDraftIfAvailable(): void {
+    const draft = this.readDraftFromStorage()
+    if (!draft) return
+
+    if (!this.isDraftFresh(draft.savedAt)) {
+      this.clearDraft()
+      return
+    }
+
+    this.isRestoringDraft = true
+    try {
+      this.flightForm.patchValue(draft.data, { emitEvent: false })
+      this.flightForm.markAsDirty()
+
+      this.draftRestoredSavedAtLabel = this.formatSavedAtLabel(draft.savedAt)
+      this.draftRestoredBannerVisible = true
+    } finally {
+      this.isRestoringDraft = false
+    }
+  }
+
+  clearDraft(): void {
+    try {
+      localStorage.removeItem(this.draftStorageKey)
+    } catch {
+      // ignore
+    }
+
+    this.draftRestoredBannerVisible = false
+    this.draftRestoredSavedAtLabel = ''
+  }
+
+  private saveDraftFromPayload(payload: FlightInfoPayload): void {
+    try {
+      const draft = {
+        savedAt: Date.now(),
+        data: {
+          airline: payload.airline,
+          flightNumber: payload.flightNumber,
+          arrivalDate: payload.arrivalDate,
+          arrivalTime: payload.arrivalTime,
+          numOfGuests: String(payload.numOfGuests ?? ''),
+          comments: payload.comments ?? '',
+        },
+      }
+      localStorage.setItem(this.draftStorageKey, JSON.stringify(draft))
+    } catch {
+      // ignore
+    }
+
+    this.draftRestoredBannerVisible = false
+    this.draftRestoredSavedAtLabel = ''
+  }
+
+
   private withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       const timer = setTimeout(() => reject(new Error('Parsing timed out. Please try again.')), ms)
@@ -541,6 +672,7 @@ export class FlightForm implements OnInit, OnDestroy {
     this.submissionReceipt = null
 
     this.clearPersistedReceipt()
+    this.clearDraft()
 
     this.selectedTicketFile = null
     this.isParsingTicket = false
@@ -567,6 +699,7 @@ export class FlightForm implements OnInit, OnDestroy {
     const payload = this.submissionReceipt
 
     this.submissionReceipt = null
+    this.clearPersistedReceipt()
 
     if (!payload) {
       this.changeDetectorRef.detectChanges()
@@ -588,6 +721,7 @@ export class FlightForm implements OnInit, OnDestroy {
 
     this.flightForm.markAsPristine()
     this.flightForm.markAsUntouched()
+    this.saveDraftFromPayload(payload)
 
     this.flightForm.get('airline')?.markAsUntouched()
     this.flightForm.get('flightNumber')?.markAsUntouched()
@@ -606,6 +740,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   async onSignOutClick(): Promise<void> {
+    this.clearDraft()
     this.clearPersistedReceipt()
     this.submissionReceipt = null
     this.lastSubmittedPayload = null
@@ -814,6 +949,7 @@ export class FlightForm implements OnInit, OnDestroy {
       this.submitSuccessMessage = 'Dry run: payload looks good. No request was sent.'
 
       this.persistReceipt(payload, this.submitSuccessMessage)
+      this.clearDraft()
 
       this.isSubmitting = false
       this.changeDetectorRef.detectChanges()
@@ -848,6 +984,7 @@ export class FlightForm implements OnInit, OnDestroy {
       this.submitSuccessMessage = 'Your flight details were submitted successfully.'
 
       this.persistReceipt(payload, this.submitSuccessMessage)
+      this.clearDraft()
 
       this.changeDetectorRef.detectChanges()
     } catch (error: any) {

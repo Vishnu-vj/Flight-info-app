@@ -76,6 +76,14 @@
       (ngSubmit)="onSubmit()"
       novalidate
     >
+      <div *ngIf="draftRestoredBannerVisible" class="draftBanner" role="status" aria-live="polite">
+      <div class="draftBannerText">
+        <span class="draftIcon">ℹ️</span>
+       Your draft from <strong>{{ draftRestoredSavedAtLabel }}</strong> has been restored.
+      </div>
+      <button type="button" class="draftBannerLink" (click)="clearDraft()">Clear</button>
+    </div>
+
       <div *ngIf="submitErrorMessage" class="alert error" role="alert" aria-live="polite">
         <div class="alertIcon" aria-hidden="true">!</div>
         <div class="alertText">
