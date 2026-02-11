@@ -111,6 +111,7 @@
           <div class="alertTitle">Submission failed</div>
           <div class="alertMessage">{{ submitErrorMessage }}</div>
         </div>
+        <button type="button" class="alertDismiss" (click)="submitErrorMessage=''">✕</button>
       </div>
 
       <div *ngIf="submitSuccessMessage" class="alert success" role="status" aria-live="polite">

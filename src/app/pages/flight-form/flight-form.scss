@@ -214,7 +214,23 @@ input:focus, textarea:focus {
 .alert.error {
   background: rgba(239,68,68,0.08);
   border-color: rgba(239,68,68,0.22);
+  position: sticky;
+  top: 12px;         
+  z-index: 20;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.10);
+  backdrop-filter: blur(8px);
 }
+
+.alert { position: relative; }
+.alertDismiss{
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  opacity: 0.7;
+}
+.alertDismiss:hover{ opacity: 1; }
 
 .callout {
   border-radius: 16px;

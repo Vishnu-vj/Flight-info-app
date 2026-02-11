@@ -181,7 +181,7 @@ export class FlightForm implements OnInit, OnDestroy {
 
   //To prevent lot of POST during testing
   //TODO: Remove before final submission
-  private readonly isDryRun = false
+  private readonly isDryRun = true
 
   selectedTicketFile: File | null = null
   isParsingTicket = false
@@ -922,78 +922,91 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   async onSubmit(): Promise<void> {
-    if (this.isSubmitting) return
+  if (this.isSubmitting) return
 
-    this.submitErrorMessage = ''
-    this.submitSuccessMessage = ''
+  this.submitErrorMessage = ''
+  this.submitSuccessMessage = ''
 
-    this.hasSubmitted = true
-    this.flightForm.updateValueAndValidity({ onlySelf: false, emitEvent: true })
+  this.hasSubmitted = true
+  this.flightForm.updateValueAndValidity({ onlySelf: false, emitEvent: true })
 
-    if (this.flightForm.invalid) {
-      this.flightForm.markAllAsTouched()
-      this.changeDetectorRef.detectChanges()
-      return
-    }
-
-    this.isSubmitting = true
+  if (this.flightForm.invalid) {
+    this.flightForm.markAllAsTouched()
     this.changeDetectorRef.detectChanges()
-    const payload = this.buildPayload()
 
-    if (this.isDryRun) {
-      console.log('[DRY RUN] FlightInfoPayload:', payload)
-      console.log('[DRY RUN] Headers:', { token: this.tokenHeaderValue, candidate: this.candidateName })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    return
+  }
 
-      this.submissionReceipt = payload
-      this.lastSubmittedPayload = payload
-      this.submitSuccessMessage = 'Dry run: payload looks good. No request was sent.'
+  this.isSubmitting = true
+  this.changeDetectorRef.detectChanges()
 
-      this.persistReceipt(payload, this.submitSuccessMessage)
-      this.clearDraft()
+  const payload = this.buildPayload()
 
-      this.isSubmitting = false
+  if (this.isDryRun) {
+    console.log('[DRY RUN] FlightInfoPayload:', payload)
+    console.log('[DRY RUN] Headers:', { token: this.tokenHeaderValue, candidate: this.candidateName })
+
+    this.submissionReceipt = payload
+    this.lastSubmittedPayload = payload
+    this.submitSuccessMessage = 'Dry run: payload looks good. No request was sent.'
+
+    this.persistReceipt(payload, this.submitSuccessMessage)
+    this.clearDraft()
+
+    this.isSubmitting = false
+    this.changeDetectorRef.detectChanges()
+    return
+  }
+
+  const headers = new HttpHeaders({
+    token: this.tokenHeaderValue,
+    candidate: this.candidateName,
+  })
+
+  try {
+    const response: any = await runInInjectionContext(this.injector, () =>
+      firstValueFrom(this.http.post(this.endpointUrl, payload, { headers }))
+    )
+
+    const isSuccess =
+      response === true ||
+      response === 'true' ||
+      response?.success === true ||
+      response?.ok === true
+
+    if (!isSuccess) {
+      this.submitErrorMessage =
+        'Submission was rejected as invalid. Please double-check each field and try again.'
       this.changeDetectorRef.detectChanges()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
 
-    const headers = new HttpHeaders({
-      token: this.tokenHeaderValue,
-      candidate: this.candidateName,
-    })
+    this.submissionReceipt = payload
+    this.lastSubmittedPayload = payload
+    this.submitSuccessMessage = 'Your flight details were submitted successfully.'
 
-    try {
-      const response: any = await runInInjectionContext(this.injector, () =>
-        firstValueFrom(this.http.post(this.endpointUrl, payload, { headers }))
-      )
+    this.persistReceipt(payload, this.submitSuccessMessage)
+    this.clearDraft()
 
-      const isSuccess =
-        response === true ||
-        response === 'true' ||
-        response?.success === true ||
-        response?.ok === true
+    this.changeDetectorRef.detectChanges()
+  } catch (error: any) {
+    const status = error?.status
 
-      if (!isSuccess) {
-        this.submitErrorMessage =
-          'Submission was received but marked as invalid. Please double-check each field and try again.'
-        this.changeDetectorRef.detectChanges()
-        return
-      }
-
-      this.submissionReceipt = payload
-      this.lastSubmittedPayload = payload
-      this.submitSuccessMessage = 'Your flight details were submitted successfully.'
-
-      this.persistReceipt(payload, this.submitSuccessMessage)
-      this.clearDraft()
-
-      this.changeDetectorRef.detectChanges()
-    } catch (error: any) {
+    if (status === 422 || status === 400) {
+      this.submitErrorMessage =
+        'Submission was rejected as invalid. Please double-check each field and try again.'
+    } else {
       this.submitErrorMessage =
         'Could not submit due to a network or server error. Please try again.'
-      this.changeDetectorRef.detectChanges()
-    } finally {
-      this.isSubmitting = false
-      this.changeDetectorRef.detectChanges()
     }
+
+    this.changeDetectorRef.detectChanges()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  } finally {
+    this.isSubmitting = false
+    this.changeDetectorRef.detectChanges()
   }
+}
 }
