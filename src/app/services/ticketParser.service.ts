@@ -15,9 +15,9 @@ type PdfJsModule = any
 export class TicketParserService {
   private pdfWorkerReady = false
   private pdfJsPromise: Promise<PdfJsModule> | null = null
-
   private tesseractCreateWorkerPromise: Promise<any> | null = null
 
+  // Lazy load pdf.js
   private async loadPdfJs(): Promise<PdfJsModule> {
     if (!this.pdfJsPromise) {
       this.pdfJsPromise = import('pdfjs-dist/legacy/build/pdf.mjs')
@@ -25,6 +25,7 @@ export class TicketParserService {
     return this.pdfJsPromise
   }
 
+  // Configure worker once
   private async ensurePdfWorkerConfigured(pdfjsLib: any): Promise<void> {
     if (this.pdfWorkerReady) return
 
@@ -32,6 +33,7 @@ export class TicketParserService {
     this.pdfWorkerReady = true
   }
 
+  // Lazy load OCR
   private async loadTesseractCreateWorker(): Promise<any> {
     if (!this.tesseractCreateWorkerPromise) {
       this.tesseractCreateWorkerPromise = import('tesseract.js').then((mod: any) => {
@@ -57,6 +59,7 @@ export class TicketParserService {
 
     let extractedText = ''
 
+    // Extract based on type
     if (isPdf) extractedText = await this.extractTextFromPdf(file)
     else extractedText = await this.extractTextFromImage(file)
 
@@ -64,7 +67,7 @@ export class TicketParserService {
 
     return {
       ...parsed,
-      rawTextSnippet: extractedText.replace(/\s+/g, ' ').trim().slice(0, 300),
+      rawTextSnippet: extractedText.replace(/\s+/g, ' ').trim().slice(0, 300), // Preview snippet
     }
   }
 
@@ -78,6 +81,7 @@ export class TicketParserService {
 
     let fullText = ''
 
+    // Loop through pages
     for (let pageIndex = 1; pageIndex <= pdf.numPages; pageIndex++) {
       const page = await pdf.getPage(pageIndex)
       const content = await page.getTextContent()
@@ -95,6 +99,7 @@ export class TicketParserService {
     const worker: any = await createWorker('eng')
 
     try {
+      // Restrict OCR noise
       await worker.setParameters({
         tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:-/ .',
         preserve_interword_spaces: '1',
@@ -103,14 +108,14 @@ export class TicketParserService {
       const { data } = await worker.recognize(file)
       return String(data?.text ?? '').trim()
     } finally {
-      await worker.terminate()
+      await worker.terminate() // Always cleanup
     }
   }
 
   private parseFieldsFromText(rawText: string): Omit<ParsedTicket, 'rawTextSnippet'> {
     const text = rawText.replace(/\s+/g, ' ').trim()
 
-    // helpers
+    // Month lookup
     const monthMap: Record<string, number> = {
       jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6,
       jul: 7, aug: 8, sep: 9, sept: 9, oct: 10, nov: 11, dec: 12
@@ -118,6 +123,7 @@ export class TicketParserService {
 
     const pad2 = (n: number) => String(n).padStart(2, '0')
 
+    // Smart year handling
     const toIsoDateFromDayMonth = (day: number, month: number): string => {
       const now = new Date()
       let year = now.getFullYear()
@@ -128,11 +134,13 @@ export class TicketParserService {
       return `${year}-${pad2(month)}-${pad2(day)}`
     }
 
+    // Normalize time format
     const normalizeTimeTo24 = (value: string): string => {
       const v = value.trim()
 
       const m24 = v.match(/^([01]\d|2[0-3]):([0-5]\d)$/)
       if (m24) return `${m24[1]}:${m24[2]}`
+
       const m12 = v.match(/^(0?[1-9]|1[0-2]):([0-5]\d)\s*(AM|PM)$/i)
       if (!m12) return v
 
@@ -146,8 +154,7 @@ export class TicketParserService {
       return `${pad2(hh)}:${pad2(mm)}`
     }
 
-    // 1) Airline
-    // Small list of common airlines. Beta version.
+    // Airline detection
     const airlineMatch =
       text.match(/\bIndiGo\b/i) ??
       text.match(/\b(Air\s*India|Vistara|SpiceJet|Akasa|Emirates|Qatar|Etihad|Lufthansa|Singapore Airlines)\b/i) ??
@@ -156,7 +163,7 @@ export class TicketParserService {
 
     const airline = airlineMatch ? airlineMatch[0].trim() : ''
 
-    // 2) Airport+Time pairs (to pick ARRIVAL)
+    // Collect airport-time pairs
     const airportTimePairs: Array<{ code: string; time: string; index: number }> = []
 
     const codeThenTime = /\b([A-Z]{3})\s+([0-2]?\d:\d{2})\s*(?:HRS|hrs)?\b/g
@@ -173,6 +180,7 @@ export class TicketParserService {
       airportTimePairs.push({ code: m[2], time: normalizeTimeTo24(m[1]), index: m.index })
     }
 
+    // Pick last airport as destination
     const allAirportCodes = Array.from(new Set(airportTimePairs.map(p => p.code)))
     const destinationCode = allAirportCodes.length > 0 ? allAirportCodes[allAirportCodes.length - 1] : ''
 
@@ -184,11 +192,12 @@ export class TicketParserService {
       }
     }
 
+    // Fallback arrival time
     if (!arrivalTime && airportTimePairs.length > 0) {
       arrivalTime = airportTimePairs.sort((a, b) => a.index - b.index)[airportTimePairs.length - 1].time
     }
 
-    // 3) Arrival Date
+    // Date detection
     const datePattern =
       /\b(Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*,?\s+(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\b/gi
 
@@ -214,11 +223,13 @@ export class TicketParserService {
         ? dateHits.filter((d) => d.index > arrivalAnchorIndex)
         : []
 
-      const chosen = (afterAnchor.length > 0 ? afterAnchor : dateHits)[(afterAnchor.length > 0 ? afterAnchor : dateHits).length - 1]
+      const chosen = (afterAnchor.length > 0 ? afterAnchor : dateHits)
+        [(afterAnchor.length > 0 ? afterAnchor : dateHits).length - 1]
+
       arrivalDate = toIsoDateFromDayMonth(chosen.day, chosen.month)
     }
 
-    // 4) Flight Number
+    // Flight number detection
     const flightCandidates: Array<{ value: string; index: number }> = []
     const flightPattern = /\b([A-Z0-9]{2,3})\s*[- ]?\s*(\d{2,5})\b/g
 
@@ -229,7 +240,7 @@ export class TicketParserService {
       const digits = m[2]
       const combined = `${prefix}-${digits}`.toUpperCase()
 
-      // reject airport codes(pure 3 letters)
+      // Skip airport codes
       if (/^[A-Z]{3}$/.test(prefix)) continue
       if (/\d{1,2}:\d{2}/.test(combined)) continue
 
@@ -253,6 +264,7 @@ export class TicketParserService {
       }
     }
 
+    // Simple scoring logic
     const confidence =
       (airline ? 30 : 0) +
       (flightNumber ? 35 : 0) +

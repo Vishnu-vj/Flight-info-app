@@ -5,6 +5,7 @@ import { AuthorizationService } from '../services/authorization.service'
 import { Observable, of, from } from 'rxjs'
 import { take, switchMap, map, catchError } from 'rxjs/operators'
 
+// Wrap Firebase auth listener
 function authState$(auth: Auth): Observable<User | null> {
   return new Observable<User | null>((subscriber) => {
     const unsubscribe = onAuthStateChanged(
@@ -12,7 +13,7 @@ function authState$(auth: Auth): Observable<User | null> {
       (user) => subscriber.next(user),
       (error) => subscriber.error(error)
     )
-    return unsubscribe
+    return unsubscribe // Clean up listener
   })
 }
 
@@ -22,16 +23,33 @@ export const authGuard: CanActivateFn = () => {
   const authorizationService = inject(AuthorizationService)
 
   return authState$(auth).pipe(
-    take(1),
+    take(1), // Only first auth state
     switchMap((user) => {
       if (!user) {
-        return of(router.createUrlTree(['/login'], { queryParams: { reason: 'auth-required' } }))
+        // Not logged in
+        return of(
+          router.createUrlTree(['/login'], {
+            queryParams: { reason: 'auth-required' },
+          })
+        )
       }
 
       return from(authorizationService.isCurrentUserAllowed()).pipe(
-        map((isAllowed) => (isAllowed ? true : router.createUrlTree(['/login'], { queryParams: { reason: 'not-authorized' } }))),
+        // Check backend access
+        map((isAllowed) =>
+          isAllowed
+            ? true
+            : router.createUrlTree(['/login'], {
+                queryParams: { reason: 'not-authorized' },
+              })
+        ),
+        // Fallback on error
         catchError(() =>
-          of(router.createUrlTree(['/login'], { queryParams: { reason: 'not-authorized' } }))
+          of(
+            router.createUrlTree(['/login'], {
+              queryParams: { reason: 'not-authorized' },
+            })
+          )
         )
       )
     })

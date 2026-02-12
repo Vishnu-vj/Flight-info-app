@@ -12,7 +12,6 @@ import { firstValueFrom, Subject } from 'rxjs'
 import { debounceTime, takeUntil } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 
-
 interface FlightInfoPayload {
   airline: string
   arrivalDate: string
@@ -31,6 +30,7 @@ function airlineValidator(control: AbstractControl): ValidationErrors | null {
   const value = String(control.value ?? '').trim()
   if (!value) return null
 
+  // quick sanity rules
   const letters = value.match(/[A-Za-z]/g)?.length ?? 0
   if (letters < 2) return { airlineLength: 'min' }
   if (value.length > 50) return { airlineLength: 'max' }
@@ -46,6 +46,7 @@ function flightNumberValidator(control: AbstractControl): ValidationErrors | nul
   const value = String(control.value ?? '').trim()
   if (!value) return null
 
+  // keep it realistic
   if (value.length < 2) return { flightNumberLength: 'min' }
   if (value.length > 10) return { flightNumberLength: 'max' }
   const allowedChars = /^[A-Za-z0-9 -]+$/
@@ -68,6 +69,7 @@ function arrivalDateValidator(control: AbstractControl): ValidationErrors | null
   const raw = String(control.value ?? '').trim()
   if (!raw) return null
 
+  // basic yyyy-mm-dd check
   const match = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/)
   if (!match) return { arrivalDateFormat: true }
 
@@ -89,6 +91,7 @@ function arrivalDateValidator(control: AbstractControl): ValidationErrors | null
   ) {
     return { arrivalDateInvalid: true }
   }
+
   const now = new Date()
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0)
   if (selected < today) return { arrivalDatePast: true }
@@ -96,6 +99,7 @@ function arrivalDateValidator(control: AbstractControl): ValidationErrors | null
   const maxFuture = new Date(today)
   maxFuture.setFullYear(maxFuture.getFullYear() + 2)
   if (selected > maxFuture) return { arrivalDateTooFar: true }
+
   return null
 }
 
@@ -119,7 +123,6 @@ function arrivalTimeValidator(control: AbstractControl): ValidationErrors | null
 function arrivalDateTimeNotPastValidator(group: AbstractControl): ValidationErrors | null {
   const dateValue = String(group.get('arrivalDate')?.value ?? '').trim()
   const timeValue = String(group.get('arrivalTime')?.value ?? '').trim()
-
   if (!dateValue || !timeValue) return null
 
   const dateMatch = dateValue.match(/^(\d{4})-(\d{2})-(\d{2})$/)
@@ -131,16 +134,21 @@ function arrivalDateTimeNotPastValidator(group: AbstractControl): ValidationErro
 
   const timeMatch = timeValue.match(/^(\d{2}):(\d{2})$/)
   if (!timeMatch) return null
+
   const hours = Number(timeMatch[1])
   const minutes = Number(timeMatch[2])
+
   const selected = new Date(year, month - 1, day, hours, minutes, 0, 0)
   if (Number.isNaN(selected.getTime())) return null
+
+  // only enforce for "today"
   const now = new Date()
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0)
   const selectedDay = new Date(year, month - 1, day, 0, 0, 0, 0)
 
   if (selectedDay.getTime() !== today.getTime()) return null
   if (selected.getTime() < now.getTime()) return { arrivalTimePastToday: true }
+
   return null
 }
 
@@ -154,17 +162,20 @@ function guestsRangeValidator(control: AbstractControl): ValidationErrors | null
   if (!Number.isFinite(parsed)) return { guestsRange: true }
   if (!Number.isInteger(parsed)) return { guestsRange: true }
   if (parsed < 1 || parsed > 20) return { guestsRange: true }
+
   return null
 }
 
 function commentsValidator(control: AbstractControl): ValidationErrors | null {
   const raw = String(control.value ?? '')
   const trimmed = raw.trim()
-
   if (!trimmed) return null
+
+  // keep notes short-ish
   if (trimmed.length > 300) return { commentsLength: 'max' }
   const allowedPattern = /^[A-Za-z0-9\s.,'"!?()\-/:;&@#%+*=\[\]{}\\|<>~`\n\r\t]+$/
   if (!allowedPattern.test(raw)) return { commentsCharacters: true }
+
   return null
 }
 
@@ -194,15 +205,15 @@ export class FlightForm implements OnInit, OnDestroy {
   private readonly receiptStorageKey = 'flightSubmissionReceipt'
   private readonly receiptSuccessMessageKey = 'flightSubmissionSuccessMessage'
   private readonly draftStorageKey = 'flightFormDraft.v1'
-  private readonly draftMaxAgeMs = 24 * 60 * 60 * 1000 
+  private readonly draftMaxAgeMs = 24 * 60 * 60 * 1000
   private isRestoringDraft = false
   private destroy$ = new Subject<void>()
 
   draftRestoredBannerVisible = false
   draftRestoredSavedAtLabel = ''
 
-
-    ngOnInit(): void {
+  ngOnInit(): void {
+    // kick user out if auth dies
     this.authUnsubscribe = onAuthStateChanged(this.auth, (user) => {
       if (!user) {
         this.flightForm.disable({ emitEvent: false })
@@ -224,7 +235,7 @@ export class FlightForm implements OnInit, OnDestroy {
 
       this.flightForm.enable({ emitEvent: false })
 
-      // Only restore a draft if we're on the form (not showing receipt)
+      // draft only when editing
       if (!this.submissionReceipt) {
         this.restoreDraftIfAvailable()
       }
@@ -233,8 +244,8 @@ export class FlightForm implements OnInit, OnDestroy {
     })
   }
 
-
   ngOnDestroy(): void {
+    // clean up subscriptions
     if (this.authUnsubscribe) {
       this.authUnsubscribe()
       this.authUnsubscribe = null
@@ -242,7 +253,6 @@ export class FlightForm implements OnInit, OnDestroy {
     this.destroy$.next()
     this.destroy$.complete()
   }
-
 
   private airlineLookupSet = new Set<string>()
   isAirlinesDatasetLoaded = false
@@ -255,6 +265,7 @@ export class FlightForm implements OnInit, OnDestroy {
 
   flightForm: FormGroup
 
+  // env-driven config
   private readonly endpointUrl = environment.flightInfo.endpointUrl
   private readonly tokenHeaderValue = environment.flightInfo.tokenHeaderValue
   private readonly candidateName = environment.flightInfo.candidateName
@@ -268,6 +279,7 @@ export class FlightForm implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef,
     private ticketParser: TicketParserService
   ) {
+    // main form shape
     this.flightForm = this.formBuilder.group(
       {
         airline: ['', [trimmedRequired, airlineValidator]],
@@ -280,13 +292,14 @@ export class FlightForm implements OnInit, OnDestroy {
       { validators: [arrivalDateTimeNotPastValidator] }
     )
 
+    // autosave draft
     this.flightForm.valueChanges
-    .pipe(debounceTime(500), takeUntil(this.destroy$))
-    .subscribe(() => {
-      this.saveDraftToStorage()
-    })
+      .pipe(debounceTime(500), takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.saveDraftToStorage()
+      })
 
-
+    // load airline hints
     this.http.get<AirlineRow[]>('/assets/airlines.json').subscribe({
       next: (rows) => {
         const cleaned: AirlineRow[] = (rows ?? [])
@@ -297,10 +310,8 @@ export class FlightForm implements OnInit, OnDestroy {
           }))
           .filter((row) => row.name.length > 0)
 
-        // datalist should be plain airline names
         this.airlineSuggestions = cleaned.map((row) => row.name)
 
-        // optional display strings if you use them elsewhere
         this.airlineSuggestionValues = cleaned.map((row) => {
           const parts: string[] = []
           if (row.iata) parts.push(row.iata)
@@ -327,6 +338,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   private persistReceipt(receipt: FlightInfoPayload, message: string): void {
+    // keep receipt on refresh
     try {
       sessionStorage.setItem(this.receiptStorageKey, JSON.stringify(receipt))
       sessionStorage.setItem(this.receiptSuccessMessageKey, String(message ?? ''))
@@ -371,6 +383,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   get arrivalTimeMinLabelForToday(): string {
+    // little UI hint
     const now = new Date()
     const min = new Date(now.getTime() + 60 * 1000)
     return new Intl.DateTimeFormat(undefined, {
@@ -380,6 +393,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   clearSubmissionMessages(): void {
+    // reset banners
     if (this.submitErrorMessage || this.submitSuccessMessage) {
       this.submitErrorMessage = ''
       this.submitSuccessMessage = ''
@@ -388,6 +402,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   onTicketFileSelected(event: Event): void {
+    // basic file gatekeeping
     const input = event.target as HTMLInputElement
     const file = input.files?.[0] ?? null
 
@@ -419,6 +434,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   private clearTicketFields(): void {
+    // wipe old autofill
     this.flightForm.patchValue({
       airline: '',
       flightNumber: '',
@@ -430,6 +446,7 @@ export class FlightForm implements OnInit, OnDestroy {
   async parseTicket(): Promise<void> {
     if (!this.selectedTicketFile || this.isParsingTicket) return
 
+    // one parse at a time
     this.isParsingTicket = true
     this.ticketParseError = ''
     this.ticketParseConfidence = null
@@ -465,13 +482,13 @@ export class FlightForm implements OnInit, OnDestroy {
       this.flightForm.updateValueAndValidity({ onlySelf: false, emitEvent: true })
       this.changeDetectorRef.detectChanges()
 
-
       const missing: string[] = []
       if (!result.airline) missing.push('airline')
       if (!result.flightNumber) missing.push('flight number')
       if (!result.arrivalDate) missing.push('arrival date')
       if (!result.arrivalTime) missing.push('arrival time')
 
+      // nudge user when unsure
       if (missing.length) {
         this.ticketParseError = `We couldn’t detect ${missing.join(', ')}. Please confirm it manually.`
       } else if (result.confidence < 60) {
@@ -490,6 +507,7 @@ export class FlightForm implements OnInit, OnDestroy {
     if (this.isRestoringDraft) return
     if (!this.flightForm.dirty) return
 
+    // keep draft lightweight
     const draft = {
       savedAt: Date.now(),
       data: this.flightForm.getRawValue(),
@@ -519,6 +537,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   private formatSavedAtLabel(savedAt: number): string {
+    // human-ish time label
     const deltaMs = Date.now() - savedAt
     const deltaMin = Math.floor(deltaMs / 60000)
 
@@ -542,6 +561,7 @@ export class FlightForm implements OnInit, OnDestroy {
       return
     }
 
+    // avoid valueChanges loops
     this.isRestoringDraft = true
     try {
       this.flightForm.patchValue(draft.data, { emitEvent: false })
@@ -566,6 +586,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   private saveDraftFromPayload(payload: FlightInfoPayload): void {
+    // quick "edit this" flow
     try {
       const draft = {
         savedAt: Date.now(),
@@ -587,8 +608,8 @@ export class FlightForm implements OnInit, OnDestroy {
     this.draftRestoredSavedAtLabel = ''
   }
 
-
   private withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+    // stop hanging forever
     return new Promise<T>((resolve, reject) => {
       const timer = setTimeout(() => reject(new Error('Parsing timed out. Please try again.')), ms)
       promise
@@ -610,6 +631,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   private buildReceiptFileName(): string {
+    // safe filename pieces
     const safeDate = (this.submissionReceipt?.arrivalDate ?? '').replace(/[^0-9-]/g, '')
     const safeFlight = (this.submissionReceipt?.flightNumber ?? '').replace(/[^A-Za-z0-9]/g, '')
     const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')
@@ -659,6 +681,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   onResetClick(): void {
+    // hard reset the form
     this.hasSubmitted = false
     this.submitErrorMessage = ''
     this.submitSuccessMessage = ''
@@ -689,6 +712,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   onEditSubmissionClick(): void {
+    // move receipt back into form
     const payload = this.submissionReceipt
 
     this.submissionReceipt = null
@@ -733,6 +757,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   async onSignOutClick(): Promise<void> {
+    // leave clean
     this.clearDraft()
     this.clearPersistedReceipt()
     this.submissionReceipt = null
@@ -774,6 +799,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   get minArrivalTimeForSelectedDate(): string | null {
+    // avoid time in the past
     const rawDate = String(this.flightForm.get('arrivalDate')?.value ?? '').trim()
     if (!rawDate) return null
 
@@ -827,6 +853,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   onAirlineBlur(): void {
+    // normalize datalist values
     const control = this.flightForm.get('airline')
     if (!control) return
     const normalized = this.normalizeAirlineInput(control.value).trim().replace(/\s+/g, ' ')
@@ -836,6 +863,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   onFlightNumberBlur(): void {
+    // normalize flight number
     const control = this.flightForm.get('flightNumber')
     if (!control) return
     const normalized = this.normalizeFlightNumberInput(control.value)
@@ -861,6 +889,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   private normalizeCommentsInput(raw: string): string {
+    // trim each line
     const value = String(raw ?? '').trim()
     if (!value) return ''
     return value
@@ -882,6 +911,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   get airlineLooksUnknown(): boolean {
+    // small "are you sure?" hint
     if (!this.isAirlinesDatasetLoaded) return false
     const raw = this.normalizeAirlineInput(this.flightForm.get('airline')?.value)
     const value = String(raw ?? '').trim().toLowerCase()
@@ -892,6 +922,7 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   private buildPayload(): FlightInfoPayload {
+    // one clean payload shape
     const airline = this.normalizeAirlineInput(this.flightForm.get('airline')?.value).trim().replace(/\s+/g, ' ')
     const flightNumber = this.normalizeFlightNumberInput(this.flightForm.get('flightNumber')?.value)
     const arrivalDate = String(this.flightForm.get('arrivalDate')?.value ?? '').trim()
@@ -915,74 +946,80 @@ export class FlightForm implements OnInit, OnDestroy {
   }
 
   async onSubmit(): Promise<void> {
-  if (this.isSubmitting) return
+    if (this.isSubmitting) return
 
-  this.submitErrorMessage = ''
-  this.submitSuccessMessage = ''
+    // reset banners
+    this.submitErrorMessage = ''
+    this.submitSuccessMessage = ''
 
-  this.hasSubmitted = true
-  this.flightForm.updateValueAndValidity({ onlySelf: false, emitEvent: true })
+    this.hasSubmitted = true
+    this.flightForm.updateValueAndValidity({ onlySelf: false, emitEvent: true })
 
-  if (this.flightForm.invalid) {
-    this.flightForm.markAllAsTouched()
-    this.changeDetectorRef.detectChanges()
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-    return
-  }
-
-  this.isSubmitting = true
-  this.changeDetectorRef.detectChanges()
-
-  const payload = this.buildPayload()
-
-  const headers = new HttpHeaders({
-    token: this.tokenHeaderValue,
-    candidate: this.candidateName,
-  })
-
-  try {
-    const response: any = await runInInjectionContext(this.injector, () =>
-      firstValueFrom(this.http.post(this.endpointUrl, payload, { headers }))
-    )
-
-    const isSuccess =
-      response === true ||
-      response === 'true' ||
-      response?.success === true ||
-      response?.ok === true
-
-    if (!isSuccess) {
-      this.submitErrorMessage =
-        'Submission was rejected as invalid. Please double-check each field and try again.'
+    // stop if invalid
+    if (this.flightForm.invalid) {
+      this.flightForm.markAllAsTouched()
       this.changeDetectorRef.detectChanges()
       window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
 
-    this.submissionReceipt = payload
-    this.lastSubmittedPayload = payload
-    this.submitSuccessMessage = 'Your flight details were submitted successfully.'
-
-    this.persistReceipt(payload, this.submitSuccessMessage)
-    this.clearDraft()
-
+    this.isSubmitting = true
     this.changeDetectorRef.detectChanges()
-  } catch (error: any) {
-    const status = error?.status
 
-    if (status === 422 || status === 400) {
-      this.submitErrorMessage =
-        'Submission was rejected as invalid. Please double-check each field and try again.'
-    } else {
-      this.submitErrorMessage =
-        'Could not submit due to a network or server error. Please try again.'
+    const payload = this.buildPayload()
+
+    // auth-style headers
+    const headers = new HttpHeaders({
+      token: this.tokenHeaderValue,
+      candidate: this.candidateName,
+    })
+
+    try {
+      const response: any = await runInInjectionContext(this.injector, () =>
+        firstValueFrom(this.http.post(this.endpointUrl, payload, { headers }))
+      )
+
+      // accept a few response shapes
+      const isSuccess =
+        response === true ||
+        response === 'true' ||
+        response?.success === true ||
+        response?.ok === true
+
+      if (!isSuccess) {
+        this.submitErrorMessage =
+          'Submission was rejected as invalid. Please double-check each field and try again.'
+        this.changeDetectorRef.detectChanges()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        return
+      }
+
+      this.submissionReceipt = payload
+      this.lastSubmittedPayload = payload
+      this.submitSuccessMessage = 'Your flight details were submitted successfully.'
+
+      this.persistReceipt(payload, this.submitSuccessMessage)
+      this.clearDraft()
+
+      this.changeDetectorRef.detectChanges()
+    } catch (error: any) {
+      const status = error?.status
+
+      // basic status mapping
+      if (status === 422 || status === 400) {
+        this.submitErrorMessage =
+          'Submission was rejected as invalid. Please double-check each field and try again.'
+      } else {
+        this.submitErrorMessage =
+          'Could not submit due to a network or server error. Please try again.'
+      }
+
+      this.changeDetectorRef.detectChanges()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } finally {
+      // always unlock submit
+      this.isSubmitting = false
+      this.changeDetectorRef.detectChanges()
     }
-
-    this.changeDetectorRef.detectChanges()
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  } finally {
-    this.isSubmitting = false
-    this.changeDetectorRef.detectChanges()
   }
-}
 }

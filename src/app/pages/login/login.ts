@@ -20,6 +20,7 @@ function consumerEmailValidator(control: AbstractControl): ValidationErrors | nu
   const rawValue = String(control.value ?? '').trim()
   if (!rawValue) return null
 
+  // Simple email format check
   const consumerEmailPattern = /^[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+\.)+[A-Za-z]{2,}$/
   return consumerEmailPattern.test(rawValue) ? null : { consumerEmail: true }
 }
@@ -45,10 +46,13 @@ export class Login implements OnInit, OnDestroy {
   googleAuthErrorMessage = ''
   sessionExpiredMessage = ''
   emailSuggestion = ''
+
   public notAuthorizedMessage =
-  "You are signed in, but this account is not authorized for the flight form. Please sign out and use an approved account."
+    "You are signed in, but this account is not authorized for the flight form. Please sign out and use an approved account."
+
   public shouldShowNotAuthorizedBanner = false
   public signedInEmail = ''
+
   private readonly authorizationService = inject(AuthorizationService)
   private readonly lastEmailStorageKey = 'flightInfoLastEmail'
 
@@ -64,6 +68,7 @@ export class Login implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef,
     private route: ActivatedRoute
   ) {
+    // Login form setup
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, consumerEmailValidator]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -71,6 +76,7 @@ export class Login implements OnInit, OnDestroy {
 
     this.loadEmailSuggestion()
 
+    // Clear errors on typing
     this.loginForm.valueChanges.subscribe(() => {
       if (this.authErrorMessage) {
         this.authErrorMessage = ''
@@ -89,74 +95,82 @@ export class Login implements OnInit, OnDestroy {
       }
     })
 
+    // Show session expiry note
     this.route.queryParamMap.subscribe((params) => {
       const reason = params.get('reason')
       this.sessionExpiredMessage =
-      reason === 'session-expired' ? 'Please sign in again to continue.' : ''
+        reason === 'session-expired'
+          ? 'Please sign in again to continue.'
+          : ''
     })
   }
 
   ngOnInit(): void {
-  this.isSubmitting = false
-  this.isGoogleSigningIn = false
+    this.isSubmitting = false
+    this.isGoogleSigningIn = false
 
-  this.queryParamsSubscription = this.route.queryParamMap.subscribe((params) => {
-  const reason = String(params.get('reason') ?? '')
-  this.shouldShowNotAuthorizedBanner = reason === 'not-authorized'
-  })
+    // Watch query params
+    this.queryParamsSubscription = this.route.queryParamMap.subscribe((params) => {
+      const reason = String(params.get('reason') ?? '')
+      this.shouldShowNotAuthorizedBanner = reason === 'not-authorized'
+    })
 
-  this.authUnsubscribe = onAuthStateChanged(this.auth, async (user) => {
-    this.signedInEmail = String(user?.email ?? '')
+    // React to auth state
+    this.authUnsubscribe = onAuthStateChanged(this.auth, async (user) => {
+      this.signedInEmail = String(user?.email ?? '')
 
-    if (!user) return
-    if (this.shouldShowNotAuthorizedBanner) return
+      if (!user) return
+      if (this.shouldShowNotAuthorizedBanner) return
 
-    try {
-      const isAllowed = await this.authorizationService.isCurrentUserAllowed()
+      try {
+        const isAllowed = await this.authorizationService.isCurrentUserAllowed()
 
-      if (isAllowed) {
-        void this.router.navigateByUrl('/flight-form')
-        return
+        if (isAllowed) {
+          // Auto redirect if allowed
+          void this.router.navigateByUrl('/flight-form')
+          return
+        }
+
+        this.shouldShowNotAuthorizedBanner = true
+      } catch {
+        this.shouldShowNotAuthorizedBanner = true
       }
-      this.shouldShowNotAuthorizedBanner = true
-    } catch {
-      this.shouldShowNotAuthorizedBanner = true
+    })
+  }
+
+  ngOnDestroy(): void {
+    // Cleanup listeners
+    if (this.authUnsubscribe) {
+      this.authUnsubscribe()
+      this.authUnsubscribe = null
     }
-  })
-}
 
-
-ngOnDestroy(): void {
-  if (this.authUnsubscribe) {
-    this.authUnsubscribe()
-    this.authUnsubscribe = null
-  }
-
-  if (this.queryParamsSubscription) {
-    this.queryParamsSubscription.unsubscribe()
-    this.queryParamsSubscription = null
-  }
+    if (this.queryParamsSubscription) {
+      this.queryParamsSubscription.unsubscribe()
+      this.queryParamsSubscription = null
+    }
   }
 
   public async signOutForAccountSwitch(): Promise<void> {
-  try {
-    this.shouldShowNotAuthorizedBanner = false
-    this.signedInEmail = ''
+    try {
+      // Clear banner state
+      this.shouldShowNotAuthorizedBanner = false
+      this.signedInEmail = ''
 
-    await signOut(this.auth)
+      await signOut(this.auth)
 
-    await this.router.navigate(['/login'], {
-      queryParams: {},
-      replaceUrl: true,
-    })
-  } catch {
-    this.shouldShowNotAuthorizedBanner = false
+      await this.router.navigate(['/login'], {
+        queryParams: {},
+        replaceUrl: true,
+      })
+    } catch {
+      this.shouldShowNotAuthorizedBanner = false
+    }
   }
-}
-
 
   private loadEmailSuggestion(): void {
     try {
+      // Restore last email
       const saved = String(localStorage.getItem(this.lastEmailStorageKey) ?? '').trim()
       this.emailSuggestion = saved
     } catch {
@@ -173,10 +187,12 @@ ngOnDestroy(): void {
   }
 
   togglePasswordVisibility(): void {
+    // Toggle password field
     this.showPassword = !this.showPassword
   }
 
   async onForgotPasswordClick(): Promise<void> {
+    // Reset state
     this.resetEmailSent = false
     this.resetErrorMessage = ''
 
@@ -199,6 +215,7 @@ ngOnDestroy(): void {
     this.changeDetectorRef.detectChanges()
 
     try {
+      // Trigger Firebase reset
       await runInInjectionContext(this.injector, () =>
         sendPasswordResetEmail(this.auth, email, {
           url: `${window.location.origin}/login`,
@@ -221,59 +238,67 @@ ngOnDestroy(): void {
         this.resetErrorMessage = 'Could not send reset email. Please try again.'
       }
     } finally {
+      // Stop loading state
       this.isResettingPassword = false
       this.changeDetectorRef.detectChanges()
     }
   }
 
   async onGoogleSignIn(): Promise<void> {
-  if (this.shouldShowNotAuthorizedBanner) return
-  this.googleAuthErrorMessage = ''
-  this.isGoogleSigningIn = true
-  this.changeDetectorRef.detectChanges()
+    if (this.shouldShowNotAuthorizedBanner) return
 
-  let focusFallbackTimer: any = null
-
- const onWindowFocus = () => {
-    focusFallbackTimer = setTimeout(() => {
-      if (this.isGoogleSigningIn) {
-        this.isGoogleSigningIn = false
-        this.changeDetectorRef.detectChanges()
-      }
-    }, 250)
-  }
-
-  window.addEventListener('focus', onWindowFocus, { once: true })
-
-  try {
-    const provider = new GoogleAuthProvider()
-    provider.setCustomParameters({ prompt: 'select_account' })
-
-    await runInInjectionContext(this.injector, () =>
-      signInWithPopup(this.auth, provider)
-    )
-
-    await this.router.navigateByUrl('/flight-form')
-  } catch (error: any) {
-    const errorCode = String(error?.code ?? '')
-
-    if (errorCode === 'auth/popup-closed-by-user') {
-      this.googleAuthErrorMessage = ''
-    } else if (errorCode === 'auth/popup-blocked') {
-      this.googleAuthErrorMessage = 'Popup blocked by your browser. Please allow popups and try again.'
-    } else if (errorCode === 'auth/cancelled-popup-request') {
-      this.googleAuthErrorMessage = ''
-    } else if (errorCode === 'auth/network-request-failed') {
-      this.googleAuthErrorMessage = 'Network error. Please try again.'
-    } else {
-      this.googleAuthErrorMessage = 'Google sign-in failed. Please try again.'
-    }
-  } finally {
-    if (focusFallbackTimer) clearTimeout(focusFallbackTimer)
-    this.isGoogleSigningIn = false
+    // Start Google flow
+    this.googleAuthErrorMessage = ''
+    this.isGoogleSigningIn = true
     this.changeDetectorRef.detectChanges()
+
+    let focusFallbackTimer: any = null
+
+    // Handle popup focus edge case
+    const onWindowFocus = () => {
+      focusFallbackTimer = setTimeout(() => {
+        if (this.isGoogleSigningIn) {
+          this.isGoogleSigningIn = false
+          this.changeDetectorRef.detectChanges()
+        }
+      }, 250)
+    }
+
+    window.addEventListener('focus', onWindowFocus, { once: true })
+
+    try {
+      const provider = new GoogleAuthProvider()
+      provider.setCustomParameters({ prompt: 'select_account' })
+
+      await runInInjectionContext(this.injector, () =>
+        signInWithPopup(this.auth, provider)
+      )
+
+      // Redirect on success
+      await this.router.navigateByUrl('/flight-form')
+    } catch (error: any) {
+      const errorCode = String(error?.code ?? '')
+
+      if (errorCode === 'auth/popup-closed-by-user') {
+        this.googleAuthErrorMessage = ''
+      } else if (errorCode === 'auth/popup-blocked') {
+        this.googleAuthErrorMessage =
+          'Popup blocked by your browser. Please allow popups and try again.'
+      } else if (errorCode === 'auth/cancelled-popup-request') {
+        this.googleAuthErrorMessage = ''
+      } else if (errorCode === 'auth/network-request-failed') {
+        this.googleAuthErrorMessage = 'Network error. Please try again.'
+      } else {
+        this.googleAuthErrorMessage = 'Google sign-in failed. Please try again.'
+      }
+    } finally {
+      if (focusFallbackTimer) clearTimeout(focusFallbackTimer)
+
+      // Reset loading state
+      this.isGoogleSigningIn = false
+      this.changeDetectorRef.detectChanges()
+    }
   }
-}
 
   async onSubmit(): Promise<void> {
     this.hasSubmitted = true
@@ -281,6 +306,7 @@ ngOnDestroy(): void {
 
     if (this.shouldShowNotAuthorizedBanner) return
 
+    // Basic form validation
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched()
       return
@@ -295,17 +321,22 @@ ngOnDestroy(): void {
     let timeoutId: any = null
 
     try {
+      // Email/password login
       const signInPromise = runInInjectionContext(this.injector, () =>
         signInWithEmailAndPassword(this.auth, email, password)
       )
 
       await Promise.race([
         signInPromise,
+        // Simple timeout guard
         new Promise((_, reject) => {
           timeoutId = setTimeout(() => reject({ code: 'app/timeout' }), 10000)
         }),
       ])
+
       try { localStorage.setItem(this.lastEmailStorageKey, email) } catch {}
+
+      // Navigate after login
       await this.router.navigateByUrl('/flight-form')
     } catch (error: any) {
       const errorCode = String(error?.code ?? '')
@@ -327,11 +358,13 @@ ngOnDestroy(): void {
       } else {
         this.authErrorMessage = 'Login failed. Please try again.'
       }
+
       this.changeDetectorRef.detectChanges()
     } finally {
       if (timeoutId) clearTimeout(timeoutId)
-      this.isSubmitting = false
 
+      // Reset loading state
+      this.isSubmitting = false
       this.changeDetectorRef.detectChanges()
     }
   }
