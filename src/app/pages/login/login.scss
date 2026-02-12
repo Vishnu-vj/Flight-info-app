@@ -9,7 +9,8 @@
               radial-gradient(1000px 500px at 90% 20%, rgba(0, 0, 0, 0.05), transparent 55%),
               #f7f7f7;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .card {
