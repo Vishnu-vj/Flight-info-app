@@ -8,4 +8,10 @@ export const environment = {
     messagingSenderId: "228259788590",
     appId: "1:228259788590:web:b84079601d71708eb16cbf",
   },
+  flightInfo: {
+    endpointUrl: 'https://us-central1-crm-sdk.cloudfunctions.net/flightInfoChallenge',
+    tokenHeaderValue:
+      'WW91IG11c3QgYmUgdGhlIGN1cmlvdXMgdHlwZS4gIEJyaW5nIHRoaXMgdXAgYXQgdGhlIGludGVydmlldyBmb3IgYm9udXMgcG9pbnRzICEh',
+    candidateName : 'Vishnu Prasath'
+  },
 }

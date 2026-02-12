@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core'
-import * as pdfjsLib from 'pdfjs-dist'
 
 export type ParsedTicket = {
   airline: string
@@ -10,12 +9,23 @@ export type ParsedTicket = {
   rawTextSnippet: string
 }
 
+type PdfJsModule = any
+
 @Injectable({ providedIn: 'root' })
 export class TicketParserService {
   private pdfWorkerReady = false
+  private pdfJsPromise: Promise<PdfJsModule> | null = null
+
   private tesseractCreateWorkerPromise: Promise<any> | null = null
 
-  private ensurePdfWorkerConfigured(): void {
+  private async loadPdfJs(): Promise<PdfJsModule> {
+    if (!this.pdfJsPromise) {
+      this.pdfJsPromise = import('pdfjs-dist/legacy/build/pdf.mjs')
+    }
+    return this.pdfJsPromise
+  }
+
+  private async ensurePdfWorkerConfigured(pdfjsLib: any): Promise<void> {
     if (this.pdfWorkerReady) return
 
     ;(pdfjsLib as any).GlobalWorkerOptions.workerSrc = '/assets/pdfjs/pdf.worker.min.mjs'
@@ -59,7 +69,8 @@ export class TicketParserService {
   }
 
   private async extractTextFromPdf(file: File): Promise<string> {
-    this.ensurePdfWorkerConfigured()
+    const pdfjsLib = await this.loadPdfJs()
+    await this.ensurePdfWorkerConfigured(pdfjsLib)
 
     const buffer = await file.arrayBuffer()
     const loadingTask = pdfjsLib.getDocument({ data: buffer })
@@ -81,7 +92,6 @@ export class TicketParserService {
 
   private async extractTextFromImage(file: File): Promise<string> {
     const createWorker = await this.loadTesseractCreateWorker()
-
     const worker: any = await createWorker('eng')
 
     try {
@@ -208,7 +218,7 @@ export class TicketParserService {
       arrivalDate = toIsoDateFromDayMonth(chosen.day, chosen.month)
     }
 
-    // -------- 4) Flight Number --------
+    // 4) Flight Number
     const flightCandidates: Array<{ value: string; index: number }> = []
     const flightPattern = /\b([A-Z0-9]{2,3})\s*[- ]?\s*(\d{2,5})\b/g
 
@@ -223,7 +233,7 @@ export class TicketParserService {
       if (/^[A-Z]{3}$/.test(prefix)) continue
       if (/\d{1,2}:\d{2}/.test(combined)) continue
 
-      flightCandidates.push({ value: combined.replace('-', ''), index: m.index }) // store as 6E2409 or AI101
+      flightCandidates.push({ value: combined.replace('-', ''), index: m.index })
     }
 
     let flightNumber = ''

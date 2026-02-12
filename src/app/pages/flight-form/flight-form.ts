@@ -10,6 +10,8 @@ import { onAuthStateChanged } from '@angular/fire/auth'
 import { TicketParserService } from '../../services/ticketParser.service'
 import { firstValueFrom, Subject } from 'rxjs'
 import { debounceTime, takeUntil } from 'rxjs/operators'
+import { environment } from '../../../environments/environment'
+
 
 interface FlightInfoPayload {
   airline: string
@@ -179,10 +181,6 @@ export class FlightForm implements OnInit, OnDestroy {
   isSubmitting = false
   hasSubmitted = false
 
-  //To prevent lot of POST during testing
-  //TODO: Remove before final submission
-  private readonly isDryRun = true
-
   selectedTicketFile: File | null = null
   isParsingTicket = false
   ticketParseError = ''
@@ -257,14 +255,9 @@ export class FlightForm implements OnInit, OnDestroy {
 
   flightForm: FormGroup
 
-  private readonly endpointUrl =
-    'https://us-central1-crm-sdk.cloudfunctions.net/flightInfoChallenge'
-
-  //TODO: Move it to env.ts instead of hard coding
-  private readonly tokenHeaderValue =
-    'WW91IG11c3QgYmUgdGhlIGN1cmlvdXMgdHlwZS4gIEJyaW5nIHRoaXMgdXAgYXQgdGhlIGludGVydmlldyBmb3IgYm9udXMgcG9pbnRzICEh'
-
-  private readonly candidateName = 'Vishnu Prasath'
+  private readonly endpointUrl = environment.flightInfo.endpointUrl
+  private readonly tokenHeaderValue = environment.flightInfo.tokenHeaderValue
+  private readonly candidateName = environment.flightInfo.candidateName
 
   constructor(
     private formBuilder: FormBuilder,
@@ -933,7 +926,6 @@ export class FlightForm implements OnInit, OnDestroy {
   if (this.flightForm.invalid) {
     this.flightForm.markAllAsTouched()
     this.changeDetectorRef.detectChanges()
-
     window.scrollTo({ top: 0, behavior: 'smooth' })
     return
   }
@@ -942,22 +934,6 @@ export class FlightForm implements OnInit, OnDestroy {
   this.changeDetectorRef.detectChanges()
 
   const payload = this.buildPayload()
-
-  if (this.isDryRun) {
-    console.log('[DRY RUN] FlightInfoPayload:', payload)
-    console.log('[DRY RUN] Headers:', { token: this.tokenHeaderValue, candidate: this.candidateName })
-
-    this.submissionReceipt = payload
-    this.lastSubmittedPayload = payload
-    this.submitSuccessMessage = 'Dry run: payload looks good. No request was sent.'
-
-    this.persistReceipt(payload, this.submitSuccessMessage)
-    this.clearDraft()
-
-    this.isSubmitting = false
-    this.changeDetectorRef.detectChanges()
-    return
-  }
 
   const headers = new HttpHeaders({
     token: this.tokenHeaderValue,
